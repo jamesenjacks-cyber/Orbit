@@ -167,7 +167,8 @@ window.ORBIT_SITE = {
   /* live: false = the buttons are greyed out and do nothing, with "For now, contact us via <lockedEmail>" under
      them (James, 4 Nov 2026, until the booking is set up). Set to true to switch the form on again. */
   lockedEmail: "James@orbit3d.nl",
-  booking: { live: false, endpoint: "", times: ["09:30", "11:00", "13:30", "15:00", "16:30"], days: 10 },
+  /* (4 Nov 2026, James) Jack set up the Google part (backend/booking/SETUP.md): live again, with his web app address */
+  booking: { live: true, endpoint: "https://script.google.com/macros/s/AKfycby3q9ZCfGQ3WQBuOMAO0KfO8LJmiEh1O-m9wX8R_HW_dWgbGcdnvyuRbmaZjtuLTOpj/exec", times: ["09:30", "11:00", "13:30", "15:00", "16:30"], days: 10 },
   /* true = empty windows show which name to fill in (handy while building).
      Set to false before the site goes public. */
   showSlotHints: false

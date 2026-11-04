@@ -16,7 +16,7 @@
 var SCOPE = new URL(self.registration.scope).pathname;
 var PRE = "orbit3dsite:" + SCOPE + ":";
 var DATA = PRE + "data-b1a1015e1a";
-var CODE = PRE + "code-20261104-175705";
+var CODE = PRE + "code-20261104-191113";
 var BIG = /^(assets\/(scans|stage|space|fonts|brand|posters|howto|partners)|vendor)\/|\.(webp|jpe?g|png|svg|woff2|wasm|mp4|webm)$/i;
 
 self.addEventListener("install", function () { self.skipWaiting(); });

@@ -14,6 +14,33 @@
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var VIEWER_ORIGIN = "https://orbit-viewer.pages.dev";   // the only viewer a frame may open
   var vids = [], preloads = [];
+  /* (4 Nov 2026) one live viewer holds a whole 3D scene (~1-2 GB, measured), and four at once crashed iPhone
+     Safari. So only the frames nearest the middle of the screen are alive, every other one is unloaded (poster
+     back; a playing one is never touched):
+       phones (small screen or touch): ONE, once it is within a quarter screen;
+       computers: ONE too (two reached 7 GB), and the first frame is loaded right after the top scan is in
+       (James: "ready before it is clicked"). */
+  var PHONE = matchMedia("(max-width: 767px), (pointer: coarse)").matches, entries = [];
+  // (4 Nov 2026) measured: two computer viewers reached 7 GB (sharper scenes than on phones), so computers
+  // also keep ONE; they may start it from further away (half a screen) and the first frame loads early
+  var MAX_ALIVE = 1, AHEAD = PHONE ? 0.25 : 0.5, early = false;
+  var pickQueued = false;
+  function pick() {
+    pickQueued = false;
+    var vh = window.innerHeight || 800, mid = vh / 2, near = [];
+    entries.forEach(function (a) {
+      var r = a.box.getBoundingClientRect();
+      if (r.bottom < -vh * AHEAD || r.top > vh * (1 + AHEAD)) return;
+      near.push({ a: a, d: Math.abs((r.top + r.bottom) / 2 - mid) });
+    });
+    near.sort(function (x, y) { return x.d - y.d; });
+    var keep = near.slice(0, MAX_ALIVE).map(function (n) { return n.a; });
+    // computers: before the visitor reaches the results, the first frame stays ready
+    if (!keep.length && early && entries[0] && entries[0].box.getBoundingClientRect().top > 0) keep = [entries[0]];
+    entries.forEach(function (a) { if (keep.indexOf(a) < 0) a.unload(); });
+    keep.forEach(function (a) { a.make(); });
+  }
+  function queuePick() { if (!pickQueued) { pickQueued = true; requestAnimationFrame(pick); } }
 
   function safeEmbed(src) {
     try {
@@ -72,11 +99,12 @@
       frame.setAttribute("allow", "xr-spatial-tracking; fullscreen; gyroscope; accelerometer");
       frame.referrerPolicy = "strict-origin-when-cross-origin";
       frame.tabIndex = -1;   // not reachable by keyboard until the visitor steps inside
-      var finished = false;
+      var finished = false, mine = frame;
       function ready() {
         if (finished) return; finished = true;
         // give the viewer a moment to draw its first picture before the poster makes way
-        setTimeout(function () { box.classList.add("is-ready"); }, it.poster ? 2500 : 0);
+        // (not when it was unloaded again in the meantime: then the poster stays)
+        setTimeout(function () { if (frame === mine) box.classList.add("is-ready"); }, it.poster ? 2500 : 0);
         if (done) done();
       }
       frame.addEventListener("load", ready);
@@ -84,6 +112,20 @@
       box.appendChild(frame);
     }
     preloads.push(makeFrame);
+    /* (4 Nov 2026, James: iPhone Safari "A problem repeatedly occurred" while scrolling) every live viewer holds a
+       whole 3D scene and keeps it while off screen: measured (phone emulation) the page went from 2.7 GB to
+       6.9 GB with the four viewers, and iPhone Safari runs them in the page's own memory, so it closed the tab.
+       On phones a viewer now loads only when its frame is about to come on screen, at most PHONE_MAX are
+       alive, and one is unloaded again once it is far away (the poster shows until it loads again). */
+    function unloadFrame() {
+      if (!frame || box.classList.contains("is-live")) return;
+      try { frame.src = "about:blank"; } catch (e) { /* fine */ }
+      frame.remove();
+      frame = null;
+      box.classList.remove("is-ready");
+    }
+    var entry = { box: box, make: function () { makeFrame(); }, unload: unloadFrame };
+    entries.push(entry);
 
     function shut() {
       if (!frame) return;
@@ -207,6 +249,32 @@
      right away when the page opens: one after the other (top frame first), so they do not fight over the
      visitor's connection. Data saver on = wait for the tap. */
   (function preloadAll() {
+    if (navigator.connection && navigator.connection.saveData) return;   // data saver: wait for the tap
+    if (entries.length) {
+      // only the frames nearest the middle of the screen (see pick); checked on scroll, only while the results
+      // are within two screens
+      var nearNow = false;
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (en) {
+          nearNow = en.some(function (e) { return e.isIntersecting; });
+          queuePick();
+        }, { rootMargin: "200% 0px 200% 0px" }).observe(sec);
+      } else nearNow = true;
+      window.addEventListener("scroll", function () { if (nearNow) queuePick(); }, { passive: true });
+      window.addEventListener("resize", queuePick);
+      if (PHONE) return;
+      // computers: the first frame right after the top scan is in (or 15 s), as before
+      var hooked = false;
+      var first = function () { if (hooked) return; hooked = true; early = true; queuePick(); };
+      var hook0 = function () {
+        var core = window.OrbitStage && window.OrbitStage._core;
+        if (!core || !core.laneAfter) { first(); return; }
+        core.laneAfter("hero").then(first);
+      };
+      if (document.readyState === "complete") hook0(); else window.addEventListener("load", hook0, { once: true });
+      setTimeout(first, 15000);
+      return;
+    }
     if (!preloads.length) return;
     var conn = navigator.connection;
     if (conn && conn.saveData) return;

@@ -221,6 +221,15 @@
       SPOTS.forEach(function (s, i) { if (i) setTimeout(function () { want(s.n); }, 300 * i); });
     }).catch(function () {});
   };
+  // (4 Nov 2026, memory) far away: free the photo textures and pictures; L.start() loads them again
+  L.drop = function () {
+    if (!L.started) return;
+    L.started = false;
+    if (L.raf) { cancelAnimationFrame(L.raf); L.raf = 0; }
+    try { Object.keys(L.tex).forEach(function (n) { L.gl.deleteTexture(L.tex[n]); }); } catch (e) { /* gone */ }
+    L.tex = {}; L.img = {}; L.imgReady = {}; L.ok = false; L.dirty = true;
+    panoEl.classList.remove("is-live");
+  };
   L.kick = function () {
     if (!L.started || L.raf || L.failed) return;
     L.last = performance.now();
@@ -496,24 +505,56 @@
       },
       update: function (st, dt) { return tick(dt); }
     });
+    /* (4 Nov 2026, memory: iPhone Safari closed the tab) this section's scan + model + 360 photos are ~1.4 GB
+       (measured, phone) and used to load from the top of the page (lane max 40 s) and stay for the whole visit.
+       Now: load when the section is within NEAR screens (after the walk scan, as before), and drop all of it
+       again when it is more than FAR screens away; coming back loads it again (the stills show meanwhile). */
     core.whenEngine(function () {
-      if (core.lane) core.lane("compare", { after: "walk", el: sec, near: 3.5, max: 40 }).then(start);
-      else start();
+      var walkIn = !core.laneAfter;
+      if (core.laneAfter) core.laneAfter("walk").then(function () { walkIn = true; nearCheck(); });
+      function nearCheck() {
+        var r = sec.getBoundingClientRect(), vh = innerHeight || 800;
+        var dist = r.top > vh ? (r.top - vh) / vh : r.bottom < 0 ? -r.bottom / vh : 0;
+        if (dist <= NEAR && walkIn) start();
+        else if (dist > FAR) drop();
+      }
+      if ("IntersectionObserver" in window) {
+        var pct = function (k) { return Math.round(k * 100) + "% 0px " + Math.round(k * 100) + "% 0px"; };
+        new IntersectionObserver(nearCheck, { rootMargin: pct(NEAR) }).observe(sec);
+        new IntersectionObserver(nearCheck, { rootMargin: pct(FAR) }).observe(sec);
+      } else { walkIn = true; start(); }
+      nearCheck();
     });
   }
+  var NEAR = 1.5, FAR = 3;
   function start() {
-    if (R.started || !R.core) return;
+    if (R.started || !R.core || R.failed) return;
     R.started = true;
     var core = R.core;
-    R.stream = core.stream(cfg, { name: "compare-scan", frame: "model", prefetch: true });
-    R.stream.warm(true);
-    R.stream.ready.then(function () {
+    var s = R.stream = core.stream(cfg, { name: "compare-scan", frame: "model", prefetch: true });
+    s.warm(true);
+    s.ready.then(function () {
+      if (R.stream !== s) return;   // dropped meanwhile
       R.ready = true; done1();
       // the height cut runs on world height: this scan is stored upside down (y down), so the cut looks at -y
-      try { R.stream.entity.gsplat.setParameter("uOrbitClip", [0, -1, 0, 0]); } catch (e) {}
+      try { s.entity.gsplat.setParameter("uOrbitClip", [0, -1, 0, 0]); } catch (e) {}
       loadModel();
-    }).catch(function () { done1(); fail(); });
-    R.stream.onLost(fail);
+    }).catch(function () { if (R.stream !== s) return; done1(); fail(); });
+    s.onLost(function () { if (R.stream === s) fail(); });
+  }
+  // far away: give back the scan, the model and the 360 photos (memory); start() makes them again
+  function drop() {
+    if (!R.started) return;
+    var s = R.stream;
+    R.started = false; R.ready = false; R.live = 0; R.stream = null;
+    setClip(""); modelShow(false); paintLive();
+    try { if (s) s.destroy(); } catch (e) { /* gone */ }
+    var dead = R.model, assets = R.modelAssets || [];
+    R.model = null; R.modelP = null; R.modelState = ""; R.pieces = []; R.modelAssets = null; modelOn = false;
+    try { if (dead) dead.destroy(); } catch (e) { /* gone */ }
+    assets.forEach(function (a) { try { R.core.app.assets.remove(a); a.unload(); } catch (e) { /* gone */ } });
+    L.drop();
+    if (R.core) R.core.render();
   }
   function done1() { if (R.core && R.core.laneDone) R.core.laneDone("compare"); }
   function fail() {
@@ -537,11 +578,16 @@
     if (R.modelP) return R.modelP;
     var suf = isPhone ? "-phone" : "";
     R.modelState = "loading";
-    R.modelP = Promise.all([
+    var myP = R.modelP = Promise.all([
       loadGlbUrl("assets/compare/walls" + suf + ".glb", "cmp-walls"),
       loadGlbUrl("assets/compare/furniture" + suf + ".glb", "cmp-furn")
     ]).then(function (as) {
       var pc = R.core.pc;
+      if (R.modelP !== myP) {   // dropped while it loaded: give it back at once
+        as.forEach(function (a) { try { R.core.app.assets.remove(a); a.unload(); } catch (e) { /* gone */ } });
+        return;
+      }
+      R.modelAssets = as;
       var root = new pc.Entity("CompareModel");
       as.forEach(function (a) { root.addChild(a.resource.instantiateRenderEntity()); });
       root.forEach(function (e) { if (/^Low(Wall|Lid)__/.test(e.name)) e.enabled = false; });
@@ -566,6 +612,7 @@
       });
       R.modelState = "ready";
     }).catch(function (err) {
+      if (R.modelP !== myP) return;
       R.modelState = "failed";
       console.warn("[compare] 3D model", err && err.message);
     });
@@ -789,6 +836,10 @@
     new IntersectionObserver(function (en) {
       if (en.some(function (e) { return e.isIntersecting; })) { L.start(); L.kick(); }
     }, { rootMargin: "100% 0px 100% 0px" }).observe(sec);
+    // (4 Nov 2026, memory) more than 3 screens away: the photos go (see L.drop)
+    new IntersectionObserver(function (en) {
+      if (en.every(function (e) { return !e.isIntersecting; })) L.drop();
+    }, { rootMargin: "300% 0px 300% 0px" }).observe(sec);
   } else { L.start(); }
   install();
   // checks only (?cmpdbg): the state, to set the clocks from a test

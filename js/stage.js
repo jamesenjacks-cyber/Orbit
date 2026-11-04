@@ -2221,7 +2221,10 @@
       io0.observe(scan);
     }
     if (houseActs.length) {
-      core.lane("house", { after: "walk", el: houseActs[0], near: 2.5 }).then(function () { gated(function () { wantHouse("lane"); }); });
+      // (4 Nov 2026, memory: iPhone Safari closed the tab) phones do not take the house early in the lane: only
+      // when #design comes within 2.5 screens (or the hero's model button asks for it), so the top of the page
+      // does not hold it in memory as well
+      core.lane("house", { after: isPhone ? "never (phone)" : "walk", el: houseActs[0], near: 2.5 }).then(function () { gated(function () { wantHouse("lane"); }); });
     }
     if (walk.length) {
       var io2 = new IntersectionObserver(function (en) {

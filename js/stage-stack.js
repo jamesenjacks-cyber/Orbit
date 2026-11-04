@@ -106,6 +106,9 @@
     var m = /[?&]stacknet=(full|lite)/.exec(location.search);
     if (m) return { pack: m[1] === "lite" ? "stack-lite" : "stack", why: "url" };
     if (core.slowNet) return { pack: "stack-lite", why: "slow network / data saver" };
+    // (4 Nov 2026, memory: iPhone Safari closed the tab) phones always take the light house: it is made for phone
+    // screens (looks the same there) and its smaller pictures take far less memory
+    if (core.isPhone) return { pack: "stack-lite", why: "phone (memory)" };
     var mbit = speedMbit(), conn = navigator.connection;
     // nothing big enough to time (cached, or so fast it took no time): Chrome's own guess, which tops out at 10,
     // so 8 or more counts as fast; no guess either = fast
