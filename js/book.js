@@ -60,8 +60,8 @@
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
   function timeout(ms) { return new Promise(function (_, no) { setTimeout(function () { no(new Error("timeout")); }, ms); }); }
-  function getJSON(url, opts) {
-    return Promise.race([fetch(url, opts).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }), timeout(15000)]);
+  function getJSON(url, opts, ms) {
+    return Promise.race([fetch(url, opts).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }), timeout(ms || 15000)]);
   }
   function askSlots(force) {
     if (!endpoint || (slotsAsked && !force)) return;
@@ -191,6 +191,16 @@
     status.className = "book__status" + (kind ? " is-" + kind : "");
   }
 
+  // (QC-20261104-1941 R3) the id belongs to the exact content: a changed form is a new request with a new id,
+  // only an unchanged retry keeps it (ridFor = the content the id was made for)
+  var rid = "", ridFor = "";
+  function newRid() {
+    try {
+      var a = new Uint8Array(12); crypto.getRandomValues(a);
+      return Array.prototype.map.call(a, function (b) { return (b < 16 ? "0" : "") + b.toString(16); }).join("");
+    } catch (e) { return String(Date.now()) + Math.floor(Math.random() * 1e9); }
+  }
+
   function mailto(data) {
     var to = site.email || "";
     var subject = mode === "call"
@@ -223,6 +233,11 @@
       language: document.documentElement.lang === "nl" ? "nl" : "en",
       website: form.elements.website ? form.elements.website.value : ""   // hidden spam trap, people leave it empty
     };
+    // (QC-20261104-1912 N3) one id per filled-in form: if a slow send did arrive after all, pressing Send again
+    // with the same id is ignored by the backend (no second mail, no second call)
+    var fp = JSON.stringify(data);
+    if (!rid || fp !== ridFor) { rid = newRid(); ridFor = fp; }
+    data.rid = rid;
     var send = form.querySelector(".book__send");
     if (!endpoint) {
       location.href = mailto(data);
@@ -233,9 +248,10 @@
     send.disabled = true; say(T("Sending..."));
     var sentMode = mode;
     // text/plain = a "simple" request: Google Apps Script can not answer the browser's CORS pre-check
-    getJSON(endpoint, { method: "POST", credentials: "omit", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(data) })
+    getJSON(endpoint, { method: "POST", credentials: "omit", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(data) }, 30000)   // booking + mail can take a while on Google's side
       .then(function (r) {
         if (r && r.ok === true) {
+          rid = ""; ridFor = "";   // the next form gets a new id
           form.reset(); pickedDay = ""; pickedTime = ""; slots = null; slotsAsked = false; drawDays(); drawTimes();
           if (sentMode === "call") askSlots(true);
           say(T(sentMode === "call" ? "Thanks! Your call is booked. You get a confirmation by email." : "Thanks! We got your message and reply soon."), "ok");
@@ -251,7 +267,12 @@
           say(T("Too many messages right now. Please try again in an hour, or email us."), "error");
         } else throw new Error(why || "unknown");
       })
-      .catch(function () {
+      .catch(function (err) {
+        // (QC-20261104-1912 N3) no answer in time: it may still have arrived, so do NOT open the email app as well
+        if (err && err.message === "timeout") {
+          say(T("We could not confirm that it was sent. Please wait a minute and check your inbox before you try again."), "error");
+          return;
+        }
         location.href = mailto(data);
         say(T("Sending did not work, so your email app opens instead. Press send there."), "error");
       })

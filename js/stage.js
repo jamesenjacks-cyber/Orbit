@@ -191,6 +191,8 @@
   function bytes(name) {
     var s = files()[name];
     if (typeof s !== "string") return null;
+    // (4 Nov 2026, phone lag) the browser's own fast decoder where it has one (Safari 18.2+, recent Chrome)
+    if (typeof Uint8Array.fromBase64 === "function") { try { return Uint8Array.fromBase64(s); } catch (e) { /* old way */ } }
     var bin = atob(s), n = bin.length, u = new Uint8Array(n);
     for (var i = 0; i < n; i++) u[i] = bin.charCodeAt(i);
     return u;
@@ -1788,9 +1790,13 @@
       lastAlpha = a2; dirty = true;
     }
     if (root.classList.contains("stage-live") !== live) root.classList.toggle("stage-live", live);
-    if (a2 > 0 && dirty) { orientGlows(); app.renderNextFrame = true; perf(dt); }
+    // (4 Nov 2026, James: "still lagging a lot on phone") a phone that cannot hold 45 fps draws every other frame:
+    // a steady 30 instead of an uneven 26-35 (the stacked house alone is ~730 pieces a frame); the page itself,
+    // the scroll and the scene clocks keep running every frame
+    var skipDraw = frameDiv > 1 && (++frameN % frameDiv) !== 0;
+    if (a2 > 0 && dirty && !skipDraw) { orientGlows(); app.renderNextFrame = true; perf(dt * frameDiv); }
     warmTick();
-    if (a2 > 0) dirty = false;
+    if (a2 > 0 && !skipDraw) dirty = false;
   }
   core.owner = function () { return owner; };
   // slow device: lower the pixel ratio step by step (never below 1)
@@ -1803,8 +1809,11 @@
       core.fps = fps;
       log("fps", fps.toFixed(1), "dpr", core.dpr);
       if (fps < 40 && dprCap > 1) { dprCap = Math.max(1, dprCap - 0.25); resize(); slow.skip = 1; }
+      // phones only, once (fps counts drawn frames): below 45 -> draw at 30 for the rest of the visit
+      if (isPhone && frameDiv === 1 && fps < 45) { frameDiv = 2; log("phone: drawing at 30 fps"); }
     }
   }
+  var frameDiv = 1, frameN = 0;
 
   /* ---------- boot ---------- */
   function fail(msg) {

@@ -74,7 +74,7 @@
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (en) {
       en.forEach(function (e) { P.onScreen = e.isIntersecting; });
-      if (P.onScreen) { L.kick(); if (R.stillWant) stills(); }
+      if (P.onScreen) { L.kick(); if (R.stillWant) stills(); if (R.ready && !R.modelP) loadModel(); }
     }, { threshold: 0.15 }).observe(zone);
   } else P.onScreen = true;
 
@@ -145,7 +145,9 @@
     L.img[n] = new Promise(function (ok, no) {
       var im = new Image();
       im.decoding = "async";
-      im.onload = function () { ok(im); };
+      // (4 Nov 2026, phone lag) unpack the picture off the main thread first: otherwise the upload to the
+      // graphics chip (texImage2D) unpacked it on the spot and froze the page (~0.9 s in the walk on a slow phone)
+      im.onload = function () { if (im.decode) im.decode().then(function () { ok(im); }, function () { ok(im); }); else ok(im); };
       im.onerror = function () { no(new Error("pano " + n)); };
       im.src = panoSrc(n);
     });
@@ -202,7 +204,8 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, im);
+    // RGBA: the browser can hand the decoded picture over as it is (RGB made it repack every pixel first)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
     L.tex[n] = t;
     return t;
   }
@@ -538,7 +541,9 @@
       R.ready = true; done1();
       // the height cut runs on world height: this scan is stored upside down (y down), so the cut looks at -y
       try { s.entity.gsplat.setParameter("uOrbitClip", [0, -1, 0, 0]); } catch (e) {}
-      loadModel();
+      // (4 Nov 2026, phone lag) the model is first needed 11 s into this section's film: unpacking its pictures
+      // froze the garden walk above (~0.45 s on a slow phone), so it loads once this section is on screen
+      if (P.onScreen) loadModel();
     }).catch(function () { if (R.stream !== s) return; done1(); fail(); });
     s.onLost(function () { if (R.stream === s) fail(); });
   }

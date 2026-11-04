@@ -99,7 +99,9 @@ window.ORBIT_SITE = {
       toModel: { scale: 1, quat: [1, 0, 0, 0], t: [0, 0, 0] },
       /* area = the open floor between the windows and the black kitchen block [x0, z0, x1, z1] */
       start: { eye: [0.3, 1.55, -0.6], look: [-1.6, 1.3, 4.0] }, floor: -0.05, area: [-2.3, -3.6, 0.55, 3.0],
-      budget: { desktop: 3500000, phone: 1200000 }, finest: { desktop: 0, phone: 1 } }
+      /* (4 Nov 2026, phone lag) phone finest 2 (was 1): the window is half a phone screen, and half the tiles to
+         unpack and upload while the visitor is still in the garden walk */
+      budget: { desktop: 3500000, phone: 1200000 }, finest: { desktop: 0, phone: 2 } }
   },
   /* Round 8: the Orbit viewer (v74 or newer) that the site embeds in "Look around, or move
      through." and "This is what you get." Embeds load only when a visitor taps them, one at a time.

@@ -2222,6 +2222,11 @@ window.ORBIT_TRANSLATIONS = {
     "nl": "Bedrijfsgegevens",
     "was": "Legal company details"
   },
+  "book26c02": {
+    "en": "We could not confirm that it was sent. Please wait a minute and check your inbox before you try again.",
+    "nl": "We konden niet bevestigen dat het is verstuurd. Wacht een minuut en kijk in je inbox voordat je het opnieuw probeert.",
+    "was": "We could not confirm that it was sent. Please wait a minute and check your inbox before you try again."
+  },
   "book26c01": {
     "en": "For now, contact us via",
     "nl": "Neem voorlopig contact op via",
