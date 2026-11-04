@@ -154,6 +154,8 @@
   }
   function setOpen(o) {
     open = o;
+    // (4 Nov 2026) closing the form ends the "sent" panel (and its animation); it opens with the empty form again
+    if (!o && typeof hideDone === "function") hideDone();
     box.classList.toggle("is-open", o);
     if (o) box.removeAttribute("inert"); else box.setAttribute("inert", "");
     openers.forEach(function (b) {
@@ -169,6 +171,7 @@
       e.preventDefault();
       var m = b.getAttribute("data-book-open");
       if (open && m === mode) { setOpen(false); return; }
+      hideDone();   // the other button while a "sent" panel shows: back to an empty form in that mode
       setMode(m); setOpen(true); say("");
       if (mode === "call") askSlots(false);
       setTimeout(function () {
@@ -200,6 +203,101 @@
       return Array.prototype.map.call(a, function (b) { return (b < 16 ? "0" : "") + b.toString(16); }).join("");
     } catch (e) { return String(Date.now()) + Math.floor(Math.random() * 1e9); }
   }
+
+  /* ===== (4 Nov 2026, James: SENT-MESSAGE-D5-D1.md) after a successful send: D5 (call) or D1 (email) =====
+     Only after the backend really answered ok. Names and addresses go in as plain text (textContent). */
+  var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var dustRaf = 0;
+
+  // D1: points from the form fly into a turning 3D check
+  function startDust(panel) {
+    cancelAnimationFrame(dustRaf);
+    var canvas = panel.querySelector(".book__dust"), ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    // (QC-20261104-2010) the drawing area has a fixed upper size (the message box can be dragged taller)
+    var fr = form.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    var W = canvas.width = Math.max(1, Math.min(2000, Math.round(fr.width * dpr))), H = canvas.height = Math.max(1, Math.min(2400, Math.round(fr.height * dpr)));
+    dpr = Math.min(dpr, W / Math.max(1, fr.width), H / Math.max(1, fr.height));
+    var css = getComputedStyle(document.documentElement);
+    var orange = css.getPropertyValue("--accent").trim() || "#ff5a2a", white = css.getPropertyValue("--ink").trim() || "#eceef1";
+    // where the points start: inside the fields the visitor just filled in
+    var boxes = [].slice.call(form.querySelectorAll(".book__input, .book__send")).map(function (el) {
+      var r = el.getBoundingClientRect(); return [r.left - fr.left, r.top - fr.top, r.width, r.height];
+    }).filter(function (b) { return b[2] > 0 && b[3] > 0; });
+    if (!boxes.length) boxes = [[0, 0, fr.width, fr.height]];
+    // the shape: a ring and a check mark, with a little depth
+    var pts = [], i;
+    for (i = 0; i < 380; i++) { var a = Math.random() * 6.2832, rr = 1 + (Math.random() - .5) * .07;
+      pts.push([Math.cos(a) * rr, Math.sin(a) * rr, (Math.random() - .5) * .18]); }
+    for (i = 0; i < 300; i++) { var s = i < 100 ? [-.45, .02, -.12, .34] : [-.12, .34, .5, -.32], t = Math.random();
+      pts.push([s[0] + (s[2] - s[0]) * t + (Math.random() - .5) * .08, s[1] + (s[3] - s[1]) * t + (Math.random() - .5) * .08, (Math.random() - .5) * .22]); }
+    var parts = pts.map(function (p) {
+      var b = boxes[Math.floor(Math.random() * boxes.length)];
+      return { p: p, sx: (b[0] + Math.random() * b[2]) * dpr, sy: (b[1] + Math.random() * b[3]) * dpr, d: Math.random() * .6, c: Math.random() < .82 ? orange : white };
+    });
+    var t0 = performance.now();
+    var END = 12;   // (QC-20261104-2010) seconds: then it stays on its last picture and the loop ends
+    function frame(now) {
+      if (panel.hidden || !open) return;   // stops by itself when "Back" is pressed or the form closes
+      // the device setting is read live: "reduce motion" switched on while the page is open counts too
+      var still = reduceMotion || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+      var el = Math.min(END, (now - t0) / 1000), R = Math.min(W, H) * .2, cx = W / 2, cy = H * .34;
+      var rot = still ? .5 : el * .55, cs = Math.cos(rot), sn = Math.sin(rot), ct = Math.cos(-.25), st = Math.sin(-.25);
+      ctx.clearRect(0, 0, W, H);
+      for (var k = 0; k < parts.length; k++) {
+        var q = parts[k], x = q.p[0], y = q.p[1], z = q.p[2];
+        var x2 = x * cs + z * sn, z2 = -x * sn + z * cs, y2 = y * ct - z2 * st, z3 = y * st + z2 * ct;
+        var sc = 3.2 / (3.2 + z3), tx = cx + x2 * R * sc, ty = cy + y2 * R * sc;
+        var m = still ? 1 : Math.min(1, Math.max(0, (el - q.d) / 1.3)); m = 1 - Math.pow(1 - m, 3);
+        var size = (1.2 + 1.4 * sc) * dpr;
+        ctx.globalAlpha = (.35 + .65 * m) * (z3 < 0 ? 1 : .65);
+        ctx.fillStyle = q.c;
+        ctx.fillRect(q.sx + (tx - q.sx) * m - size / 2, q.sy + (ty - q.sy) * m - size / 2, size, size);
+      }
+      if (!still && el < END) dustRaf = requestAnimationFrame(frame);
+    }
+    dustRaf = requestAnimationFrame(frame);
+  }
+
+  function fillTitle(el, plain, accent) {   // "Got it, Guy." + orange part, safe for any name
+    el.textContent = plain + " ";
+    var em = document.createElement("em"); em.textContent = accent; el.appendChild(em);
+  }
+
+  function showDone(sentMode, info) {
+    var nl = document.documentElement.lang === "nl";
+    var panel = box.querySelector('[data-book-done="' + sentMode + '"]');
+    if (!panel) return false;
+    if (sentMode === "call") {
+      var d = new Date(info.day + "T12:00:00"), loc = nl ? "nl-NL" : "en-GB";
+      panel.querySelector("[data-cal-week]").textContent = d.toLocaleDateString(loc, { weekday: "long" });
+      panel.querySelector("[data-cal-day]").textContent = String(d.getDate());
+      panel.querySelector("[data-cal-month]").textContent = d.toLocaleDateString(loc, { month: "short", year: "numeric" }) + (info.time ? " · " + info.time : "");
+      panel.querySelector("[data-cal-stamp]").textContent = nl ? "GEBOEKT" : "BOOKED";
+      panel.querySelector("[data-done-title]").textContent = T("It's on our calendar.");
+      panel.querySelector("[data-done-sub]").textContent = T("You get a confirmation by email.");
+    } else {
+      fillTitle(panel.querySelector("[data-done-title]"), T("Got it,") + " " + info.name + ".", T("We'll reply soon."));
+      panel.querySelector("[data-done-sub]").textContent = T("Our answer goes to") + " " + info.email + ".";
+      startDust(panel);   // before the fields hide, so the points start where the fields are
+    }
+    form.classList.add("is-sent");
+    panel.hidden = false;
+    panel.classList.remove("is-play"); void panel.offsetWidth; panel.classList.add("is-play");
+    try { panel.querySelector("[data-book-again]").focus({ preventScroll: true }); } catch (_) {}
+    return true;
+  }
+  function hideDone() {
+    cancelAnimationFrame(dustRaf);
+    [].forEach.call(box.querySelectorAll("[data-book-done]"), function (p) { p.hidden = true; p.classList.remove("is-play"); });
+    form.classList.remove("is-sent");
+  }
+  [].forEach.call(box.querySelectorAll("[data-book-again]"), function (b) {
+    b.addEventListener("click", function () {
+      hideDone(); say("");
+      try { form.elements.name.focus({ preventScroll: true }); } catch (_) {}
+    });
+  });
 
   function mailto(data) {
     var to = site.email || "";
@@ -247,6 +345,7 @@
     if (send.disabled) return;
     send.disabled = true; say(T("Sending..."));
     var sentMode = mode;
+    var sentInfo = { day: data.day, time: data.time, name: data.name, email: data.email };   // the form is cleared on success
     // text/plain = a "simple" request: Google Apps Script can not answer the browser's CORS pre-check
     getJSON(endpoint, { method: "POST", credentials: "omit", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(data) }, 30000)   // booking + mail can take a while on Google's side
       .then(function (r) {
@@ -254,7 +353,8 @@
           rid = ""; ridFor = "";   // the next form gets a new id
           form.reset(); pickedDay = ""; pickedTime = ""; slots = null; slotsAsked = false; drawDays(); drawTimes();
           if (sentMode === "call") askSlots(true);
-          say(T(sentMode === "call" ? "Thanks! Your call is booked. You get a confirmation by email." : "Thanks! We got your message and reply soon."), "ok");
+          if (!showDone(sentMode, sentInfo))
+            say(T(sentMode === "call" ? "Thanks! Your call is booked. You get a confirmation by email." : "Thanks! We got your message and reply soon."), "ok");
           return;
         }
         var why = r && r.error;

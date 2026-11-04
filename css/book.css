@@ -96,5 +96,54 @@
 .is-locked[data-book-open]::before, .is-locked[data-book-open]::after { display: none !important; }
 .book__locked { margin: var(--s-2, 16px) 0 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-2); }
 .book__locked a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+/* ===== (4 Nov 2026, James: SENT-MESSAGE-D5-D1.md) after a successful send: D5 call, D1 email ===== */
+.book__form { position: relative; }
+.book__form > * { transition: opacity .35s var(--ease); }
+.book__form.is-sent > :not(.book__done) { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .35s var(--ease), visibility 0s .35s; }
+.book__done { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: var(--s-3); }
+.book__done[hidden] { display: none; }   /* display: grid above would otherwise beat the hidden attribute */
+.book__done-title { margin: 0; font-size: var(--t-3); font-weight: 600; letter-spacing: -.02em; text-wrap: balance; overflow-wrap: anywhere; }
+.book__done-title em { font-style: normal; color: var(--accent); }
+.book__done-sub { margin: 0; color: var(--ink-2); max-width: 36ch; overflow-wrap: anywhere; }
+
+/* D5: calendar page + stamp (Book a call) */
+.book__done-shake { display: grid; justify-items: center; gap: 14px; }
+.book__cal { position: relative; width: 150px; border-radius: 18px; background: #eceef1;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.8); opacity: 0; transform: translateY(160px) scale(.4) rotate(-6deg); }
+.book__cal-m { background: var(--accent); color: var(--on-accent); border-radius: 18px 18px 0 0; padding: 9px 0;
+  font: 500 13px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.book__cal-d { font-weight: 600; font-size: 76px; line-height: 1; letter-spacing: -.04em; padding: 12px 0 2px; color: #0d0e10; }
+.book__cal-y { font: 12px var(--mono); color: #5b6068; padding-bottom: 14px; text-transform: uppercase; letter-spacing: .1em; }
+.book__stamp { position: absolute; left: 50%; top: 56%; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 8px;
+  color: var(--accent); background: rgba(255,90,42,.06); font: 500 15px var(--mono); letter-spacing: .2em; white-space: nowrap;
+  opacity: 0; transform: translate(-50%,-50%) rotate(-14deg) scale(2.6); }
+.book__done.is-play .book__cal { animation: book-fly .8s .15s cubic-bezier(.2,.9,.25,1.1) forwards; }
+.book__done.is-play .book__stamp { animation: book-stamp .28s 1s cubic-bezier(.6,0,.9,.4) forwards; }
+.book__done.is-play .book__done-shake { animation: book-shake .3s 1.26s; }
+
+/* D1: points become a turning 3D check (Via email) */
+.book__done--dust { place-items: end center; padding-bottom: var(--s-4); }
+.book__dust { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.book__dust-text { position: relative; display: grid; justify-items: center; gap: 14px; }
+
+/* the texts fade in after the main moment (both) */
+.book__done.is-play .book__done-title,
+.book__done.is-play .book__done-sub,
+.book__done.is-play .book__done-back { opacity: 0; animation: book-rise .5s forwards; }
+.book__done.is-play .book__done-title { animation-delay: 1.5s; }
+.book__done.is-play .book__done-sub { animation-delay: 1.65s; }
+.book__done.is-play .book__done-back { animation-delay: 1.8s; }
+
+@keyframes book-fly { to { opacity: 1; transform: none; } }
+@keyframes book-stamp { to { opacity: .95; transform: translate(-50%,-50%) rotate(-14deg) scale(1); } }
+@keyframes book-shake { 25% { transform: translate(2px,-1px); } 50% { transform: translate(-2px,1px); } 75% { transform: translate(1px,1px); } }
+@keyframes book-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .book__done * { animation: none !important; }
+  .book__cal { opacity: 1; transform: none; }
+  .book__stamp { opacity: .95; transform: translate(-50%,-50%) rotate(-14deg); }
+  .book__done-title, .book__done-sub, .book__done-back { opacity: 1 !important; }
+}
 /* (4 Nov 2026) spam trap field: off screen, never seen or reached by people */
 .book__trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }

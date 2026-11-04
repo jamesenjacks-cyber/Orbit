@@ -2222,6 +2222,36 @@ window.ORBIT_TRANSLATIONS = {
     "nl": "Bedrijfsgegevens",
     "was": "Legal company details"
   },
+  "book26d01": {
+    "en": "Back",
+    "nl": "Terug",
+    "was": "Back"
+  },
+  "book26d02": {
+    "en": "It's on our calendar.",
+    "nl": "Het staat in onze agenda.",
+    "was": "It's on our calendar."
+  },
+  "book26d03": {
+    "en": "You get a confirmation by email.",
+    "nl": "Je krijgt een bevestiging per e-mail.",
+    "was": "You get a confirmation by email."
+  },
+  "book26d04": {
+    "en": "Got it,",
+    "nl": "Ontvangen,",
+    "was": "Got it,"
+  },
+  "book26d05": {
+    "en": "We'll reply soon.",
+    "nl": "We reageren snel.",
+    "was": "We'll reply soon."
+  },
+  "book26d06": {
+    "en": "Our answer goes to",
+    "nl": "Ons antwoord gaat naar",
+    "was": "Our answer goes to"
+  },
   "book26c02": {
     "en": "We could not confirm that it was sent. Please wait a minute and check your inbox before you try again.",
     "nl": "We konden niet bevestigen dat het is verstuurd. Wacht een minuut en kijk in je inbox voordat je het opnieuw probeert.",

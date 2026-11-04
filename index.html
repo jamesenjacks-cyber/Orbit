@@ -665,6 +665,29 @@
         <button class="btn btn--accent book__send" type="submit"><orbit-text data-i18n="d3a1c00061">Send</orbit-text></button>
         <p class="book__status" data-book-status role="status" aria-live="polite"></p>
       </div>
+      <!-- (4 Nov 2026, James: SENT-MESSAGE-D5-D1.md) after a successful send: D5 "Stamped" for a call,
+           D1 "Points become the check" for an email (js/book.js showDone) -->
+      <div class="book__done" data-book-done="call" hidden>
+        <div class="book__done-shake">
+          <div class="book__cal" aria-hidden="true">
+            <div class="book__cal-m" data-cal-week></div>
+            <div class="book__cal-d" data-cal-day></div>
+            <div class="book__cal-y" data-cal-month></div>
+            <div class="book__stamp" data-cal-stamp></div>
+          </div>
+          <p class="book__done-title" data-done-title role="status"></p>
+          <p class="book__done-sub" data-done-sub></p>
+          <button class="btn book__done-back" type="button" data-book-again><orbit-text data-i18n="book26d01">Back</orbit-text></button>
+        </div>
+      </div>
+      <div class="book__done book__done--dust" data-book-done="email" hidden>
+        <canvas class="book__dust" aria-hidden="true"></canvas>
+        <div class="book__dust-text">
+          <p class="book__done-title" data-done-title role="status"></p>
+          <p class="book__done-sub" data-done-sub></p>
+          <button class="btn book__done-back" type="button" data-book-again><orbit-text data-i18n="book26d01">Back</orbit-text></button>
+        </div>
+      </div>
     </form>
   </div>
 </div>
