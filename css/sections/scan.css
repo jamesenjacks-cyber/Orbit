@@ -1,0 +1,219 @@
+/* 03 Scan (round 8, step 3): "One space. Two ways to experience it." An act (340vh, a sticky
+   full-screen pin).
+     gather   the background points gather into the building ("One space." in big type).
+     reveal   the real aerial splat fades in at the same camera ("Not a drawing. Not a render.").
+     two      TWO cards: the real splat (explore it as it was captured) and the 3D model from above
+              (try what it could become). Desktop: side by side. Phone: stacked, each <= 48svh.
+   The stage (E) renders both views INSIDE the rects of [data-card] (a scissor rectangle on the one
+   fixed canvas behind the page). The card interior is therefore transparent. Round 9: the canvas
+   itself is cut to the card's own squircle (js/stage-aerial.js mask, the same corner as CSS
+   corner-shape), so only a thin hairline is drawn around each card (no heavy ring).
+   No 3D layer: the cards show a still instead (html.stage-none).
+   Phase = data-phase on the section (js/sections/scan.js). Round 9: while the stage draws the act,
+   js/sections/scan.js copies the stage's own numbers into --scan-fa / --scan-fb / --scan-ft (card A
+   frame + caption, card B frame + caption, title) and adds .is-driven, so the frames come exactly when
+   the picture is inside them (review A1, A2). Without the stage the phase classes below do it.
+   Page scroll is never trapped: a vertical drag scrolls the page (touch-action: pan-y), a plain wheel
+   scrolls it until the visitor engages a card. */
+
+.sec--scan { overflow-x: clip; --scan-lead: calc(var(--s-6) + 14svh); margin-top: var(--scan-lead); }
+.sec--scan .scan__pin { isolation: isolate; pointer-events: none; --ring: 2px; }
+
+/* ---------- The subject side while the points gather ---------- */
+.sec--scan .scan__subject {
+  position: absolute; z-index: 0; pointer-events: none;
+  left: var(--gutter); right: var(--gutter); top: 40%; bottom: var(--s-3);
+}
+
+/* ---------- Who we are, then "One space." in the same frame (30 Oct, option C) ----------
+   The words of the old #who section live in this pin, so the frame holds still while its contents change.
+   js/sections/scan.js sets, from the scroll (smooth both ways, no timers):
+     --w1 --w2 --w3  0..1  the three smaller lines fade out (and lift a hair), top one first
+     --wt            0..1  the old title rolls up out of its mask
+     --st            0..1  "One space." rolls up into the same mask, same size, same place
+     --sn            0..1  "Not a drawing..." comes in where the first small line was
+     --scan-open     1..0  the whole block leaves (fades, lifts a little) as the real aerial begins */
+.sec--scan .scan__who {
+  position: absolute; z-index: 2; inset: 0; pointer-events: none;
+  opacity: var(--scan-open, 1); transform: translateY(calc((1 - var(--scan-open, 1)) * -28px));
+}
+.sec--scan .who__grid { align-items: center; height: 100%; padding-block: var(--nav-h) var(--s-4); }
+.sec--scan .who__text {
+  grid-column: 1 / -1; position: relative; isolation: isolate;
+  display: grid; gap: var(--s-3); align-content: center;
+}
+.sec--scan .who__title { display: grid; gap: var(--s-2); font-weight: 500; }
+.sec--scan .who__name {
+  display: block;
+  font-size: clamp(3.4rem, 1rem + 9.2vw, 9.5rem);
+  font-weight: 600; letter-spacing: -.055em; line-height: .88;
+}
+/* the mask: both titles in one grid cell; room for the descender of "p" so nothing is cut */
+.sec--scan .who__mask { display: grid; overflow: clip; padding-block: .08em .16em; margin-block: -.08em -.16em; }
+.sec--scan .who__old, .sec--scan .who__new { grid-area: 1 / 1; text-wrap: balance; }
+.sec--scan .who__old { transform: translateY(calc(var(--wt, 0) * -115%)); }
+/* "One space." sits on the last line of the old title, right above the line under it */
+.sec--scan .who__new { align-self: end; white-space: nowrap; transform: translateY(calc((1 - var(--st, 0)) * 120%)); }
+.sec--scan .who__what {
+  display: grid;
+  font-size: clamp(1.5rem, 1rem + 2.1vw, 3rem);
+  font-weight: 500; letter-spacing: -.028em; line-height: 1.08;
+  max-width: 21ch; color: var(--ink);
+}
+.sec--scan .who__what > span { grid-area: 1 / 1; text-wrap: balance; }
+.sec--scan .who__new2 { opacity: var(--sn, 0); transform: translateY(calc((1 - var(--sn, 0)) * .35em)); }
+.sec--scan .who__line { font-size: var(--t-3); font-weight: 500; color: var(--ink); max-width: 34ch; text-wrap: pretty; }
+.sec--scan .who__first { max-width: 44ch; margin-top: var(--s-2); font-size: .9375rem; line-height: 1.5; color: var(--ink); }
+.sec--scan .who__first .who__fade { display: block; padding-top: var(--s-2); border-top: 1px solid var(--line-strong); }
+.sec--scan .who__fade { display: block; }
+.sec--scan .who__fade--1 { opacity: calc(1 - var(--w1, 0)); transform: translateY(calc(var(--w1, 0) * -.25em)); }
+.sec--scan .who__fade--2 { opacity: calc(1 - var(--w2, 0)); transform: translateY(calc(var(--w2, 0) * -6px)); }
+.sec--scan .who__fade--3 { opacity: calc(1 - var(--w3, 0)); transform: translateY(calc(var(--w3, 0) * -6px)); }
+/* 30 Oct, evening (James: "text to the top, the 3D model bigger"): the words sit at the top of the frame, the
+   house's box takes ALL the room under them, full width. The box is where the three-floor house is drawn and
+   turned (js/stage-stack.js, a .stage-hit) and where space.js fits the house points when the stage is off. */
+.sec--scan .who__grid { align-items: start; align-content: start; grid-template-rows: auto minmax(0, 1fr); }
+.sec--scan .who__text { grid-row: 1; align-content: start; padding-top: var(--s-3); }
+.sec--scan .who__subject { grid-column: 1 / -1; grid-row: 2; justify-self: stretch; align-self: stretch; width: auto; height: auto; min-height: 12rem; margin-top: var(--s-2); }
+.sec--scan .who__subject.stage-hit { position: relative; pointer-events: auto; border-radius: var(--r-lg, 24px); }
+/* (3 Nov 2026, James: slow internet) the still house picture: shows at once, fades when the live 3D is in
+   (--poster set by js/stage-stack.js: 1 = picture, 0 = live 3D). Same angle as the 3D, centred like it. */
+.sec--scan .who__subject { --poster: 1; position: relative; }
+.sec--scan .who__poster { position: absolute; inset: 0; display: block; pointer-events: none; opacity: var(--poster); }
+/* never over "One space." (also when there is no 3D at all and the script never runs) */
+.sec--scan:not([data-phase="who"]) .who__poster { opacity: 0; transition: opacity .35s var(--ease); }
+.sec--scan .who__poster img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.sec--scan .who__subject:focus-visible { outline: 2px solid var(--accent); outline-offset: -6px; }
+/* the "drag to turn" chip (the page's one .hint style), bottom centre of the house box */
+.sec--scan .who__chip { position: absolute; left: 50%; bottom: .75rem; translate: -50% 0; margin: 0; width: max-content; max-width: calc(100% - 1.5rem); pointer-events: none;
+  transition: opacity var(--d-med) var(--ease); }
+.sec--scan .who__chip.is-off { opacity: 0; }
+/* without the scroll numbers (no JS loop yet): the phase classes */
+.sec--scan:not(.is-open-driven)[data-phase="two"] .scan__who,
+.sec--scan:not(.is-open-driven)[data-phase="out"] .scan__who { opacity: 0; transition: opacity var(--d-slow) var(--ease); }
+
+/* ---------- The two cards ---------- */
+.sec--scan .scan__two {
+  position: absolute; z-index: 3; inset: 0; pointer-events: none; max-width: none;
+  display: flex; flex-direction: column; justify-content: flex-start; gap: var(--s-2);
+  padding-top: calc(var(--nav-h) + var(--s-1)); padding-bottom: var(--s-2);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--d-slow) var(--ease), visibility 0s linear var(--d-slow);
+}
+.sec--scan[data-phase="two"] .scan__two { opacity: 1; visibility: visible; transition: opacity var(--d-slow) var(--ease) 120ms, visibility 0s; }
+/* Round 9: the stage's numbers (see the top). The block itself is there; the title and each card's
+   frame + caption follow the picture, opacity only. A part that is gone takes no pointer. */
+.sec--scan.is-driven .scan__two { opacity: 1; visibility: visible; transition: none; }
+.sec--scan.is-driven .scan__title { opacity: var(--scan-ft, 0); }
+.sec--scan.is-driven .scan__fig--splat { opacity: var(--scan-fa, 0); }
+.sec--scan.is-driven .scan__fig--model { opacity: var(--scan-fb, 0); }
+.sec--scan.is-driven.is-a-off .scan__fig--splat,
+.sec--scan.is-driven.is-b-off .scan__fig--model { visibility: hidden; }
+.sec--scan.is-driven.is-t-off .scan__title { visibility: hidden; }
+
+.sec--scan .scan__title {
+  font-size: clamp(1.375rem, 1rem + 1.6vw, 2.75rem);
+  font-weight: 600; letter-spacing: -.035em; line-height: 1.08; text-wrap: balance; max-width: 22ch;
+}
+.sec--scan .scan__title span { color: var(--ink-2); }
+
+.sec--scan .scan__cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+.sec--scan .scan__fig { margin: 0; display: grid; gap: calc(var(--ring) + 6px); min-width: 0; }
+
+.sec--scan .scan__card {
+  position: relative; pointer-events: auto;
+  margin: var(--ring) var(--ring) 0;
+  height: clamp(150px, calc((100svh - 330px) / 2), 48svh);
+  border-radius: var(--r-lg);
+  /* round 9 (review C Scan 4): one thin light hairline, no heavy ring (the canvas is cut to the same squircle) */
+  box-shadow: 0 0 0 1px rgba(236, 238, 241, .2);
+  transition: box-shadow var(--d-med) var(--ease);
+}
+/* No 3D: a still of what the card would show. */
+html.stage-none .sec--scan .scan__fig--splat .scan__card { background: var(--space) url("../assets/stage/still-hero.webp") center / cover no-repeat; }
+html.stage-none .sec--scan .scan__fig--model .scan__card { background: var(--space) url("../assets/stage/still-top.webp") center / cover no-repeat; }
+/* The visitor has taken a card (wheel zoom is on): the accent ring says so. */
+.sec--scan .scan__card.is-engaged { box-shadow: 0 0 0 2px var(--accent); }
+
+.sec--scan .scan__hit {
+  position: absolute; inset: 0; z-index: 0; border-radius: inherit;
+  touch-action: pan-y; cursor: grab; -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+}
+.sec--scan .scan__hit:active { cursor: grabbing; }
+.sec--scan .scan__hit:focus { outline: none; }
+.sec--scan .scan__hit:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; }
+
+/* hint chip: the one chip style of the page (.hint in base.css), bottom centre of the card */
+.sec--scan .scan__chip {
+  position: absolute; z-index: 1; left: 50%; bottom: .75rem; translate: -50% 0;
+  max-width: calc(100% - 1.5rem); width: max-content; margin: 0; text-wrap: balance; text-align: center;
+  pointer-events: none;
+}
+.sec--scan .scan__chip .scan__done {
+  pointer-events: auto; margin: -.1rem -.5rem -.1rem .25rem; min-height: 28px; padding: 0 .7rem;
+  border-radius: var(--r-pill); background: #15171a; color: #fff; font-size: .75rem; font-weight: 500;
+}
+.sec--scan .scan__chip .scan__done:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* caption + tools under each card */
+.sec--scan .scan__cap { display: flex; align-items: center; justify-content: space-between; gap: var(--s-1); min-height: 44px; pointer-events: none; }
+.sec--scan .scan__cap-text { font-size: .9375rem; font-weight: 500; letter-spacing: -.01em; line-height: 1.25; text-wrap: balance; }
+.sec--scan .scan__tools { display: inline-flex; gap: 6px; flex: none; pointer-events: auto; }
+.sec--scan .scan__btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 44px; height: 44px; padding: 0; border-radius: var(--r-pill);
+  color: var(--ink); background: color-mix(in srgb, var(--bg) 70%, transparent);
+  box-shadow: 0 0 0 1px var(--line-strong);
+  touch-action: manipulation;
+  transition: background var(--d-fast) var(--ease), box-shadow var(--d-fast) var(--ease), scale var(--d-fast) var(--ease);
+}
+.sec--scan .scan__btn:hover { background: var(--bg-2); box-shadow: 0 0 0 1px var(--ink); }
+.sec--scan .scan__btn:active { scale: .95; }
+.sec--scan .scan__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sec--scan .scan__btn--reset { padding: 0 1rem; font-size: .875rem; font-weight: 500; }
+/* + and - drawn with two bars (no icon pictures) */
+.sec--scan .scan__icon { position: relative; width: 16px; height: 16px; }
+.sec--scan .scan__icon::before, .sec--scan .scan__icon::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 16px; height: 2px; margin: -1px 0 0 -8px;
+  border-radius: var(--r-pill); background: currentColor;
+}
+.sec--scan .scan__icon--minus::after { display: none; }
+.sec--scan .scan__icon--plus::after { width: 2px; height: 16px; margin: -8px 0 0 -1px; }
+
+/* Tablet: a little more air */
+@media (min-width: 768px) {
+  .sec--scan .scan__subject { top: 44%; }
+  .sec--scan .scan__pin { --ring: 14px; }
+}
+
+/* (30 Oct late night, James) ONE card now, as big as the screen allows under the title, border kept */
+.sec--scan .scan__card { height: max(240px, calc(100svh - var(--nav-h) - 13rem)); }
+@media (min-width: 900px) {
+  /* (4 Nov 2026 audit) 11rem left the zoom buttons under the bottom of a 900 px screen; 14rem keeps them in view */
+  .sec--scan .scan__card { height: max(300px, calc(100svh - var(--nav-h) - 14rem)); }
+  .sec--scan .scan__cap-text { font-size: 1.0625rem; }
+  .sec--scan .scan__title { max-width: none; }
+  .sec--scan .scan__two { gap: var(--s-3); padding-bottom: var(--s-3); }
+}
+/* Round 9 (review C Scan 1): words left and clear, building right. The words take the left ~38 %,
+   the subject box (its centre is where js/space.js puts the building, and so the splat) starts at 54 %. */
+@media (min-width: 1024px) {
+  /* (30 Oct evening) words in one band at the top: the title on one line, the small lines next to it on the
+     right; the house and later the building fill the screen under it */
+  .sec--scan .who__text { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(16rem, 26rem); column-gap: var(--s-5); align-items: end; }
+  .sec--scan .who__title { grid-column: 1; grid-row: 1 / span 2; }
+  .sec--scan .who__name { font-size: clamp(3.4rem, 1rem + 5.4vw, 7.5rem); white-space: nowrap; }
+  .sec--scan .who__what { font-size: clamp(1.25rem, .9rem + 1.2vw, 2.1rem); max-width: 30ch; }
+  .sec--scan .who__line { grid-column: 2; grid-row: 1; align-self: end; }
+  .sec--scan .who__first { grid-column: 2; grid-row: 2; margin-top: 0; }
+  .sec--scan .scan__subject { left: var(--gutter); right: var(--gutter); top: 34%; bottom: var(--s-3); }
+}
+
+/* Reduced motion: no rolling or lifting, the two layers simply cross-fade */
+@media (prefers-reduced-motion: reduce) {
+  .sec--scan .scan__who, .sec--scan .who__old, .sec--scan .who__new, .sec--scan .who__new2,
+  .sec--scan .who__fade--1, .sec--scan .who__fade--2, .sec--scan .who__fade--3 { transform: none; }
+  .sec--scan .who__old { opacity: calc(1 - var(--wt, 0)); }
+  .sec--scan .who__new { opacity: var(--st, 0); }
+}

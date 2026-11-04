@@ -1,0 +1,41 @@
+/* Translation runs retain the existing layout and interactive elements. */
+orbit-text { display: contents; }
+.language-switch { display: inline-flex; flex-shrink: 0; align-items: center; padding: 3px; border-radius: var(--r-pill); background: rgba(14,16,20,.88); }
+.language-switch button { min-width: 36px; min-height: 40px; padding: 0 7px; border-radius: var(--r-pill); color: #fff; font-size: .75rem; font-weight: 600; }
+.language-switch button[aria-pressed="true"] { background: #fff; color: #111; }
+.language-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sec--hero .hero__title { max-width: 9ch; }
+html[lang="nl"] .sec--hero .hero__title { font-size: clamp(3.7rem, 9vw, 8rem); max-width: 10ch; }
+.sec--hero .hero__hint { white-space: pre-line; }
+.sec--compare .compare__title > span { display: block; }
+.sec--compare .compare__say { min-width: 0; flex: 1 1 auto; }
+.sec--compare .compare__where, .sec--compare .compare__hint { white-space: normal; }
+.sec--floor .floor__lead { max-width: 16ch; font-size: clamp(2.5rem, 4.5vw, 5.5rem); }
+.sec--floor .floor__sub { margin-top: 1.5rem; }
+.sec--scan .scan__title > span { display: block; margin-top: .3em; }
+.sec--design [data-line="couch"] .design__head { max-width: 16ch; }
+.sec--design .design__head, .sec--design .design__pw-head { overflow-wrap: break-word; }
+.sec--contact .contact__title { max-width: 18ch; font-size: clamp(2.5rem, 1rem + 4.5vw, 6rem); line-height: 1.06; }
+.quote-help { margin-top: 1.5rem; }
+.portfolio-quote { margin-top: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--accent); max-width: 42ch; }
+.hint, .floor__btn--text, .tour__btn { white-space: normal; height: auto; }
+@media (max-width: 899px) {
+  .nav__island { gap: 6px; }
+  .nav__logo { flex-shrink: 0; }
+  .nav__logo img { width: 82px; height: auto; }
+  .nav__end { gap: 2px; }
+  .nav__menu { padding: 0 8px; gap: 4px; }
+  .nav__cta { padding: 0 9px; font-size: .75rem; }
+  .language-switch button { min-width: 30px; padding: 0 5px; }
+  .nav__sheet-steps { gap: 5px; }
+  .nav__sheet-steps a { padding-inline: 6px; }
+  .sec--scan .who__line { font-weight: 400; }
+  html[lang="nl"] .sec--hero .hero__title { font-size: clamp(3.5rem, 12vw, 5.5rem); }
+  .sec--hero .hero__sub { margin-top: 16px; }
+  .sec--compare .compare__title { font-size: clamp(2.5rem, 9vw, 4rem); }
+  .sec--compare .compare__lede { margin-top: 1.25rem; }
+}
+/* (3 Nov, phone audit) EN / NL were 30 px wide (hard to hit with a thumb); there is room from 375 px wide */
+@media (min-width: 375px) and (max-width: 899px) {
+  .language-switch button { min-width: 36px; }
+}

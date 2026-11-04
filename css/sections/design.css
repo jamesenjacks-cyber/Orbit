@@ -1,0 +1,734 @@
+/* 06 Design (round 8): "Now explore what it could become." The station tour in the 3D model.
+   An act (640vh, a sticky full-screen pin). overview > tv > couch > kitchen; scroll drives the camera
+   (js/stage-tour.js), the step bar only scrolls the page. Layers inside the pin, back to front:
+     .design__hit      the whole screen, takes drags once the tour is ready (.is-live)
+     .design__text     one line per stop, top on phones, the left column on desktop (pointer-events none)
+     leader + ring     a hairline from the panel to the top of the piece (an instrument callout)
+     .design__panel    the compact light glass panel above the piece (placed by design.js each frame)
+     hint + dock       the hint chip, the step bar and the view buttons at the foot
+   State on the section (design.js): data-station, data-phase, .is-live, .is-panel, .is-under. */
+
+.sec--design { overflow-x: clip; }
+.sec--design .design__pin { isolation: isolate; pointer-events: none; }
+
+/* ---------- the 3D view ---------- */
+.sec--design .design__hit {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; cursor: auto;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.sec--design.is-live .design__hit { pointer-events: auto; cursor: grab; }
+.sec--design.is-live .design__hit:active { cursor: grabbing; }
+.sec--design .design__hit:focus { outline: none; }
+.sec--design .design__hit:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; border-radius: var(--r-stage); }
+/* the stage frames the stop inside this rectangle: under the words on phones */
+.sec--design .design__subject { position: absolute; left: 12px; right: 12px; top: 36%; bottom: 84px; pointer-events: none; }
+
+/* ---------- the words ---------- */
+.sec--design .design__text {
+  position: relative; z-index: 2; pointer-events: none;
+  padding-top: calc(var(--nav-h) + var(--s-2));
+  transition: opacity var(--d-med) var(--ease);
+}
+.sec--design.is-under .design__text { opacity: .14; }
+.sec--design .design__lines { display: grid; }
+.sec--design .design__line {
+  grid-area: 1 / 1; display: grid; gap: var(--s-2); align-content: start;
+  position: relative; isolation: isolate;
+  /* the words sit on clear glass (James's reference, 29 Oct: iOS-style clear widgets): see-through,
+     a soft blur that slightly dims what is behind, a bright rim of light, white words */
+  padding: clamp(16px, 2.2vw, 28px) clamp(18px, 2.4vw, 32px);
+  justify-self: start; align-self: start; width: fit-content; max-width: 100%;
+  border-radius: clamp(24px, 2.4vw, 34px);
+  color: #fff;
+  background: linear-gradient(155deg, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, .10) 45%, rgba(255, 255, 255, .06) 100%);
+  -webkit-backdrop-filter: blur(26px) saturate(1.6) brightness(.82); backdrop-filter: blur(26px) saturate(1.6) brightness(.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .55),
+    inset 0 0 0 1px rgba(255, 255, 255, .22),
+    inset 0 -10px 24px -14px rgba(255, 255, 255, .22),
+    0 18px 40px -22px rgba(0, 0, 0, .35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .22);
+  opacity: 0; translate: 0 18px; visibility: hidden;
+  transition: opacity var(--d-med) var(--ease), translate var(--d-slow) var(--ease), visibility 0s linear var(--d-med);
+}
+.sec--design .design__line.is-on {
+  opacity: 1; translate: 0 0; visibility: visible;
+  transition: opacity var(--d-slow) var(--ease) 120ms, translate var(--d-slow) var(--ease) 120ms, visibility 0s;
+}
+.no-js .sec--design .design__line--overview { opacity: 1; translate: none; visibility: visible; }
+.sec--design .design__lead {
+  font-size: clamp(2.35rem, 1rem + 5.2vw, 5.25rem);
+  font-weight: 600; letter-spacing: -.05em; line-height: .94;
+  max-width: 10ch; text-wrap: balance;
+}
+.sec--design .design__head {
+  font-size: clamp(1.9rem, .9rem + 3.6vw, 3.75rem);
+  font-weight: 600; letter-spacing: -.045em; line-height: .98;
+  max-width: 12ch; text-wrap: balance;
+}
+.sec--design .design__sub {
+  font-size: var(--t-3); line-height: 1.4; font-weight: 500; color: rgba(255, 255, 255, .86);
+  max-width: 30ch; text-wrap: pretty;
+}
+
+/* ---------- the callout: leader line + ring on the piece ---------- */
+.sec--design .design__leader,
+.sec--design .design__ring {
+  position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none;
+  opacity: 0; transition: opacity var(--d-fast) var(--ease);
+}
+.sec--design .design__leader {
+  height: 1px; width: 0; transform-origin: 0 50%;
+  background: linear-gradient(to right, rgba(250, 250, 252, .9), rgba(250, 250, 252, .55));
+  box-shadow: 0 0 0 .5px rgba(13, 14, 16, .25);
+}
+.sec--design .design__ring {
+  width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%;
+  border: 1.5px solid rgba(250, 250, 252, .95);
+  background: rgba(250, 250, 252, .22);
+  box-shadow: 0 0 0 1px rgba(13, 14, 16, .3);
+}
+.sec--design.is-panel .design__leader.is-on,
+.sec--design.is-panel .design__ring.is-on { opacity: 1; transition: opacity var(--d-med) var(--ease) 140ms; }
+
+/* ---------- the floating panel ---------- */
+.sec--design .design__panel {
+  position: absolute; left: 0; top: 0; z-index: 4;
+  width: min(300px, calc(100vw - 24px));
+  padding: 12px;
+  pointer-events: auto; touch-action: manipulation;
+  opacity: 0; visibility: hidden;
+  transition: opacity 150ms var(--ease), visibility 0s linear 150ms;
+  will-change: transform;
+}
+.sec--design .design__panel.is-open {
+  opacity: 1; visibility: visible;
+  transition: opacity var(--d-med) var(--ease), visibility 0s;
+}
+.sec--design .design__panel.is-lost { opacity: 0; }
+.sec--design .design__panel.is-sheet { max-height: 34svh; overflow-y: auto; overscroll-behavior: contain; width: calc(100vw - 24px); }
+.sec--design .design__pcore {
+  display: grid; gap: 12px;
+  transform-origin: 50% 100%; scale: .96; translate: 0 8px;
+  transition: scale var(--d-med) var(--ease), translate var(--d-med) var(--ease);
+}
+.sec--design .design__panel.is-open .design__pcore { scale: 1; translate: 0 0; }
+.sec--design .design__phead { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 32px; padding-left: 4px; }
+.sec--design .design__phead[hidden] { display: none; }
+.sec--design .design__phead .design__picks { flex: 1 1 auto; min-width: 0; margin-left: -4px; }
+.sec--design .design__picks[hidden] { display: none; }
+/* light glass, a little denser than the base so small text stays crisp over a bright model */
+.sec--design .design__panel.glass,
+.sec--design .design__steps.glass,
+.sec--design .design__view.glass { background: rgba(250, 250, 252, .84); }
+.sec--design .design__ptitle { font-size: .9375rem; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+.sec--design .design__prow { display: grid; gap: 8px; }
+.sec--design .design__prow[hidden] { display: none; }
+.sec--design .design__plabel { padding-left: 4px; font-size: .75rem; font-weight: 500; line-height: 1.2; color: var(--glass-ink-2); }
+
+/* pick a piece: a small segmented row */
+.sec--design .design__picks {
+  display: flex; gap: 4px; padding: 3px;
+  border-radius: var(--r-pill); background: rgba(13, 14, 16, .06);
+  overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+}
+.sec--design .design__picks::-webkit-scrollbar { display: none; }
+.sec--design .design__pick {
+  flex: 1 0 auto; min-height: 34px; padding: 0 .85rem;
+  border-radius: var(--r-pill); font-size: .8125rem; font-weight: 500; white-space: nowrap;
+  color: var(--glass-ink-2);
+  transition: background var(--d-fast) var(--ease), color var(--d-fast) var(--ease);
+}
+.sec--design .design__pick[aria-pressed="true"] { background: rgba(255, 255, 255, .95); color: var(--glass-ink); box-shadow: 0 1px 2px rgba(13, 14, 16, .12), 0 0 0 1px rgba(13, 14, 16, .06); }
+
+/* picture choices */
+.sec--design .design__opts {
+  display: flex; gap: 8px; padding: 2px 2px 4px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none;
+}
+.sec--design .design__opts::-webkit-scrollbar { display: none; }
+.sec--design .design__opt {
+  flex: 0 0 60px; display: grid; gap: 5px; justify-items: center; scroll-snap-align: start;
+  font-size: .6875rem; line-height: 1.15; text-align: center; color: var(--glass-ink-2);
+}
+.sec--design .design__opt-pic {
+  width: 60px; height: 60px; display: block; object-fit: contain;
+  border-radius: var(--r-sm); background: #fff;
+  box-shadow: 0 0 0 1px rgba(13, 14, 16, .08);
+  transition: box-shadow var(--d-fast) var(--ease), scale var(--d-fast) var(--ease);
+}
+.sec--design .design__opt:hover .design__opt-pic { box-shadow: 0 0 0 1px rgba(13, 14, 16, .3); }
+.sec--design .design__opt:active .design__opt-pic { scale: .96; }
+.sec--design .design__opt[aria-pressed="true"] { color: var(--glass-ink); font-weight: 500; }
+.sec--design .design__opt[aria-pressed="true"] .design__opt-pic { box-shadow: 0 0 0 2px var(--accent); }
+.sec--design .design__opt[aria-busy="true"] .design__opt-pic { opacity: .55; }
+.sec--design .design__opt-name { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 60px; }
+.sec--design .design__opt:focus-visible { outline: none; }
+.sec--design .design__opt:focus-visible .design__opt-pic { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* wall colours */
+.sec--design .design__swatches { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 4px; }
+.sec--design .design__swatch {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--c, #fff);
+  box-shadow: inset 0 0 0 1px rgba(13, 14, 16, .14);
+  transition: box-shadow var(--d-fast) var(--ease), scale var(--d-fast) var(--ease);
+}
+.sec--design .design__swatch:hover { scale: 1.06; }
+.sec--design .design__swatch--original {
+  background: conic-gradient(from 45deg, #e9e6df 0 50%, #cfcac0 0 100%);
+}
+.sec--design .design__swatch[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(13, 14, 16, .14), 0 0 0 2px #fff, 0 0 0 4px var(--glass-ink); }
+.sec--design .design__swatch:focus-visible { outline-offset: 5px; }
+
+/* tools */
+.sec--design .design__tools { display: flex; gap: 6px; }
+.sec--design .design__tool {
+  flex: 1 1 0; min-height: 38px; padding: 0 .9rem;
+  border-radius: var(--r-pill); font-size: .8125rem; font-weight: 500; white-space: nowrap;
+  color: var(--glass-ink); background: rgba(13, 14, 16, .07);
+  transition: background var(--d-fast) var(--ease), color var(--d-fast) var(--ease), scale var(--d-fast) var(--ease);
+}
+.sec--design .design__tool:hover { background: rgba(13, 14, 16, .12); }
+.sec--design .design__tool:active { scale: .97; }
+.sec--design .design__tool[aria-pressed="true"] { background: var(--glass-ink); color: #fafafc; }
+.sec--design .design__tool--quiet { flex: 0 0 auto; min-height: 32px; padding: 0 .8rem; background: transparent; color: var(--glass-ink-2); box-shadow: inset 0 0 0 1px rgba(13, 14, 16, .14); }
+.sec--design .design__tool--quiet:hover { background: rgba(13, 14, 16, .06); color: var(--glass-ink); }
+.sec--design .design__tool[hidden] { display: none; }
+.sec--design .design__pad { display: flex; justify-content: center; gap: 6px; }
+.sec--design .design__pad[hidden] { display: none; }
+.sec--design .design__padbtn {
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.05rem; line-height: 1; color: var(--glass-ink);
+  background: rgba(255, 255, 255, .9); box-shadow: 0 0 0 1px rgba(13, 14, 16, .1), 0 1px 2px rgba(13, 14, 16, .1);
+}
+.sec--design .design__padbtn:active { scale: .95; }
+.sec--design .design__note { padding-left: 4px; font-size: .75rem; color: var(--glass-ink-2); }
+
+/* the kitchen lights: one big switch */
+.sec--design .design__switch {
+  width: 100%; min-height: 52px; padding: 0 10px 0 14px;
+  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px;
+  border-radius: var(--r-md); text-align: left;
+  background: rgba(255, 255, 255, .7); box-shadow: 0 0 0 1px rgba(13, 14, 16, .08);
+  color: var(--glass-ink);
+}
+.sec--design .design__switch-text { font-size: .9375rem; font-weight: 600; letter-spacing: -.01em; }
+.sec--design .design__switch-state { font-family: var(--mono); font-size: .75rem; color: var(--glass-ink-2); }
+.sec--design .design__switch-track {
+  position: relative; width: 44px; height: 26px; border-radius: 999px;
+  background: rgba(13, 14, 16, .18); transition: background var(--d-med) var(--ease);
+}
+.sec--design .design__switch-knob {
+  position: absolute; left: 3px; top: 3px; width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 3px rgba(13, 14, 16, .3);
+  transition: translate var(--d-med) var(--ease);
+}
+.sec--design .design__switch[aria-pressed="true"] .design__switch-track { background: var(--accent); }
+.sec--design .design__switch[aria-pressed="true"] .design__switch-knob { translate: 18px 0; }
+
+/* the touch handle for sliding the piece */
+.sec--design .design__grab {
+  position: absolute; left: 0; top: 0; z-index: 4;
+  width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+  display: none; touch-action: none; cursor: move;
+  background: rgba(250, 250, 252, .78);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  box-shadow: 0 0 0 1px rgba(13, 14, 16, .14), var(--shadow-soft);
+}
+/* round 9 (review C design 5): a move icon (four arrows) instead of the "+" */
+.sec--design .design__grab-icon { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; color: #15171a; pointer-events: none; }
+.sec--design.is-live .design__grab.is-on { display: block; pointer-events: auto; }
+
+/* ---------- hint + dock ---------- */
+.sec--design .design__hint {
+  position: absolute; z-index: 5; left: 50%; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 62px);
+  translate: -50% 0; max-width: calc(100% - 32px); width: max-content;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity var(--d-med) var(--ease), visibility 0s linear var(--d-med);
+}
+.sec--design .design__hint.is-on { opacity: 1; visibility: visible; transition: opacity var(--d-med) var(--ease), visibility 0s; }
+.sec--design.is-sheet .design__hint { opacity: 0; visibility: hidden; }
+
+.sec--design .design__dock {
+  position: absolute; z-index: 5; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
+  translate: -50% 0; display: flex; align-items: center; gap: 8px;
+  max-width: calc(100% - 24px);
+}
+.sec--design .design__steps {
+  position: relative; display: flex; align-items: center; padding: 4px;
+  border-radius: var(--r-pill); pointer-events: auto;
+}
+.sec--design .design__step {
+  position: relative; z-index: 1; min-height: 40px; padding: 0 .68rem;
+  border-radius: var(--r-pill);
+  font-size: .8125rem; font-weight: 500; white-space: nowrap; color: var(--glass-ink-2);
+  transition: color var(--d-med) var(--ease);
+}
+.sec--design .design__step:hover { color: var(--glass-ink); }
+.sec--design .design__step[aria-current="step"] { color: #fafafc; }
+.sec--design .design__thumb {
+  position: absolute; z-index: 0; left: 0; top: 4px; height: 40px; width: 0;
+  border-radius: var(--r-pill); background: var(--glass-ink);
+  transition: translate var(--d-slow) var(--ease), width var(--d-slow) var(--ease);
+}
+.sec--design .design__view { display: none; align-items: center; gap: 2px; padding: 4px; border-radius: var(--r-pill); pointer-events: auto; }
+.sec--design .design__vbtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%; color: var(--glass-ink);
+  transition: background var(--d-fast) var(--ease);
+}
+.sec--design .design__vbtn:hover { background: rgba(13, 14, 16, .08); }
+.sec--design .design__vbtn:disabled { opacity: .35; cursor: default; }
+.sec--design .design__vbtn--text { width: auto; padding: 0 .85rem; border-radius: var(--r-pill); font-size: .8125rem; font-weight: 500; white-space: nowrap; }
+.sec--design .design__icon { position: relative; width: 14px; height: 14px; }
+.sec--design .design__icon::before,
+.sec--design .design__icon::after { content: ""; position: absolute; left: 0; top: 6px; width: 14px; height: 2px; border-radius: 999px; background: currentColor; }
+.sec--design .design__icon::after { display: none; }
+.sec--design .design__icon--plus::after { display: block; left: 6px; top: 0; width: 2px; height: 14px; }
+/* the dock only while the visitor is inside the act */
+.sec--design .design__dock { opacity: 0; visibility: hidden; transition: opacity var(--d-med) var(--ease), visibility 0s linear var(--d-med); }
+.sec--design.is-in .design__dock { opacity: 1; visibility: visible; transition: opacity var(--d-med) var(--ease), visibility 0s; }
+.sec--design:not(.is-live) .design__view { display: none; }
+/* round 9 (review A4 + A5): leaving the act (end of the kitchen stop, then the pin scrolls away while
+   the camera rises to the whole floor): the step bar, the hint and the lamp dots go before anything
+   moves, so nothing floats up the screen */
+.sec--design.is-leaving .design__dock,
+.sec--design.is-leaving .design__hint,
+.sec--design.is-leaving .design__lamps,
+.sec--design.is-leaving .design__tapdemo,
+.sec--design.is-leaving .design__grab {
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 180ms var(--ease), visibility 0s linear 180ms;
+}
+
+/* ---------- phones: a compact low sheet under the words (QA8 M2) ---------- */
+@media (max-width: 767px) {
+  .sec--design .design__panel { padding: 10px; }
+  .sec--design .design__panel.is-sheet { max-height: 30svh; }
+  .sec--design .design__pcore { gap: 8px; }
+  .sec--design .design__opt { flex-basis: 48px; }
+  .sec--design .design__opt-pic { width: 48px; height: 48px; }
+  .sec--design .design__opt-name { max-width: 56px; }
+  .sec--design .design__swatches { gap: 6px; }
+  .sec--design .design__swatch { width: 30px; height: 30px; }
+}
+
+/* ---------- tablet and up ---------- */
+@media (min-width: 768px) {
+  .sec--design .design__step { padding: 0 1rem; font-size: .875rem; }
+  .sec--design.is-live .design__view { display: inline-flex; }
+  .sec--design .design__hint { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 66px); }
+}
+
+/* ---------- desktop: the words in the left column, the stop on the right ---------- */
+@media (min-width: 1024px) {
+  .sec--design .design__text { padding-top: calc(var(--nav-h) + clamp(32px, 7vh, 96px)); }
+  .sec--design .design__lines { max-width: 34%; }
+  .sec--design .design__line { gap: var(--s-3); }
+  .sec--design .design__lead { font-size: clamp(3.5rem, 1rem + 4vw, 5.5rem); }
+  .sec--design .design__sub { max-width: 26ch; font-size: clamp(1.125rem, .9rem + .4vw, 1.3rem); }
+  .sec--design .design__subject { left: 38%; right: var(--gutter); top: calc(var(--nav-h) + 8px); bottom: 88px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec--design .design__line, .sec--design .design__line.is-on { translate: none; }
+  .sec--design .design__pcore { scale: 1; translate: none; }
+}
+
+/* ==========================================================================
+   Clear glass, one family (29 Oct, James: "a better design than this", reference = iOS clear widgets).
+   UX research notes (ui-ux-pro-max "liquid-glass" + configurator patterns):
+   - the caption, the panel and the foot bar were three different materials (clear / milky / milky)
+     and competed; now ONE material: see-through, blurred, slightly dimmed, a bright rim, white ink.
+   - glass is for controls; content (product pictures) stays on solid white tiles inside it.
+   - orientation: every caption says which stop this is ("Stop 1 of 3").
+   - the colour row never breaks onto a lonely second line; the chosen colour is named.
+   - the foot is ONE capsule: stops | zoom out, zoom in, reset (icon with a label for screen readers).
+   ========================================================================== */
+.sec--design {
+  --cg-bg: linear-gradient(155deg, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, .09) 45%, rgba(255, 255, 255, .05) 100%);
+  --cg-filter: blur(28px) saturate(1.7) brightness(.74);
+  --cg-rim: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 0 0 1px rgba(255, 255, 255, .2), inset 0 -10px 24px -16px rgba(255, 255, 255, .2), 0 18px 44px -22px rgba(0, 0, 0, .45);
+  --cg-ink: #fff; --cg-ink-2: rgba(255, 255, 255, .74);
+  --cg-fill: rgba(255, 255, 255, .12); --cg-fill-hi: rgba(255, 255, 255, .2);
+  --cg-on: rgba(255, 255, 255, .94); --cg-on-ink: #121417;
+}
+.sec--design .design__line,
+.sec--design .design__panel,
+.sec--design .design__dock {
+  color: var(--cg-ink);
+  background: var(--cg-bg);
+  -webkit-backdrop-filter: var(--cg-filter); backdrop-filter: var(--cg-filter);
+  box-shadow: var(--cg-rim);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sec--design .design__line, .sec--design .design__panel, .sec--design .design__dock { background: rgba(28, 30, 34, .86); }
+}
+
+/* 1. the caption: smaller, calmer, with the stop marker */
+.sec--design .design__line { gap: 10px; max-width: min(100%, 420px); border-radius: 30px; text-shadow: 0 1px 2px rgba(0, 0, 0, .2); }
+.sec--design .design__kicker {
+  font: 500 .6875rem/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cg-ink-2);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.sec--design .design__kicker::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255, 79, 31, .25); }
+.sec--design .design__head { font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3rem); line-height: 1; max-width: 13ch; }
+.sec--design .design__lead { font-size: clamp(2rem, 1.1rem + 3vw, 3.6rem); max-width: 11ch; }
+.sec--design .design__sub { color: var(--cg-ink-2); font-size: clamp(.95rem, .9rem + .2vw, 1.0625rem); max-width: 32ch; }
+
+/* 2. the panel: same glass, white ink, clear groups */
+.sec--design .design__panel { width: min(320px, calc(100vw - 24px)); padding: 14px; border-radius: 28px; }
+.sec--design .design__pcore { gap: 14px; }
+.sec--design .design__ptitle { color: var(--cg-ink); font-size: 1rem; }
+.sec--design .design__plabel { color: var(--cg-ink-2); font-size: .75rem; letter-spacing: .01em; }
+.sec--design .design__picks { background: var(--cg-fill); }
+.sec--design .design__pick { color: var(--cg-ink-2); }
+.sec--design .design__pick:hover { color: var(--cg-ink); }
+.sec--design .design__pick[aria-pressed="true"] { background: var(--cg-on); color: var(--cg-on-ink); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+.sec--design .design__opt { flex-basis: 64px; color: var(--cg-ink-2); }
+.sec--design .design__opt-pic { width: 64px; height: 64px; border-radius: 18px; background: rgba(255, 255, 255, .92); box-shadow: 0 0 0 1px rgba(255, 255, 255, .3); }
+.sec--design .design__opt:hover .design__opt-pic { box-shadow: 0 0 0 1px rgba(255, 255, 255, .7); }
+.sec--design .design__opt[aria-pressed="true"] { color: var(--cg-ink); }
+.sec--design .design__opt[aria-pressed="true"] .design__opt-pic { box-shadow: 0 0 0 2px var(--accent), 0 0 0 5px rgba(255, 79, 31, .22); }
+.sec--design .design__swatches { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; gap: 10px; padding: 5px 5px 6px; }
+.sec--design .design__swatches::-webkit-scrollbar { display: none; }
+.sec--design .design__swatch { flex: 0 0 auto; width: 30px; height: 30px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35); }
+.sec--design .design__swatch[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15), 0 0 0 2px rgba(20, 22, 26, .6), 0 0 0 4px #fff; }
+.sec--design .design__tool { color: var(--cg-ink); background: var(--cg-fill); }
+.sec--design .design__tool:hover { background: var(--cg-fill-hi); }
+.sec--design .design__tool[aria-pressed="true"] { background: var(--cg-on); color: var(--cg-on-ink); }
+.sec--design .design__tool--quiet { background: transparent; color: var(--cg-ink-2); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+.sec--design .design__tool--quiet:hover { background: var(--cg-fill); color: var(--cg-ink); }
+.sec--design .design__padbtn { color: var(--cg-on-ink); background: var(--cg-on); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+.sec--design .design__note { color: var(--cg-ink-2); }
+.sec--design .design__switch { background: var(--cg-fill); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); color: var(--cg-ink); }
+.sec--design .design__switch-state { color: var(--cg-ink-2); }
+.sec--design .design__switch-track { background: rgba(255, 255, 255, .22); }
+.sec--design .design__switch[aria-pressed="true"] .design__switch-track { background: var(--accent); }
+/* the callout ring: a soft live dot on the piece */
+.sec--design .design__ring { border-color: #fff; background: rgba(255, 255, 255, .3); box-shadow: 0 0 0 4px rgba(255, 255, 255, .16), 0 1px 4px rgba(0, 0, 0, .4); }
+.sec--design .design__leader { background: linear-gradient(to right, rgba(255, 255, 255, .85), rgba(255, 255, 255, .45)); box-shadow: 0 0 0 .5px rgba(0, 0, 0, .3); }
+
+/* 3. the foot: one capsule, stops | view */
+.sec--design .design__dock { gap: 0; padding: 4px; border-radius: 999px; pointer-events: auto; }
+.sec--design .design__steps, .sec--design .design__view { padding: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.sec--design .design__step { color: var(--cg-ink-2); }
+.sec--design .design__step:hover { color: var(--cg-ink); }
+.sec--design .design__step[aria-current="step"] { color: var(--cg-on-ink); }
+.sec--design .design__thumb { top: 0; background: var(--cg-on); box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
+.sec--design .design__split { display: none; width: 1px; height: 22px; margin: 0 6px; background: rgba(255, 255, 255, .24); }
+.sec--design .design__vbtn { color: var(--cg-ink); }
+.sec--design .design__vbtn:hover { background: var(--cg-fill); }
+.sec--design .design__svg { width: 18px; height: 18px; }
+@media (min-width: 768px) {
+  .sec--design.is-live .design__split { display: block; }
+}
+@media (max-width: 767px) {
+  .sec--design .design__line { border-radius: 24px; padding: 14px 18px 16px; }
+  .sec--design .design__head { font-size: 1.6rem; }
+  .sec--design .design__lead { font-size: 2rem; }
+  .sec--design .design__panel { padding: 12px; border-radius: 24px; }
+  .sec--design .design__opt { flex-basis: 52px; }
+  .sec--design .design__opt-pic { width: 52px; height: 52px; border-radius: 15px; }
+}
+
+/* ==========================================================================
+   ONE sheet per stop (29 Oct, James picked "B2, on the right"): the stop's words + its choices
+   together in one clear glass sheet. Computers: a tall side sheet (nav to step bar); tablets: the
+   same sheet, as tall as its content; phones: a compact strip above the step bar, the model keeps
+   the whole screen. design.js places it (sheetBox) and tells the camera the free part of the
+   screen (tour.area), so the piece is framed beside the sheet, never under it.
+   ========================================================================== */
+.sec--design .design__panel { display: flex; flex-direction: column; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.sec--design .design__panel::-webkit-scrollbar { display: none; }
+.sec--design .design__pcore { flex: 1 0 auto; display: flex; flex-direction: column; gap: 16px; transform-origin: 50% 0; }
+.sec--design .design__pwords { display: grid; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, .16); }
+.sec--design .design__pw-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 500 .6875rem/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cg-ink-2);
+}
+.sec--design .design__pw-kicker::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px rgba(255, 79, 31, .25); }
+.sec--design .design__pw-head { font-size: clamp(1.75rem, 1.2rem + 1.5vw, 2.6rem); font-weight: 600; letter-spacing: -.045em; line-height: 1; text-wrap: balance; }
+.sec--design .design__pw-sub { font-size: 1rem; line-height: 1.4; font-weight: 500; color: var(--cg-ink-2); text-wrap: pretty; }
+.sec--design .design__pfoot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 4px; }
+.sec--design .design__pnote { font-size: .75rem; color: var(--cg-ink-2); }
+/* the overview words (29 Oct, James): big in the middle of the screen, straight over the model, no box
+   (bright ink + glyph halo, base.css rule); --intro (design.js, 1 -> 0) fades them as the flight starts */
+.sec--design .design__intro {
+  /* round 9 (review D3): the words in the band above the room (design.js frames the room below 45 %
+     of the screen), on the dark background, so the sub-line no longer crosses the pale floor */
+  position: absolute; inset: var(--nav-h) 0 55%; z-index: 2; pointer-events: none;
+  display: grid; place-items: center; padding: 0 var(--gutter);
+  opacity: var(--intro, 1);
+  /* round 9 (review C design 1): at the end of the overview the words lift up as they fade (fast),
+     so they never hang half see-through over the model */
+  translate: 0 calc(var(--intro-lift, 0) * -56px);
+}
+.sec--design .design__intro .design__line--overview {
+  justify-self: center; align-self: center; justify-items: center; text-align: center;
+  max-width: min(100%, 980px); padding: 0; gap: clamp(10px, 1.4vw, 18px);
+  background: none; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none; border-radius: 0;
+  text-shadow: var(--halo-big), 0 4px 40px rgba(0, 0, 0, .55);
+}
+.sec--design .design__intro .design__lead {
+  font-size: clamp(2.4rem, 1rem + 4.4vw, 5.5rem); line-height: .94; letter-spacing: -.05em; max-width: 13ch;
+}
+.sec--design .design__intro .design__sub {
+  color: #fff; font-size: clamp(1rem, .9rem + .45vw, 1.3rem); max-width: 34ch; font-weight: 600;
+  /* round 9 (review C design 1): the sub-line sits over the bright floor: a denser glyph halo (no box) */
+  text-shadow: var(--halo-small), 0 0 2px rgba(0, 0, 0, .7), 0 2px 22px rgba(0, 0, 0, .55);
+}
+.sec--design .design__intro .design__kicker { color: #fff; text-shadow: var(--halo-small); }
+@media (max-width: 767px) {
+  .sec--design .design__intro { inset: var(--nav-h) 0 53%; }
+  .sec--design .design__intro .design__line--overview .design__sub { display: block; font-size: 1rem; }
+  .sec--design .design__intro .design__lead { font-size: clamp(2.3rem, 1rem + 6vw, 3rem); }
+}
+
+/* the words card (before the sheet opens) hands over to the sheet: same place, so nothing jumps */
+.sec--design.is-panel .design__line.is-on { opacity: 0; transition: opacity 140ms var(--ease); }
+
+@media (min-width: 768px) {
+  .sec--design .design__text {
+    position: absolute; z-index: 2; top: var(--sheet-y, 92px); left: var(--sheet-x, auto); right: auto;
+    width: var(--sheet-w, 340px); max-width: none; margin: 0; padding: 0;
+  }
+  .sec--design .design__lines { max-width: none; }
+  .sec--design .design__line { width: 100%; max-width: none; border-radius: 30px; padding: 22px; gap: 10px; }
+  .sec--design .design__head { font-size: clamp(1.75rem, 1.2rem + 1.5vw, 2.6rem); max-width: none; }
+  .sec--design .design__lead { font-size: clamp(2.1rem, 1.3rem + 2vw, 3.2rem); max-width: none; }
+  .sec--design .design__sub { font-size: 1rem; max-width: none; }
+  .sec--design .design__panel { padding: 22px; border-radius: 30px; }
+}
+/* computers: the tall sheet has room for bigger pictures and the wall colours as a named list */
+@media (min-width: 1024px) {
+  .sec--design .design__opt { flex-basis: 76px; }
+  .sec--design .design__opt-pic { width: 76px; height: 76px; border-radius: 20px; }
+  .sec--design .design__opt-name { max-width: 76px; }
+  .sec--design .design__swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; overflow: visible; padding: 0; }
+  .sec--design .design__swatch,
+  .sec--design .design__swatch--original {
+    width: auto; height: 42px; border-radius: 999px; scale: 1;
+    display: flex; align-items: center; gap: 10px; padding: 0 12px 0 6px;
+    font-size: .8125rem; font-weight: 500; color: var(--cg-ink); text-align: left; white-space: nowrap;
+    background: rgba(255, 255, 255, .08); box-shadow: none;
+  }
+  .sec--design .design__swatch::before { content: ""; flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--c, #fff); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35); }
+  .sec--design .design__swatch--original::before { background: conic-gradient(from 45deg, #e9e6df 0 50%, #cfcac0 0 100%); }
+  .sec--design .design__swatch::after { content: attr(data-name); overflow: hidden; text-overflow: ellipsis; }
+  .sec--design .design__swatch:hover { scale: 1; background: rgba(255, 255, 255, .16); }
+  .sec--design .design__swatch[aria-pressed="true"] { background: rgba(255, 255, 255, .22); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6); }
+}
+
+/* phones: the model fills the screen; the stop is ONE compact strip above the step bar.
+   Only the essentials: a one-line title, small chips, five colours. A vertical swipe anywhere
+   (also on the strip) scrolls the page; the chips only react to a tap. */
+@media (max-width: 767px) {
+  .sec--design .design__text {
+    position: absolute; z-index: 2; left: 12px; right: 12px; top: auto;
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 58px);
+    width: auto; max-width: none; margin: 0; padding: 0;
+  }
+  .sec--design .design__line { width: 100%; max-width: none; padding: 12px 16px 14px; border-radius: 22px; gap: 4px; }
+  .sec--design .design__line .design__sub { display: none; }
+  .sec--design .design__line--overview .design__sub { display: block; font-size: .875rem; }
+  .sec--design .design__kicker { font-size: .625rem; }
+  .sec--design .design__head { font-size: 1.125rem; letter-spacing: -.02em; max-width: none; }
+  .sec--design .design__lead { font-size: 1.5rem; max-width: none; }
+  .sec--design .design__panel.is-sheet { padding: 12px 14px; border-radius: 22px; max-height: 42svh; touch-action: pan-y; }
+  .sec--design .design__pcore { gap: 10px; }
+  .sec--design .design__pwords { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 0; border: 0; }
+  .sec--design .design__pw-head { font-size: 1.05rem; letter-spacing: -.02em; }
+  .sec--design .design__pw-kicker { order: 2; flex: 0 0 auto; font-size: .5625rem; letter-spacing: .08em; }
+  .sec--design .design__pw-kicker::before { display: none; }
+  .sec--design .design__pw-sub, .sec--design .design__phead, .sec--design .design__pfoot, .sec--design .design__note { display: none; }
+  .sec--design [data-prow="options"], .sec--design [data-prow="paints"] { grid-template-columns: 44px minmax(0, 1fr); align-items: center; gap: 6px; }
+  .sec--design .design__plabel { padding: 0; font-size: .75rem; }
+  .sec--design .design__opts { gap: 6px; padding: 0; }
+  .sec--design .design__opt {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 6px;
+    padding: 3px 10px 3px 3px; border-radius: 999px; background: var(--cg-fill);
+    font-size: .75rem; color: var(--cg-ink);
+  }
+  /* (3 Nov, phone audit) 28 -> 32 px pictures (chips 38 px) and 26 -> 32 px colours: easier for a thumb */
+  .sec--design .design__opt-pic { width: 32px; height: 32px; border-radius: 999px; box-shadow: none; }
+  .sec--design .design__opt-name { display: block; max-width: 7em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sec--design .design__opt[aria-pressed="true"] { background: var(--cg-on); color: var(--cg-on-ink); }
+  .sec--design .design__opt[aria-pressed="true"] .design__opt-pic { box-shadow: none; }
+  /* only the chosen chip says its name: the row stays one glance wide */
+  .sec--design .design__opt:not([aria-pressed="true"]) { padding-right: 3px; }
+  .sec--design .design__opt:not([aria-pressed="true"]) .design__opt-name { display: none; }
+  .sec--design .design__swatches { gap: 10px; padding: 4px; }
+  .sec--design .design__swatch { width: 32px; height: 32px; }
+  .sec--design .design__swatch:nth-child(n+6) { display: none; }
+  .sec--design .design__tool { min-height: 36px; }
+  .sec--design .design__switch { min-height: 44px; }
+}
+
+/* ==========================================================================
+   The kitchen lamps (29 Oct, James: "tap the light source itself"). A small glow dot on each lamp
+   is its switch: warm and glowing = on, a hollow white ring = off. The lamp's name tag shows on
+   hover, on keyboard focus and for 2.5 s after a tap (.is-told). Until the first lamp tap a finger
+   taps the first lamp in view (.design__tapdemo), then it is gone. Placed by design.js placeLamps.
+   ========================================================================== */
+.sec--design .design__lamps { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.sec--design .design__lamps[hidden] { display: none; }
+.sec--design .design__lamp {
+  position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0;
+  border: 0; border-radius: 50%; background: none; color: #fff; cursor: pointer; pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+.sec--design .design__lamp.is-away { visibility: hidden; pointer-events: none; }
+.sec--design .design__lamp-dot {
+  position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+  transition: background var(--d-med) var(--ease), box-shadow var(--d-med) var(--ease), scale 160ms var(--ease);
+}
+.sec--design .design__lamp[aria-pressed="true"] .design__lamp-dot {
+  background: radial-gradient(circle, #fffaf0 0 28%, #ffd27a 52%, #f5a83c 100%);
+  box-shadow: 0 0 0 4px rgba(255, 210, 122, .32), 0 0 18px 6px rgba(255, 196, 102, .55);
+}
+.sec--design .design__lamp[aria-pressed="true"] .design__lamp-dot::after {
+  content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 1.5px solid rgba(255, 214, 140, .8);
+  animation: lampBreathe 2.6s var(--ease) infinite;
+}
+.sec--design .design__lamp[aria-pressed="false"] .design__lamp-dot {
+  background: rgba(16, 18, 22, .45); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .9), 0 1px 4px rgba(0, 0, 0, .45);
+}
+.sec--design .design__lamp:active .design__lamp-dot { scale: .86; }
+@keyframes lampBreathe { 0%, 100% { opacity: .9; scale: 1; } 50% { opacity: .35; scale: 1.18; } }
+
+.sec--design .design__lamp-tag {
+  position: absolute; top: 50%; left: 38px; translate: -6px -50%;
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+  font-size: .8125rem; font-weight: 600; letter-spacing: -.01em; color: var(--cg-ink);
+  background: var(--cg-bg); -webkit-backdrop-filter: var(--cg-filter); backdrop-filter: var(--cg-filter); box-shadow: var(--cg-rim);
+  opacity: 0; pointer-events: none; transition: opacity 160ms var(--ease), translate 160ms var(--ease);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sec--design .design__lamp-tag { background: rgba(28, 30, 34, .86); }
+}
+.sec--design .design__lamp-state { font: 500 .6875rem/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--cg-ink-2); }
+.sec--design .design__lamp[aria-pressed="true"] .design__lamp-state { color: #ffd27a; }
+.sec--design .design__lamp.is-left .design__lamp-tag { left: auto; right: 38px; translate: 6px -50%; }
+.sec--design .design__lamp.is-told .design__lamp-tag,
+.sec--design .design__lamp:focus-visible .design__lamp-tag { opacity: 1; translate: 0 -50%; }
+@media (hover: hover) {
+  .sec--design .design__lamp:hover .design__lamp-tag { opacity: 1; translate: 0 -50%; }
+  .sec--design .design__lamp:hover .design__lamp-dot { scale: 1.15; }
+}
+.sec--design .design__lamp:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* the line in the sheet: how many lamps are on */
+.sec--design .design__lampcount { display: inline-flex; align-items: center; gap: 8px; font-size: .875rem; font-weight: 500; color: var(--cg-ink); }
+.sec--design .design__lampcount-dot { width: 9px; height: 9px; border-radius: 50%; background: #ffd27a; box-shadow: 0 0 10px 3px rgba(255, 196, 102, .6); transition: background var(--d-med) var(--ease), box-shadow var(--d-med) var(--ease); }
+.sec--design [data-prow="lights"].is-dark .design__lampcount-dot { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .8); }
+
+/* the tap demo: a finger taps the lamp, a ring spreads, "Tap a lamp" beside it */
+.sec--design .design__tapdemo { position: absolute; left: 0; top: 0; z-index: 5; width: 0; height: 0; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity var(--d-med) var(--ease), visibility 0s linear var(--d-med); }
+.sec--design.is-live .design__tapdemo.is-on { opacity: 1; visibility: visible; transition: opacity var(--d-med) var(--ease) 400ms, visibility 0s; }
+.sec--design .design__tapdemo-ripple {
+  position: absolute; left: -32px; top: -32px; width: 64px; height: 64px; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .95); box-shadow: 0 0 0 10px rgba(255, 255, 255, .1);
+  opacity: 0; animation: tapRipple 2.4s var(--ease) infinite;
+}
+.sec--design .design__tapdemo-finger {
+  position: absolute; left: -10px; top: 2px; width: 42px; height: 42px; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .55));
+  animation: tapFinger 2.4s var(--ease) infinite;
+}
+.sec--design .design__tapdemo-bubble {
+  position: absolute; left: 30px; top: -58px; padding: 8px 13px; border-radius: 14px; white-space: nowrap;
+  font-size: .875rem; font-weight: 600; color: #121417; background: #fff; box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+}
+.sec--design .design__tapdemo.is-left .design__tapdemo-bubble { left: auto; right: 30px; }
+@keyframes tapFinger {
+  0% { translate: 26px 34px; opacity: 0; scale: 1; }
+  18% { translate: 0 0; opacity: 1; scale: 1; }
+  28% { translate: 0 0; scale: .88; }
+  38% { translate: 0 0; scale: 1; }
+  70% { translate: 0 0; opacity: 1; }
+  88%, 100% { translate: 26px 34px; opacity: 0; }
+}
+@keyframes tapRipple {
+  0%, 26% { opacity: 0; scale: .35; }
+  30% { opacity: 1; scale: .45; }
+  70%, 100% { opacity: 0; scale: 1.45; }
+}
+@media (max-width: 767px) {
+  .sec--design .design__tapdemo-finger { width: 36px; height: 36px; }
+  .sec--design .design__tapdemo-bubble { font-size: .8125rem; top: -52px; }
+  .sec--design .design__lamp-tag { font-size: .75rem; padding: 6px 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec--design .design__lamp[aria-pressed="true"] .design__lamp-dot::after { animation: none; }
+  .sec--design .design__tapdemo-ripple { animation: none; opacity: .8; scale: .8; }
+  .sec--design .design__tapdemo-finger { animation: none; }
+  .sec--design .design__intro { translate: none; }
+}
+
+/* ---------- Real scan | 3D Model in each stop's sheet (3 Nov, James: the same switch as the hero) ----------
+   Full width, under the stop's words, so it never reads as one more piece picker. While the real scan
+   shows (.is-real) the 3D-only marks (ring, hairline, lamp dots, move handle) step back. */
+.sec--design .design__modes {
+  display: flex; gap: 4px; padding: 4px; border-radius: var(--r-pill);
+  background: rgba(0, 0, 0, .28); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
+}
+.sec--design .design__modes[hidden] { display: none; }
+.sec--design .design__modes button {
+  flex: 1 1 0; min-height: 36px; padding: 0 .9rem; border-radius: var(--r-pill);
+  font-size: .8125rem; font-weight: 500; white-space: nowrap; color: var(--cg-ink-2);
+  transition: background var(--d-fast) var(--ease), color var(--d-fast) var(--ease);
+}
+.sec--design .design__modes button:hover { color: var(--cg-ink); }
+.sec--design .design__modes button[aria-pressed="true"] { background: var(--cg-on); color: var(--cg-on-ink); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
+.sec--design .design__modes button[data-design-mode="scan"][aria-pressed="true"] { box-shadow: 0 0 0 2px var(--accent), 0 1px 3px rgba(0, 0, 0, .25); }
+.sec--design.is-real .design__ring,
+.sec--design.is-real .design__leader,
+.sec--design.is-real .design__lamps,
+.sec--design.is-real .design__tapdemo,
+.sec--design.is-real .design__grab { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+@media (max-width: 767px) {
+  .sec--design .design__modes button { min-height: 34px; }
+}
+
+/* ---------- the kitchen lamps read as switches at a glance (3 Nov, James) ----------
+   Every lamp's tag (name + ON / OFF) is always shown at the kitchen stop, not only on hover; a lamp that is
+   off gets a dashed ring that breathes; the "Tap here" sign (orange, with a small pointer) stands next to
+   the lamp that is off until the first tap. */
+.sec--design .design__lamp .design__lamp-tag { opacity: 1; translate: 0 -50%; }
+.sec--design .design__lamp[aria-pressed="false"] .design__lamp-dot::after {
+  content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 1.5px dashed rgba(255, 255, 255, .85);
+  animation: lampBreathe 2.2s var(--ease) infinite;
+}
+.sec--design .design__lamp[aria-pressed="false"] .design__lamp-tag { color: var(--cg-ink-2); }
+.sec--design .design__tapdemo-bubble {
+  top: -64px; padding: 9px 15px; border-radius: 999px;
+  font-size: .9375rem; font-weight: 700; letter-spacing: -.01em;
+  color: #fff; background: var(--accent); box-shadow: 0 8px 24px rgba(255, 79, 31, .45), 0 2px 6px rgba(0, 0, 0, .35);
+}
+.sec--design .design__tapdemo-bubble::after {
+  content: ""; position: absolute; left: 18px; bottom: -6px; width: 12px; height: 12px; border-radius: 2px;
+  background: var(--accent); rotate: 45deg;
+}
+.sec--design .design__tapdemo.is-left .design__tapdemo-bubble::after { left: auto; right: 18px; }
+@media (max-width: 767px) {
+  .sec--design .design__tapdemo-bubble { top: -58px; font-size: .875rem; padding: 8px 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec--design .design__lamp[aria-pressed="false"] .design__lamp-dot::after { animation: none; }
+}
+/* (3 Nov) "Tap here" centred right above its lamp (it covered the next lamp's tag on phones) */
+.sec--design .design__tapdemo .design__tapdemo-bubble,
+.sec--design .design__tapdemo.is-left .design__tapdemo-bubble { left: 0; right: auto; translate: -50% 0; top: -66px; }
+.sec--design .design__tapdemo .design__tapdemo-bubble::after,
+.sec--design .design__tapdemo.is-left .design__tapdemo-bubble::after { left: 50%; right: auto; margin-left: -6px; }
+.sec--design .design__tapdemo.is-edge-r .design__tapdemo-bubble { translate: -85% 0; }
+.sec--design .design__tapdemo.is-edge-r .design__tapdemo-bubble::after { left: 85%; }
+.sec--design .design__tapdemo.is-edge-l .design__tapdemo-bubble { translate: -15% 0; }
+.sec--design .design__tapdemo.is-edge-l .design__tapdemo-bubble::after { left: 15%; }
+/* (3 Nov, James: "why is there a text box, remove it") the separate words card of a stop (TV, couch, kitchen)
+   showed during the last part of the flight and before the sheet opened. The sheet carries the same words,
+   so the card is never drawn now; it stays in the page (opacity only) for screen readers. */
+.sec--design .design__lines .design__line,
+.sec--design .design__lines .design__line.is-on { opacity: 0 !important; pointer-events: none !important; }

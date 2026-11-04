@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en" data-palette="void" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pricing | Orbit 3D</title>
+  <meta name="description" content="What an Orbit 3D scan includes and how we price it. Tell us about your space and get a price.">
+  <meta name="theme-color" content="#0b0c0e">
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <script>if (location.protocol !== "file:") { var l = document.createElement("link"); l.rel = "preload"; l.as = "font"; l.type = "font/woff2"; l.href = "assets/fonts/geist-latin.woff2"; l.crossOrigin = ""; document.head.appendChild(l); }</script>
+  <!-- (4 Nov 2026) parts appear as you scroll (css/motion.css part 5, js/reveal.js). Hidden only when motion is
+       allowed; if js/reveal.js never runs, everything shows after 3 s. -->
+  <script>if (!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { document.documentElement.classList.add("rv"); setTimeout(function () { if (!window.OrbitReveal) document.documentElement.classList.add("rv-off"); }, 3000); }</script>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/language.css">
+  <link rel="stylesheet" href="css/book.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <script src="js/translations.js"></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/glider.js" defer></script>
+  <script src="js/press.js" defer></script>
+  <script src="js/reveal.js" defer></script>
+</head>
+<!-- A page of its own (View your design, Pricing, About us, and Portfolio which is out of the menu since 4 Nov 2026). Made by tools/build.py from src/pages/<name>.html:
+     same top bar and colours as the main page, no 3D background (opens fast). -->
+<body class="page page--pricing" data-page="pricing">
+  <a class="sr-only" href="#main"><orbit-text data-i18n="444cdc672b">Skip to content</orbit-text></a>
+  <!-- (4 Nov 2026, James) "View your design" replaces Portfolio in the menu; portfolio.html is still built
+       from src/pages/portfolio.html, but no menu or footer links to it any more.
+       Top bar (30 Oct 2026, James picked option B "floating pills"): logo on its own, one glass capsule
+       in the middle, "Contact us" on its own. "How it works" holds the four story steps; on the main page
+       it shows the step you are in (js/main.js). Phones: logo + one small capsule (Menu | Contact us) at the
+       top, the menu opens as a glass sheet under it. Built into every page by tools/build.py
+       (index.html = "" on the main page, "index.html" on the other pages). -->
+  <header class="nav" data-nav>
+    <div class="nav__island">
+      <a class="nav__logo" href="index.html#top" aria-label="Orbit 3D, home">
+        <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22">
+      </a>
+      <nav class="nav__caps" aria-label="Main">
+        <div class="nav__story">
+          <button type="button" class="nav__chip nav__story-btn" aria-expanded="false" aria-controls="nav-story" data-story-btn>
+            <span class="nav__label" aria-hidden="true">
+              <span data-step-label=""><orbit-text data-i18n="914d83456d">How it works</orbit-text></span><span data-step-label="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></span><span data-step-label="#one-space"><orbit-text data-i18n="d3a1c00102">One space</orbit-text></span><span data-step-label="#compare"><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></span><span data-step-label="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></span><span data-step-label="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></span>
+            </span>
+            <span class="sr-only" data-step-sr><orbit-text data-i18n="97416feb68">How it works</orbit-text></span>
+            <span class="nav__dots" aria-hidden="true"><i data-dot="#top"></i><i data-dot="#one-space"></i><i data-dot="#compare"></i><i data-dot="#design"></i><i data-dot="#examples"></i></span>
+            <svg class="nav__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav__drop" id="nav-story" hidden>
+            <ul class="nav__links" role="list">
+              <!-- (4 Nov 2026, James) five steps in page order; the pill shows the one you are in (js/main.js NAV_OF) -->
+              <li><a href="index.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="d3a1c00105">Who we are and what we make</orbit-text></small></a></li>
+              <li><a href="index.html#one-space"><i>02</i><b><orbit-text data-i18n="d3a1c00102">One space</orbit-text></b><small><orbit-text data-i18n="d3a1c00106">The whole place, from the air</orbit-text></small></a></li>
+              <li><a href="index.html#compare"><i>03</i><b><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></b><small><orbit-text data-i18n="d3a1c00107">Walk freely, not spot to spot</orbit-text></small></a></li>
+              <li><a href="index.html#design-start" data-step-link="#design"><i>04</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="index.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
+            </ul>
+          </div>
+        </div>
+        <a class="nav__chip" href="view-design.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text></a>
+        <a class="nav__chip" href="pricing.html" data-page-link="pricing"><orbit-text data-i18n="f6b4e37dda">Pricing</orbit-text></a>
+        <a class="nav__chip" href="about.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">About us</orbit-text></a>
+      </nav>
+      <div class="nav__end">
+        <div class="language-switch" role="group" aria-label="Language / Taal">
+          <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+          <button type="button" data-language="nl" lang="nl" aria-label="Nederlands" aria-pressed="false">NL</button>
+        </div>
+        <button type="button" class="nav__menu" aria-expanded="false" aria-controls="nav-sheet" data-menu-btn>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path class="nav__menu-a" d="M3 7h14"/><path class="nav__menu-b" d="M3 13h14"/></svg>
+          <span data-menu-text><orbit-text data-i18n="b9c827b8c8">Menu</orbit-text></span>
+        </button>
+        <a class="btn btn--accent nav__cta" href="index.html#contact"><orbit-text data-i18n="fc313f67b0">Contact us</orbit-text></a>
+      </div>
+    </div>
+    <div class="nav__sheet" id="nav-sheet" hidden>
+      <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">How it works</orbit-text></p>
+      <ul class="nav__sheet-steps" role="list">
+        <li><a href="index.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
+        <li><a href="index.html#one-space" data-step-link="#one-space"><orbit-text data-i18n="d3a1c00102">One space</orbit-text></a></li>
+        <li><a href="index.html#compare" data-step-link="#compare"><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></a></li>
+        <li><a href="index.html#design-start" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="index.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
+      </ul>
+      <ul class="nav__sheet-pages" role="list">
+        <li><a href="view-design.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text> <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="pricing.html" data-page-link="pricing"><orbit-text data-i18n="f6b4e37dda">Pricing</orbit-text> <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="about.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">About us</orbit-text> <span aria-hidden="true">&rarr;</span></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+<!-- Pricing (30 Oct 2026). No prices on the site yet: James decides them. To add packages later, put a
+         <ul class="price-cards"> with one <li> per package between "What you get" and "What sets the price". -->
+    <header class="wrap pg-head">
+      <h1 class="pg-title"><orbit-text data-i18n="29bc64e860">Pricing</orbit-text></h1>
+      <p class="pg-lede"><orbit-text data-i18n="bade833c1e">Every space is unique<br>Unique rooms, unique sizes<br>But so is our pricing</orbit-text></p>
+      <p class="pg-text quote-help"><orbit-text data-i18n="quote-help">Tell us about your space and receive a personalised quote</orbit-text></p>
+      <p class="pg-text portfolio-quote"><orbit-text data-i18n="portfolio-quote">Do you own multiple properties? Get a quotation that matches your portfolio</orbit-text></p>
+      <div class="pg-act">
+        <a class="btn btn--accent pg-cta" data-book-open="call" href="index.html#contact"><orbit-text data-i18n="d3a1c00052">Book a call with us</orbit-text></a>
+      </div>
+<!-- Book a call / Via email (3 Nov 2026, James). Shared part: tools/build.py puts it where a page has the "@book" marker.
+     Opened by any button with data-book-open="call" or "email" (js/book.js). Call mode: name, company (optional),
+     email, short message, then a day and a time. Email mode: the same without day and time.
+     Send: to ORBIT_SITE.booking.endpoint (js/embeds.js) once the calendar is set up; until then it opens an email
+     to ORBIT_SITE.email with everything filled in. -->
+<div class="book" id="book" data-book data-mode="call" inert>
+  <div class="book__clip">
+    <form class="book__form" data-book-form novalidate>
+      <p class="book__head" data-book-head>
+        <span data-book-only="call"><orbit-text data-i18n="d3a1c00052">Book a call with us</orbit-text></span>
+        <span data-book-only="email" hidden><orbit-text data-i18n="d3a1c00053">Send us an email</orbit-text></span>
+      </p>
+      <div class="book__row">
+        <label class="book__field">
+          <span class="book__label"><orbit-text data-i18n="d3a1c00054">Name</orbit-text></span>
+          <input class="book__input" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Guy" required>
+        </label>
+        <label class="book__field">
+          <span class="book__label"><orbit-text data-i18n="d3a1c00055">Company</orbit-text> <span class="book__opt"><orbit-text data-i18n="d3a1c00056">(optional)</orbit-text></span></span>
+          <input class="book__input" name="company" type="text" autocomplete="organization" maxlength="80" placeholder="Orbit3D">
+        </label>
+      </div>
+      <label class="book__field">
+        <span class="book__label"><orbit-text data-i18n="d3a1c00057">Contact info: email</orbit-text></span>
+        <input class="book__input" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" placeholder="guy@example.nl" required>
+      </label>
+      <label class="book__field">
+        <span class="book__label"><orbit-text data-i18n="d3a1c00058">Short message</orbit-text></span>
+        <textarea class="book__input book__area" name="message" rows="4" maxlength="1000" placeholder="I would like to talk about..."></textarea>
+      </label>
+      <fieldset class="book__when" data-book-only="call">
+        <legend class="book__label"><orbit-text data-i18n="d3a1c00059">Pick a day</orbit-text></legend>
+        <div class="book__chips book__days" data-book-days></div>
+        <div class="book__times" data-book-times hidden>
+          <p class="book__label"><orbit-text data-i18n="d3a1c00060">Pick a time</orbit-text></p>
+          <div class="book__chips" data-book-times-row></div>
+        </div>
+      </fieldset>
+      <!-- (4 Nov 2026) spam trap: hidden from people and screen readers, robots fill it in; the backend ignores those -->
+      <div class="book__trap" aria-hidden="true"><label>Website <input name="website" type="text" tabindex="-1" autocomplete="off" maxlength="200"></label></div>
+      <!-- (4 Nov 2026) GDPR art. 13: say what happens with the details where they are asked for -->
+      <p class="book__privacy"><orbit-text data-i18n="legal26a04">We only use your details to answer you and plan the call. Read how in our</orbit-text> <a href="privacy.html"><orbit-text data-i18n="legal26a05">privacy statement</orbit-text></a>.</p>
+      <div class="book__foot">
+        <button class="btn btn--accent book__send" type="submit"><orbit-text data-i18n="d3a1c00061">Send</orbit-text></button>
+        <p class="book__status" data-book-status role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</div>
+    </header>
+
+    <section class="wrap pg-sec pg-split" aria-labelledby="get-title">
+      <h2 id="get-title" class="pg-h2"><orbit-text data-i18n="f86397b540">What do you get?</orbit-text></h2>
+      <ul class="ticks" role="list">
+        <li><b><orbit-text data-i18n="d857507650">A 3D scan you can walk through</orbit-text></b><span><orbit-text data-i18n="33bd6f5dda">Every room at eye height, the way a visitor would see it.</orbit-text></span></li>
+        <li><b><orbit-text data-i18n="31929feb4d">A 3D model from the same scan</orbit-text></b><span><orbit-text data-i18n="3c187628eb">Try new furniture and wall colours before you buy anything.</orbit-text></span></li>
+        <li><b><orbit-text data-i18n="35e9d17876">One link</orbit-text></b><span><orbit-text data-i18n="b860c5c4c3">Share it anywhere: your website, a listing, a message.</orbit-text></span></li>
+        <li><b><orbit-text data-i18n="4ca694ec60">Delivered directly by us</orbit-text></b><span><orbit-text data-i18n="7f23faf4e3">From the day we film to the day you get the link.</orbit-text></span></li>
+      </ul>
+    </section>
+
+    <section class="wrap pg-sec pg-split" aria-labelledby="price-title">
+      <h2 id="price-title" class="pg-h2"><orbit-text data-i18n="81ac3ac8d1">What defines the Price</orbit-text></h2>
+      <ul class="ticks ticks--plain" role="list">
+        <li><b><orbit-text data-i18n="5fcef82166">Size of the space</orbit-text></b><span><orbit-text data-i18n="ac3456b504">The number of rooms and floors.</orbit-text></span></li>
+        <li><b><orbit-text data-i18n="4c613b0f46">Inside, outside or both</orbit-text></b><span><orbit-text data-i18n="ef5c5f2be4">Inside only, or also the building from the air.</orbit-text></span></li>
+        <li><b><orbit-text data-i18n="08129c00b9">Package selection</orbit-text></b><span><orbit-text data-i18n="53044b1d5a">The 3D scan, the 3D model, or both.</orbit-text></span></li>
+      </ul>
+    </section>
+
+    <section class="wrap pg-sec pg-end">
+      <h2 class="pg-h2"><orbit-text data-i18n="5df9ec678d">Tell us about your space</orbit-text></h2>
+      <p class="pg-text"><orbit-text data-i18n="453a19bcab">You can get in touch with us<br>Tell us about your space and what services you're interested in</orbit-text></p>
+      <div class="pg-act">
+        <a class="btn btn--accent pg-cta" data-mail href="index.html#contact"><orbit-text data-i18n="a94089cc17">Contact us</orbit-text></a>
+        <a class="meta pg-mail" data-mail data-mail-text href="index.html#contact"><orbit-text data-i18n="7c27014b08">email</orbit-text></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap site-foot__row">
+      <a href="index.html#top" class="site-foot__logo" aria-label="Orbit 3D, home">
+        <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
+      </a>
+      <nav class="site-foot__nav" aria-label="Footer">
+        <a href="index.html#scan"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
+        <a href="view-design.html"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text></a>
+        <a href="pricing.html"><orbit-text data-i18n="b767503acc">Pricing</orbit-text></a>
+        <a href="about.html"><orbit-text data-i18n="2ca466a9b9">About us</orbit-text></a>
+        <a href="index.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Contact us</orbit-text></a>
+      </nav>
+      <p class="meta site-foot__copy"><orbit-text data-i18n="c77e4f4800">© 2026 3DGS Orbit Studio</orbit-text></p>
+<!-- Legal strip (4 Nov 2026, James: "compliant with EU rules"). Shared part: tools/build.py puts it where a page has
+     the "@legal" marker (main page footer + every sub page footer). Dutch law (Handelsregisterbesluit art. 27,
+     BW 3:15d) asks for the registered name, KvK number, VAT number and address on the website. The address comes
+     from ORBIT_SITE.company.address in js/embeds.js (js/main.js fills it; hidden while empty). -->
+<div class="legal-strip" role="group" aria-label="Legal company details">
+  <p class="legal-strip__ids">
+    <span>3DGS Orbit Studio</span>
+    <span data-company-address hidden><span data-company-address-text></span></span>
+    <span>KvK 42080166</span>
+    <span><orbit-text data-i18n="legal26a01">VAT</orbit-text> NL869615002B01</span>
+  </p>
+  <p class="legal-strip__links">
+    <a href="privacy.html"><orbit-text data-i18n="legal26a02">Privacy &amp; cookies</orbit-text></a>
+    <a href="legal.html"><orbit-text data-i18n="legal26a03">Legal</orbit-text></a>
+  </p>
+</div>
+    </div>
+  </footer>
+
+  <script src="js/embeds.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/pages.js"></script>
+  <script src="js/book.js"></script>
+</body>
+</html>

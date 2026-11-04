@@ -1,0 +1,120 @@
+/* 07 Floor (round 8): "Your ideas. In the actual space." The whole floor with every change of the tour.
+   An act (300vh, a sticky full-screen pin), beats arrive / explore / return / exit (CONTRACT 8.3).
+   The words sit top on phones and in the left column on desktop; the floor itself is the stage's
+   (js/stage-tour.js, F1). Drag works in the explore beat only: from the return beat on the view eases
+   back to the reference view and the hint says how to explore again. State: data-phase, .is-live. */
+
+.sec--floor { overflow-x: clip; }
+.sec--floor .floor__pin { isolation: isolate; pointer-events: none; }
+
+.sec--floor .floor__hit {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none; cursor: auto;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.sec--floor.is-live[data-phase="arrive"] .floor__hit,
+.sec--floor.is-live[data-phase="explore"] .floor__hit { pointer-events: auto; cursor: grab; }
+.sec--floor.is-live[data-phase="explore"] .floor__hit:active { cursor: grabbing; }
+.sec--floor .floor__hit:focus { outline: none; }
+.sec--floor .floor__hit:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; border-radius: var(--r-stage); }
+.sec--floor .floor__subject { position: absolute; left: 12px; right: 12px; top: 34%; bottom: 84px; pointer-events: none; }
+
+/* ---------- the words ---------- */
+.sec--floor .floor__text {
+  position: relative; z-index: 2; pointer-events: none;
+  display: grid; gap: var(--s-2); align-content: start;
+  padding-top: calc(var(--nav-h) + var(--s-2));
+}
+.sec--floor .floor__card { display: grid; gap: var(--s-2); }
+.sec--floor .floor__lead {
+  font-size: clamp(2.35rem, 1rem + 5.2vw, 5.25rem);
+  font-weight: 600; letter-spacing: -.05em; line-height: .94;
+  max-width: 10ch; text-wrap: balance;
+}
+.sec--floor .floor__sub { font-size: var(--t-3); line-height: 1.4; font-weight: 500; color: var(--ink); max-width: 30ch; text-wrap: pretty; }
+.sec--floor .floor__lead,
+.sec--floor .floor__sub {
+  opacity: 0; translate: 0 18px;
+  transition: opacity var(--d-slow) var(--ease), translate var(--d-slow) var(--ease);
+}
+.sec--floor .floor__sub { transition-delay: 90ms; }
+/* (30 Oct, James) a small line that says the model can be spun; the icon rocks gently until the
+   first drag, then the line goes quiet (.is-used) */
+.sec--floor .floor__spin {
+  display: inline-flex; align-items: center; gap: .5rem; width: max-content; margin-top: var(--s-1);
+  padding: .45rem .85rem .45rem .65rem; border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .06);
+  font-size: .875rem; font-weight: 500; line-height: 1; color: var(--ink);
+  opacity: 0; translate: 0 18px;
+  transition: opacity var(--d-slow) var(--ease) 180ms, translate var(--d-slow) var(--ease) 180ms;
+}
+.sec--floor .floor__spin-icon { flex: none; animation: floor-spin-rock 2.4s var(--ease) infinite; }
+@keyframes floor-spin-rock { 0%, 100% { rotate: -14deg; } 50% { rotate: 14deg; } }
+.sec--floor.is-shown .floor__spin { opacity: 1; translate: 0 0; }
+.sec--floor.is-shown .floor__spin.is-used { opacity: .55; }
+.sec--floor .floor__spin.is-used .floor__spin-icon { animation: none; }
+.sec--floor:not(.is-shown)[data-phase="exit"] .floor__spin,
+.sec--floor:not(.is-shown)[data-phase="after"] .floor__spin { opacity: 0; translate: 0 -14px; transition-duration: var(--d-med); transition-delay: 0ms; }
+.no-js .sec--floor .floor__spin { display: none; }
+/* round 9 (review A4 + A6): .is-shown (floor.js) = the whole floor is on screen: from the end of the
+   arrive flight through explore and return; off in the exit and after it (no words coming back) */
+.sec--floor.is-shown .floor__lead,
+.sec--floor.is-shown .floor__sub { opacity: 1; translate: 0 0; }
+.sec--floor:not(.is-shown)[data-phase="exit"] .floor__lead,
+.sec--floor:not(.is-shown)[data-phase="exit"] .floor__sub,
+.sec--floor:not(.is-shown)[data-phase="after"] .floor__lead,
+.sec--floor:not(.is-shown)[data-phase="after"] .floor__sub { opacity: 0; translate: 0 -14px; transition-duration: var(--d-med); transition-delay: 0ms; }
+.no-js .sec--floor .floor__lead, .no-js .sec--floor .floor__sub { opacity: 1; translate: none; }
+
+/* ---------- hint + view buttons at the foot ---------- */
+.sec--floor .floor__hint {
+  position: absolute; z-index: 5; left: 50%; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 62px);
+  translate: -50% 0; max-width: calc(100% - 32px); width: max-content;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity var(--d-med) var(--ease), visibility 0s linear var(--d-med);
+}
+.sec--floor .floor__hint.is-on { opacity: 1; visibility: visible; transition: opacity var(--d-med) var(--ease), visibility 0s; }
+/* during the return beat the hint sits where the buttons were */
+.sec--floor[data-phase="return"] .floor__hint { bottom: max(22px, env(safe-area-inset-bottom)); }
+
+.sec--floor .floor__ctl {
+  position: absolute; z-index: 5; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
+  translate: -50% 10px; display: inline-flex; align-items: center; gap: 2px; padding: 4px;
+  border-radius: var(--r-pill);
+  opacity: 0; visibility: hidden; pointer-events: auto; touch-action: manipulation;
+  transition: opacity var(--d-med) var(--ease), translate var(--d-slow) var(--ease), visibility 0s linear var(--d-med);
+}
+.sec--floor .floor__ctl.glass { background: rgba(250, 250, 252, .84); }   /* as the design panel: crisp over the model */
+.sec--floor.is-live[data-phase="explore"] .floor__ctl {
+  opacity: 1; visibility: visible; translate: -50% 0;
+  transition: opacity var(--d-med) var(--ease), translate var(--d-slow) var(--ease), visibility 0s;
+}
+.sec--floor .floor__btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%; color: var(--glass-ink);
+  transition: background var(--d-fast) var(--ease), scale var(--d-fast) var(--ease);
+}
+.sec--floor .floor__btn:hover { background: rgba(13, 14, 16, .08); }
+.sec--floor .floor__btn:active { scale: .95; }
+.sec--floor .floor__btn:disabled { opacity: .35; cursor: default; }
+.sec--floor .floor__btn--text { width: auto; padding: 0 1rem; border-radius: var(--r-pill); font-size: .875rem; font-weight: 500; white-space: nowrap; }
+.sec--floor .floor__icon { position: relative; width: 14px; height: 14px; }
+.sec--floor .floor__icon::before,
+.sec--floor .floor__icon::after { content: ""; position: absolute; left: 0; top: 6px; width: 14px; height: 2px; border-radius: 999px; background: currentColor; }
+.sec--floor .floor__icon::after { display: none; }
+.sec--floor .floor__icon--plus::after { display: block; left: 6px; top: 0; width: 2px; height: 14px; }
+
+@media (min-width: 768px) {
+  .sec--floor .floor__hint { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 66px); }
+}
+@media (min-width: 1024px) {
+  .sec--floor .floor__text { padding-top: calc(var(--nav-h) + clamp(32px, 7vh, 96px)); }
+  .sec--floor .floor__card { gap: var(--s-3); }
+  .sec--floor .floor__lead { font-size: clamp(3.5rem, 1rem + 4vw, 5.5rem); }
+  .sec--floor .floor__sub { max-width: 21ch; font-size: clamp(1.125rem, .9rem + .4vw, 1.3rem); }
+  .sec--floor .floor__subject { left: 36%; right: var(--gutter); top: calc(var(--nav-h) + 8px); bottom: 88px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec--floor .floor__lead, .sec--floor .floor__sub, .sec--floor .floor__spin { translate: none; }
+  .sec--floor .floor__spin-icon { animation: none; }
+}

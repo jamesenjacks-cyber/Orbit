@@ -1,0 +1,206 @@
+/* 08 Examples. (3 Nov 2026, James: "just show our product there") "Results? Take a look" = finished work only:
+   up to FOUR large frames, one under the other, no step texts. A frame holds a live Orbit viewer (still +
+   "Step inside" first, the viewer loads on tap), a picture or a video (js/sections/examples.js).
+   Empty frames are hidden online; dashed boxes only on the test server. Old: work/backup-20261103-examples/. */
+
+.sec--examples { overflow-x: clip; }
+.sec--examples .examples__wrap { display: grid; gap: var(--s-4); }
+.sec--examples .examples__head { display: grid; gap: var(--s-2); }
+.sec--examples .examples__title {
+  font-size: clamp(2.6rem, 1rem + 6.4vw, 7rem);
+  font-weight: 600; letter-spacing: -.055em; line-height: .92; max-width: 10ch; text-wrap: balance;
+}
+.sec--examples .examples__lede { font-size: var(--t-3); color: var(--ink-2); max-width: 38ch; text-wrap: pretty; }
+
+.sec--examples .examples__list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4);
+}
+.sec--examples .examples__card { min-width: 0; display: block; }
+.sec--examples .examples__card.is-empty { display: none; }
+
+/* the frame */
+.sec--examples .examples__media {
+  position: relative; display: block; overflow: hidden; isolation: isolate;
+  aspect-ratio: 4 / 3; width: 100%;
+  border-radius: var(--r-lg);
+  background: radial-gradient(120% 90% at 20% 0%, rgba(236, 238, 241, .07), transparent 60%), var(--space);
+  box-shadow: 0 0 0 1px var(--on-space-line), var(--shadow-soft);
+}
+.sec--examples .is-hint .examples__media { box-shadow: none; outline: 2px dashed var(--on-space-line); outline-offset: -2px; background: transparent; }
+.sec--examples .examples__media > img,
+.sec--examples .examples__media > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sec--examples .examples__media.is-embed { background: #040508; }
+/* while building (ORBIT_SITE.showSlotHints): which setting fills this frame */
+.sec--examples .examples__hint {
+  position: absolute; top: 14px; left: 14px; right: 14px; margin: 0;
+  font: 500 .8125rem/1.3 ui-monospace, monospace; color: var(--ink-2);
+}
+
+/* a live viewer frame: the still, then the viewer itself after "Step inside" */
+.sec--examples .examples__poster { transition: opacity var(--d-med) var(--ease), scale .8s var(--ease); }
+.sec--examples .examples__media.is-embed:hover .examples__poster { scale: 1.015; }
+.sec--examples .examples__frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; background: #040508;
+  opacity: 0; pointer-events: none; transition: opacity var(--d-med) var(--ease); }
+/* (4 Nov 2026) preloaded: the live scene shows once ready, but takes touches only after "Step inside" */
+.sec--examples .examples__media.is-ready .examples__frame { opacity: 1; }
+.sec--examples .examples__media.is-ready .examples__poster { opacity: 0; }
+.sec--examples .examples__media.is-live .examples__frame { pointer-events: auto; }
+.sec--examples .examples__open,
+.sec--examples .examples__close {
+  position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: .55rem;
+  border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-weight: 500; letter-spacing: -.01em;
+  transition: opacity var(--d-med) var(--ease), scale var(--d-med) var(--ease), background-color var(--d-med) var(--ease);
+}
+/* (3 Nov 2026, James) a round orange Play button */
+.sec--examples .examples__open {
+  left: 50%; top: 50%; translate: -50% -50%;
+  width: clamp(72px, 6vw, 96px); aspect-ratio: 1; padding: 0; justify-content: center;
+  color: #fff; background: var(--accent);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .45), 0 6px 24px color-mix(in srgb, var(--accent) 45%, transparent), inset 0 0 0 1px rgba(255, 255, 255, .25);
+}
+/* (4 Nov 2026, James: "not centred") no extra nudge: the triangle's own centre point (centroid) sits in the middle */
+.sec--examples .examples__play { width: 44%; height: 44%; margin: 0; }
+.sec--examples .examples__open:hover { scale: 1.06; }
+.sec--examples .examples__open:active { scale: .95; }
+/* the click ring the demo cursor makes */
+.sec--examples .examples__open::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 0 2px var(--accent); opacity: 0;
+}
+
+/* (3 Nov 2026, James) an animated cursor glides to the Play button and clicks it, so visitors know what to do.
+   Runs while the frame is on screen, stops for good after the first tap; none with reduced motion. */
+.sec--examples .examples__cursor {
+  position: absolute; z-index: 3; left: 50%; top: 50%; width: 30px; height: 30px; pointer-events: none;
+  margin: 8px 0 0 10px;   /* the arrow's tip lands on the lower right of the button's middle */
+  opacity: 0; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .5));
+}
+.sec--examples .examples__cursor svg { width: 100%; height: 100%; display: block; transform-origin: 5px 3px; }
+.sec--examples .is-inview:not(.is-used):not(.is-live) .examples__cursor { animation: ex-cursor 3.4s cubic-bezier(.45, 0, .2, 1) .6s infinite; }
+.sec--examples .is-inview:not(.is-used):not(.is-live) .examples__cursor svg { animation: ex-press 3.4s ease .6s infinite; }
+.sec--examples .is-inview:not(.is-used):not(.is-live) .examples__open { animation: ex-btn 3.4s ease .6s infinite; }
+.sec--examples .is-inview:not(.is-used):not(.is-live) .examples__open::after { animation: ex-ring 3.4s ease-out .6s infinite; }
+.sec--examples .is-used .examples__cursor { display: none; }
+@keyframes ex-cursor {
+  0%   { opacity: 0; translate: 90px 70px; }
+  12%  { opacity: 1; translate: 90px 70px; }
+  42%  { opacity: 1; translate: 0 0; }
+  78%  { opacity: 1; translate: 0 0; }
+  92%, 100% { opacity: 0; translate: 6px 4px; }
+}
+@keyframes ex-press { 0%, 44% { scale: 1; } 48% { scale: .8; } 54%, 100% { scale: 1; } }
+@keyframes ex-btn   { 0%, 45% { scale: 1; } 49% { scale: .92; } 56%, 100% { scale: 1; } }
+@keyframes ex-ring  { 0%, 47% { opacity: 0; scale: 1; } 50% { opacity: .9; scale: 1; } 80%, 100% { opacity: 0; scale: 1.7; } }
+/* Close: under the frame, right (the viewer's own buttons fill its corners and its bottom edge) */
+.sec--examples .examples__card { display: grid; justify-items: end; }
+.sec--examples .examples__card > .examples__media { justify-self: stretch; }
+.sec--examples .examples__close {
+  position: static; margin-top: .75rem; min-height: 44px; padding: 0 1.2rem; font-size: .9375rem;
+  color: #fff; background: rgba(255, 255, 255, .08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22);
+  display: none;
+}
+.sec--examples .examples__close:hover { background: rgba(255, 255, 255, .16); }
+.sec--examples .examples__card.is-live .examples__close { display: inline-flex; }
+.sec--examples .examples__open:focus-visible,
+.sec--examples .examples__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sec--examples .examples__media.is-live .examples__poster,
+.sec--examples .examples__media.is-live .examples__open { opacity: 0; pointer-events: none; }
+
+/* (4 Nov 2026, James, round 2) "Already designed?" = a sub-section of its own under the results: a double-bezel
+   frame (outer tray + inner window) so it reads as different from the result frames; a small label, the title,
+   three short steps and the upload button on the left, real furniture floating in live 3D on the right
+   (phones: on top). js/sections/examples.js does the upload, js/float-furniture.js the furniture. */
+.sec--examples .mine { margin-top: clamp(56px, 8vw, 128px); }
+.sec--examples .mine__frame { --bezel: 8px; }
+.sec--examples .mine__core {
+  position: relative; overflow: hidden; isolation: isolate; color: var(--on-space);
+  display: grid; align-content: end; min-height: 0;
+  background:
+    radial-gradient(70% 90% at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 60%),
+    radial-gradient(60% 80% at 0% 100%, rgba(236, 238, 241, .05) 0%, transparent 70%), var(--space);
+  box-shadow: inset 0 0 0 1px var(--on-space-line);
+  transition: box-shadow var(--d-fast) var(--ease);
+}
+.sec--examples .mine__furn { position: absolute; z-index: 0; inset: 0 0 auto 0; height: 64vw; }
+.sec--examples .mine__body { position: relative; z-index: 1; display: grid; gap: var(--s-2); justify-items: start; padding: 58vw var(--s-3) var(--s-4); }
+.sec--examples .mine__label {
+  font-family: var(--mono); font-size: .8125rem; font-weight: 500; letter-spacing: .02em; color: var(--accent-ink);
+  display: inline-flex; align-items: center; gap: .5rem;
+}
+.sec--examples .mine__label::before { content: ""; width: 18px; height: 1px; background: currentColor; }
+.sec--examples .mine__title {
+  font-size: clamp(2.2rem, 1.2rem + 3.6vw, 4.5rem); font-weight: 600; letter-spacing: -.05em; line-height: .95;
+  text-wrap: balance; text-shadow: var(--halo-big);
+}
+.sec--examples .mine__text { font-size: var(--t-3); color: var(--on-space-2); max-width: 34ch; text-wrap: pretty; text-shadow: var(--halo-small); }
+/* the three steps: a numbered squircle chip, a bold line and a quiet line */
+.sec--examples .mine__steps { list-style: none; margin: var(--s-1) 0 0; padding: 0; display: grid; gap: .75rem; counter-reset: mine; width: 100%; max-width: 30rem; }
+.sec--examples .mine__steps li {
+  counter-increment: mine; display: grid; grid-template-columns: 36px minmax(0, 1fr); column-gap: .85rem; align-items: center;
+}
+.sec--examples .mine__steps li::before {
+  content: counter(mine); grid-row: span 2; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--r-sm);
+  font-family: var(--mono); font-size: .8125rem; font-weight: 500; color: var(--on-space);
+  background: rgba(236, 238, 241, .06); box-shadow: inset 0 0 0 1px var(--on-space-line);
+}
+.sec--examples .mine__steps li:last-child::before { background: var(--accent); color: var(--on-accent); box-shadow: none; }
+.sec--examples .mine__steps b { font-weight: 500; font-size: 1rem; letter-spacing: -.01em; }
+.sec--examples .mine__steps span { color: var(--on-space-2); font-size: .875rem; line-height: 1.35; }
+.sec--examples .mine__act { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-2); margin-top: var(--s-2); width: 100%; }
+.sec--examples .mine__btn { min-height: 52px; padding: 0 1.5rem; font-size: 1rem; width: 100%; justify-content: center; }
+.sec--examples .mine__btn svg { width: 20px; height: 20px; flex: none; }
+.sec--examples .mine__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sec--examples .mine__drop { color: var(--on-space-2); font-size: .9375rem; display: none; }
+@media (hover: hover) and (pointer: fine) { .sec--examples .mine__drop { display: inline; } }
+.sec--examples .mine__note {
+  margin: 0; max-width: 40ch; padding: .7rem 1rem; border-radius: var(--r-sm);
+  font-size: .9375rem; color: var(--on-space);
+  background: color-mix(in srgb, var(--accent) 16%, rgba(11, 12, 14, .7)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.sec--examples .mine__note[hidden] { display: none; }
+.sec--examples .mine__input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; overflow: hidden; }
+/* a file dragged over it: an orange edge */
+.sec--examples .mine__core.is-over { box-shadow: inset 0 0 0 2px var(--accent), 0 0 56px color-mix(in srgb, var(--accent) 26%, transparent); }
+/* computers: words left, furniture right, the frame as tall as the words need */
+@media (min-width: 768px) {
+  .sec--examples .mine__core { align-content: center; min-height: clamp(520px, 62vh, 680px); }
+  .sec--examples .mine__furn { inset: 0 0 0 34%; height: auto; }
+  .sec--examples .mine__body { padding: clamp(36px, 5vw, 80px); max-width: 56%; }
+  .sec--examples .mine__btn { width: auto; }
+}
+/* tablets: the words need more of the width, the furniture keeps to the right half */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .sec--examples .mine__furn { inset: 0 0 0 50%; }
+}
+
+.sec--examples .examples__title { text-shadow: var(--halo-big); }
+.sec--examples .examples__lede { text-shadow: var(--halo-small); }
+
+/* phones: a live viewer needs room for its own buttons (top and bottom): a tall frame */
+@media (max-width: 767px) {
+  .sec--examples .examples__media.is-embed { aspect-ratio: 3 / 4; max-height: 76svh; }
+}
+
+/* ONE large frame at a time, one under the other on every width; a frame always fits the screen */
+@media (min-width: 768px) {
+  .sec--examples .examples__list { gap: clamp(56px, 6vw, 112px); }
+  .sec--examples .examples__media { aspect-ratio: 16 / 9; max-height: calc(100svh - 10rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec--examples .examples__poster, .sec--examples .examples__open, .sec--examples .examples__close,
+  .sec--examples .mine__core { transition: none; }
+  .sec--examples .examples__cursor { display: none; }
+  .sec--examples .examples__media .examples__open,
+  .sec--examples .examples__media .examples__open::after { animation: none !important; }
+  .sec--examples .examples__media.is-embed:hover .examples__poster { scale: 1; }
+}
+
+/* (4 Nov 2026) floating furniture (js/float-furniture.js): the still picture first, the live canvas fades in over it */
+.furn { pointer-events: none; }
+.furn picture, .furn__still, .furn__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.furn__still { object-fit: contain; transition: opacity .9s var(--ease); }
+.furn__gl { opacity: 0; transition: opacity .9s var(--ease); }
+.furn.is-live .furn__gl { opacity: 1; }
+.furn.is-live .furn__still { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .furn__still, .furn__gl { transition: none; } }

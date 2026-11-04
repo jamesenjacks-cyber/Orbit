@@ -1,0 +1,127 @@
+/* 09 Contact (round 8, step 9; segment 1; round 9): the closing call, centred. The house's own points
+   gather once more into the building with its orbit ring (scene "planet" in js/space.js) inside the
+   empty box at the top (.contact__subject); the line, "Book a scan" and the email sit UNDER it, never
+   on it. Then what happens next, then a small footer: logo, links, copyright, one hairline row on wide
+   screens, a short centred stack on phones. */
+
+.sec--contact { isolation: isolate; padding-bottom: var(--s-3); overflow-x: clip; }
+
+.sec--contact .contact__close {
+  position: relative;
+  justify-content: center; gap: var(--s-3);
+  min-height: 100vh; min-height: 100svh;
+  padding-block: calc(var(--nav-h) + var(--s-2)) var(--s-5);
+}
+/* the box the ring is fitted into (empty). (30 Oct night, James) it sits ON the title, a bit wider than it, so
+   the ring goes around the line; the points behind stay hidden until the pointer passes */
+.sec--contact .contact__ringed { position: relative; display: grid; justify-items: center; }
+.sec--contact .contact__subject {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); pointer-events: none;
+  width: min(125vw, 165%); height: 320%;   /* phones: the ring may pass the screen edges (the section clips) */
+}
+/* the button sits clear under the ring's lower edge */
+.sec--contact .contact__ringed + .contact__act { margin-top: clamp(var(--s-3), 10vw, 10rem); }
+.sec--contact .contact__title {
+  position: relative;
+  font-size: clamp(2.9rem, 1rem + 5.4vw, 7rem);
+  font-weight: 600; letter-spacing: -.055em; line-height: .92;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.sec--contact .contact__lede { position: relative; font-size: var(--t-3); color: var(--ink-2); max-width: 32ch; text-wrap: balance; }
+.sec--contact .contact__act {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--s-1); margin-top: var(--s-2);
+}
+.sec--contact .contact__cta { min-height: 60px; padding: 0 2.2rem; font-size: 1.125rem; }
+/* Magnetic hover (contact.js sets --mx/--my): transform only. */
+.sec--contact .contact__cta[data-magnet] { transform: translate(var(--mx, 0px), var(--my, 0px)); }
+.sec--contact .contact__cta[data-magnet]:active { transform: translate(var(--mx, 0px), var(--my, 0px)) scale(.98); }
+/* (3 Nov 2026) Book a call + Via email, same size; the shared form (css/book.css) drops down under them */
+.sec--contact .contact__cta { min-width: 200px; justify-content: center; }
+.sec--contact .contact__cta--alt { color: var(--ink); background: color-mix(in srgb, var(--bg) 40%, transparent); }
+.sec--contact .book { position: relative; z-index: 1; margin-inline: auto; }
+
+/* What happens next: four true facts in a row (phone: stacked), under the first screen. */
+.sec--contact .contact__next { display: grid; gap: var(--s-3); padding-block: var(--s-6) var(--s-6); }
+.sec--contact .contact__next-title { font-size: var(--t-3); font-weight: 500; color: var(--ink); letter-spacing: -.01em; }
+.sec--contact .contact__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-2); }
+.sec--contact .contact__step {
+  position: relative; isolation: isolate; display: grid; gap: .35rem; align-content: start;
+  padding-top: var(--s-2); border-top: 1px solid var(--line-strong);
+}
+.sec--contact .contact__verb { font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem); font-weight: 600; letter-spacing: -.04em; line-height: 1; }
+.sec--contact .contact__what { font-size: 1rem; color: var(--ink); max-width: 26ch; text-wrap: pretty; }
+@media (min-width: 768px) {
+  .sec--contact .contact__steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2vw, 40px); }
+}
+/* (31 Oct, phone audit) phones: the ring screen stays full height, but "What happens next" follows closer
+   (there was more than a screen of empty black between the email and it) */
+@media (max-width: 767px) {
+  /* (3 Nov, phone audit) 70 % of the screen instead of 100 %: the centred line left ~300 px of black under the email */
+  .sec--contact .contact__close { padding-bottom: var(--s-2); min-height: 70vh; min-height: 70svh; }
+  .sec--contact .contact__next { padding-block: var(--s-3) var(--s-5); }
+}
+
+/* Over the bright planet: bright ink + the shared glyph halo (base.css), no scrims. */
+.sec--contact .contact__lede { color: var(--ink); }
+
+/* ---------- Partners bar (30 Oct 2026): just above the call ----------
+   A quiet row of partner logos in white on the scene, no box behind it. Phones: a sideways swipe row. */
+.sec--contact .partners { position: relative; display: grid; justify-items: center; gap: var(--s-2); }
+.sec--contact .partners[hidden] { display: none; }
+.sec--contact .partners__label { font: 500 .6875rem/1.4 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); text-shadow: var(--halo-small); }
+.sec--contact .partners__row {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; align-items: center; gap: clamp(20px, 4vw, 56px);
+  max-width: 100%; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
+}
+.sec--contact .partners__row::-webkit-scrollbar { display: none; }
+.sec--contact .partners__row li { flex: none; }
+.sec--contact .partners__item {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+  color: var(--ink); text-decoration: none; font-weight: 500; opacity: .72;
+  transition: opacity var(--d-fast) var(--ease);
+}
+.sec--contact a.partners__item:hover { opacity: 1; }
+.sec--contact .partners__item img { height: 30px; width: auto; max-width: 150px; object-fit: contain; filter: brightness(0) invert(1); }
+.sec--contact .partners__item--empty {
+  width: 120px; height: 40px; min-height: 0; border-radius: var(--r-sm);
+  border: 1px dashed var(--line-strong); font-size: .75rem; color: var(--ink-2); opacity: 1;
+}
+@media (max-width: 767px) {
+  .sec--contact .partners__row { justify-content: flex-start; width: calc(100% + 2 * var(--gutter)); margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+}
+@media (min-width: 768px) { .sec--contact .partners__row { flex-wrap: wrap; justify-content: center; overflow: visible; } }
+
+/* ---------- Footer: small, under the call ---------- */
+.sec--contact .contact__foot {
+  display: grid; justify-items: center; gap: .25rem;
+  padding-top: var(--s-2);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.sec--contact .contact__logo { display: inline-flex; min-height: 44px; align-items: center; }
+.sec--contact .contact__logo img { height: 18px; width: auto; filter: var(--logo-filter); }
+.sec--contact .contact__nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--s-3); }
+.sec--contact .contact__nav a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-size: .875rem; color: var(--ink-2); text-decoration: none;
+  transition: color var(--d-fast) var(--ease);
+}
+.sec--contact .contact__nav a:hover { color: var(--ink); }
+.sec--contact .contact__copy { color: var(--ink-3); min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .25rem var(--s-2); }
+.sec--contact .contact__tag { font-family: var(--font); color: var(--ink-2); font-size: .75rem; }
+
+@media (min-width: 768px) {
+  .sec--contact .contact__foot {
+    grid-template-columns: 1fr auto 1fr; align-items: center; justify-items: stretch;
+    text-align: left;
+  }
+  .sec--contact .contact__logo { justify-self: start; }
+  .sec--contact .contact__copy { justify-content: flex-end; }
+}
+@media (min-width: 1024px) {
+  .sec--contact .contact__act { flex-direction: row; gap: var(--s-3); }
+}

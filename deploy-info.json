@@ -1,0 +1,19 @@
+{
+ "made": "20261104-175705",
+ "files": 367,
+ "mb": 286.8,
+ "scans": [
+  "assets/scans/aerial",
+  "assets/scans/home",
+  "assets/scans/room"
+ ],
+ "furniture": [
+  "bed-bedroom-tv-0708",
+  "cabinet-tv-sideboard-2b8b",
+  "cabinet-white-cabinet-1027",
+  "chair-armchair-00be",
+  "other-bunk-tv-0073",
+  "sofa-lounge-sofa-2102",
+  "sofa-sofa-bed-under-the-bunk-3615"
+ ]
+}

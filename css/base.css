@@ -1,0 +1,495 @@
+/* Orbit 3D - base layer: fonts, colour tokens, palettes, type, layout, nav.
+   Sections never hard-code colours: they use the tokens below. */
+
+@font-face {
+  font-family: "Geist";
+  src: url("../assets/fonts/geist-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../assets/fonts/geist-mono-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* ---------- Palettes ----------
+   The colourway is not decided yet. "silver" is the default (it matches the
+   logo artwork). Try others with  ?palette=void  or  ?palette=ice  in the
+   address bar, or change data-palette on <html> in src/page.html. */
+:root,
+:root[data-palette="silver"] {
+  --bg: #e7e8ea;          /* page */
+  --bg-2: #dcdee1;        /* quiet band / hover */
+  --ink: #0d0e10;         /* text, logo */
+  --ink-2: #4a4d53;       /* secondary text (7:1 on --bg) */
+  --ink-3: #5f636b;       /* tertiary, meta text (about 4.9:1) */
+  --line: rgba(13, 14, 16, .14);
+  --line-strong: rgba(13, 14, 16, .32);
+  --accent: #ff4f1f;      /* signal: live states, focus, the one CTA */
+  --accent-ink: #b8300a;  /* accent when used as small text on --bg */
+  --on-accent: #0d0e10;
+  --logo-filter: none;    /* black PNG logo stays black */
+  color-scheme: light;
+}
+:root[data-palette="void"] {
+  --bg: #0a0b0d;
+  --bg-2: #131418;
+  --ink: #eceef1;
+  --ink-2: #a3a7af;
+  --ink-3: #7d828b;
+  --line: rgba(236, 238, 241, .12);
+  --line-strong: rgba(236, 238, 241, .3);
+  --accent: #ff5a2a;
+  --accent-ink: #ff7a52;
+  --on-accent: #0a0b0d;
+  --logo-filter: invert(1);
+  --shadow-float: 0 40px 90px -40px rgba(0, 0, 0, .7), 0 12px 28px -14px rgba(0, 0, 0, .5);
+  --shadow-soft: 0 18px 40px -24px rgba(0, 0, 0, .6);
+  --shell: rgba(236, 238, 241, .04);
+  --shell-line: rgba(236, 238, 241, .08);
+  --shell-hi: inset 0 1px 0 rgba(255, 255, 255, .06);
+  color-scheme: dark;
+}
+:root[data-palette="ice"] {
+  --bg: #f4f6f8;
+  --bg-2: #e9edf1;
+  --ink: #0b1220;
+  --ink-2: #445066;
+  --ink-3: #66718a;
+  --line: rgba(11, 18, 32, .12);
+  --line-strong: rgba(11, 18, 32, .3);
+  --accent: #2f4bff;
+  --accent-ink: #2f4bff;
+  --on-accent: #ffffff;
+  --logo-filter: none;
+  color-scheme: light;
+}
+
+:root {
+  /* The inside of every 3D window is always "space", whatever the palette. */
+  --space: #0b0c0e;
+  --space-2: #16181c;
+  --on-space: #eceef1;
+  --on-space-2: #9a9ea6;
+  --on-space-line: rgba(236, 238, 241, .16);
+
+  --font: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "Cascadia Mono", monospace;
+
+  /* Type scale (fluid, phone first) */
+  --t-hero: clamp(2.6rem, 1.6rem + 5vw, 6rem);
+  --t-1: clamp(2rem, 1.4rem + 3vw, 4rem);
+  --t-2: clamp(1.5rem, 1.2rem + 1.4vw, 2.25rem);
+  --t-3: 1.125rem;
+  --t-body: 1rem;
+  --t-meta: .75rem;       /* mono readouts, minimum 12px */
+
+  /* Spacing (spacious, density 3) */
+  --s-1: .5rem; --s-2: 1rem; --s-3: 1.5rem; --s-4: 2.5rem;
+  --s-5: 4rem;  --s-6: 6rem; --s-7: 9rem;
+  /* Round 6: the 3D film stays full screen, but text, controls, logo and CTA sit
+     in a calmer centred column (James: logo and "Book a scan" closer together). */
+  --gutter: clamp(16px, 4vw, 56px);
+  --max: 1280px;
+  --nav-max: 1200px;
+
+  /* Shape rule: NO sharp corners anywhere. Everything is a squircle (a
+     smooth "superellipse" corner, like an app icon). Browsers that know
+     `corner-shape: squircle` draw true squircles (radius is scaled up by
+     --sq-k so the curve looks the same size); others get a plain rounded
+     corner. Use only these radii:
+       --r-stage  the hero / showcase stage     --r-lg  big frames, bento cells
+       --r-md     tiles, small windows          --r-sm  chips, small panels
+       --r-pill   buttons and pills (fully round ends)
+     Nested shapes (double bezel) subtract the padding: calc(--r-lg - --bezel). */
+  --sq-k: 1;
+  --r-stage: calc(40px * var(--sq-k));
+  --r-lg: calc(30px * var(--sq-k));
+  --r-md: calc(22px * var(--sq-k));
+  --r-sm: calc(14px * var(--sq-k));
+  --r-pill: 999px;
+  --r-frame: var(--r-lg);   /* legacy name, same as --r-lg */
+  --bezel: 7px;             /* the gap between outer tray and inner window */
+
+  /* Soft ambient shadows, tinted to the ink colour (no hard black). */
+  --shadow-float: 0 40px 90px -40px rgba(13, 14, 16, .32), 0 12px 28px -14px rgba(13, 14, 16, .16);
+  --shadow-soft: 0 18px 40px -24px rgba(13, 14, 16, .28);
+  --shell: rgba(13, 14, 16, .045);          /* outer tray of a bezel */
+  --shell-line: rgba(13, 14, 16, .07);
+  --shell-hi: inset 0 1px 0 rgba(255, 255, 255, .55);
+
+  --ease: cubic-bezier(.16, 1, .3, 1);      /* out-expo, most motion */
+  --ease-io: cubic-bezier(.65, 0, .35, 1);
+  --d-fast: 180ms; --d-med: 420ms; --d-slow: 900ms;
+
+  --nav-h: 76px;   /* space the floating nav needs at the top */
+}
+
+/* True squircles where supported (Chrome 139+). Every rounded thing on the
+   page follows automatically; circles stay circles via .is-round. */
+@supports (corner-shape: squircle) {
+  :root { --sq-k: 1.75; }
+  *, *::before, *::after { corner-shape: squircle; }
+  .is-round, .is-round::before, .is-round::after { corner-shape: round; }
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--t-body);
+  line-height: 1.55;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, video, iframe, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; }
+h1, h2, h3, p, figure { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.sr-only:focus { position: fixed; z-index: 70; left: 1rem; top: .75rem; width: auto; height: auto; clip: auto; padding: .6rem 1rem; border-radius: var(--r-pill); background: var(--bg); color: var(--ink); }
+
+/* ---------- The living background (js/space.js) ---------- */
+#space { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; pointer-events: none; }
+.space-still #space { display: none; }
+/* The solid 3D layer (js/stage.js): above the points, below the page. It never
+   takes the pointer itself: sections put .stage-hit areas where dragging works. */
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; pointer-events: none; opacity: 0; transition: opacity .6s var(--ease); }
+html.stage-on #stage { opacity: 1; }
+main { position: relative; z-index: 1; }
+.stage-hit { touch-action: pan-y; cursor: grab; }
+.stage-hit:active { cursor: grabbing; }
+/* No 3D layer (no WebGL2, or the engine failed): the acts show still pictures of their
+   3D scenes instead (made by tools/make_stills.py), so nothing looks empty. */
+/* Round 5: the hero is points only (no solid house), so it needs no still of its own. */
+html.stage-none .sec--room .act__pin,
+html.stage-none .sec--real .act__pin { background: var(--bg) center / cover no-repeat; }
+html.stage-none .sec--room .act__pin { background-image: url("../assets/stage/still-room.webp"); }
+html.stage-none .sec--real .act__pin,
+html.real-none .sec--real .act__pin { background: var(--bg) url("../assets/stage/still-real.webp") center / cover no-repeat; }
+html.stage-none .stage-hit { cursor: auto; }
+html.stage-none .hero__hint { display: none; }   /* a still picture cannot be dragged */
+/* Beats: invisible markers inside tall "act" sections that drive the film (CONTRACT 4.6). */
+.beat { position: absolute; left: 0; width: 1px; pointer-events: none; visibility: hidden; }
+/* (4 Nov 2026) menu step marks inside a pinned section: a jump target / a zone for the menu pill (js/main.js) */
+.nav-mark { position: absolute; left: 0; width: 1px; pointer-events: none; visibility: hidden; }
+/* Still picture for devices without 3D (or reduced motion fallback): a fixed
+   layer, because a fixed body background misbehaves on iPhones. */
+html.space-still body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: var(--bg) url("../assets/space/still.webp") center / cover no-repeat;
+}
+main:focus { outline: none; }
+
+/* ---------- Type helpers ---------- */
+.h-hero { font-size: var(--t-hero); font-weight: 500; letter-spacing: -.035em; line-height: 1; }
+.h-1 { font-size: var(--t-1); font-weight: 500; letter-spacing: -.03em; line-height: 1.04; text-wrap: balance; }
+.h-2 { font-size: var(--t-2); font-weight: 500; letter-spacing: -.02em; line-height: 1.15; text-wrap: balance; }
+.lede { font-size: var(--t-3); color: var(--ink-2); max-width: 46ch; text-wrap: pretty; }
+.muted { color: var(--ink-2); }
+/* Wide-tracked thin caps, the "STEP INTO SPACE." voice of the logo.
+   Use for the tagline only, not as an eyebrow on every section. */
+.tagline { font-weight: 300; letter-spacing: .42em; text-transform: uppercase; font-size: .8125rem; }
+/* Mono instrument readout: facts only (place, floor, type). */
+.meta { font-family: var(--mono); font-size: var(--t-meta); letter-spacing: .02em; color: var(--ink-2); }
+
+/* ---------- Layout ---------- */
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gutter); }
+.sec { position: relative; padding-block: var(--s-6); }
+@media (min-width: 1024px) { .sec { padding-block: var(--s-7); } }
+/* 12 columns across the whole screen (phone: 4). Place text anywhere on it. */
+.grid12 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--s-2); }
+@media (min-width: 768px) { .grid12 { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(16px, 1.6vw, 32px); } }
+/* An act: a tall section whose content stays on screen while the film plays. */
+.act { position: relative; padding: 0; height: var(--act, 300vh); }
+.act__pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: clip; }
+
+/* ---------- Round 5: Segments 1:2:3 (James's layout rule, CONTRACT 5.1) ----------
+   .seg1  one important thing, centred, alone.
+   .seg2  two things side by side (text | example). Phone: stacked, text first.
+          .seg2--flip puts the example on the left on wide screens (text stays first in the HTML).
+   .seg3  a browse row of several things. Phone: a sideways swipe row (next card peeks in).
+   Sections add their own sizes; these only set the shape. */
+.seg1 { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.seg2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-4); align-items: center; }
+@media (min-width: 1024px) {
+  .seg2 { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 4vw, 96px); }
+  .seg2--flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .seg2--flip > :first-child { order: 2; }
+}
+.seg3 {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(78%, 1fr); gap: var(--s-2);
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none;
+  margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter);
+  list-style: none; padding-block: 0; margin-block: 0;
+}
+.seg3::-webkit-scrollbar { display: none; }
+.seg3 > * { scroll-snap-align: start; min-width: 0; }
+@media (min-width: 768px) {
+  .seg3 { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible;
+          margin-inline: 0; padding-inline: 0; gap: clamp(16px, 1.6vw, 32px); }
+}
+
+/* ---------- Buttons (pill) ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: .6em;
+  min-height: 44px; padding: 0 1.25rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  font-size: .9375rem; font-weight: 500; white-space: nowrap; text-decoration: none;
+  transition: background var(--d-fast) var(--ease), border-color var(--d-fast) var(--ease), transform var(--d-fast) var(--ease);
+}
+.btn:hover { border-color: var(--ink); }
+.btn:active { transform: scale(.98); }
+.btn--accent { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn--accent:hover { border-color: var(--accent); filter: brightness(1.06); }
+.btn--sm { min-height: 40px; padding: 0 1rem; font-size: .875rem; }
+
+/* ---------- Double bezel (the frame for every 3D window and tile) ----------
+   <div class="bezel"><div class="slot" ...></div></div>
+   Outer tray + inner window with concentric squircle corners.
+   Size modifiers: .bezel--stage (hero/showcase), .bezel--md (tiles). */
+.bezel {
+  --b-r: var(--r-lg);
+  padding: var(--bezel);
+  border-radius: var(--b-r);
+  background: var(--shell);
+  box-shadow: 0 0 0 1px var(--shell-line), var(--shell-hi);
+}
+.bezel--stage { --b-r: var(--r-stage); box-shadow: 0 0 0 1px var(--shell-line), var(--shell-hi), var(--shadow-float); }
+.bezel--md { --b-r: var(--r-md); --bezel: 5px; }
+.bezel > .slot, .bezel > .bezel__core { border-radius: calc(var(--b-r) - var(--bezel)); }
+
+/* ---------- Nav (30 Oct 2026, James picked option B "floating pills") ----------
+   No bar: three pieces float on the scene. The logo on its own (white, glyph shadow), one capsule of
+   clear dark glass in the middle with the white chip (the same switch look as "Real scan | 3D model"),
+   and "Contact us" on its own. The island is only an invisible row that lines the pieces up (design.js
+   measures its edges). Phones (< 900): logo + one small capsule (Menu | Contact us), the menu opens a
+   light glass sheet under it. Behaviour: js/main.js. */
+.nav {
+  --nav-glass: rgba(14, 16, 20, .46);
+  --nav-rim: inset 0 0 0 1px rgba(255, 255, 255, .14), inset 0 1px 0 rgba(255, 255, 255, .1);
+  --nav-chip: #f6f7f9; --nav-chip-ink: #111316;
+  position: fixed; z-index: 50; top: 10px; left: 0; right: 0;
+  display: flex; flex-direction: column; align-items: center; pointer-events: none;
+  padding-inline: var(--gutter);
+  color: #fff;
+}
+.nav__island {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-2);
+  width: 100%; max-width: calc(var(--nav-max) - 2 * var(--gutter)); height: 56px;
+}
+.nav__island > * { pointer-events: auto; }
+.nav__logo { display: inline-flex; align-items: center; min-height: 44px; padding-inline: 4px; }
+.nav__logo img { height: 20px; width: auto; filter: invert(1) drop-shadow(0 1px 2px rgba(0, 0, 0, .55)) drop-shadow(0 0 10px rgba(0, 0, 0, .35)); }
+
+/* the middle capsule */
+.nav__caps {
+  display: none; align-items: center; gap: 2px; padding: 5px;
+  border-radius: var(--r-pill);
+  background: var(--nav-glass);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: var(--nav-rim), 0 18px 40px -24px rgba(0, 0, 0, .6);
+  font-size: .9375rem;
+}
+.nav__chip {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 40px; padding: 0 1rem;
+  border-radius: var(--r-pill);
+  color: rgba(255, 255, 255, .84); text-decoration: none; white-space: nowrap;
+  transition: color var(--d-fast) var(--ease), background var(--d-med) var(--ease);
+}
+.nav__chip:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.nav__chip[aria-current], .nav__story.is-on .nav__story-btn { background: var(--nav-chip); color: var(--nav-chip-ink); }
+.nav__chip:focus-visible, .nav__menu:focus-visible, .nav__cta:focus-visible { outline-offset: 2px; }
+
+/* "How it works": all five labels sit on top of each other, so the chip keeps one width while the
+   label changes to the step you are in. Four dots show where in the story you are. */
+.nav__story { position: relative; }
+.nav__label { display: grid; }
+.nav__label > span { grid-area: 1 / 1; visibility: hidden; }
+.nav__label > span.is-shown { visibility: visible; }
+.nav__dots { display: none; gap: 3px; align-items: center; }
+.nav__story.is-on .nav__dots { display: inline-flex; }
+.nav__dots i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .28; transition: width var(--d-med) var(--ease), opacity var(--d-med) var(--ease); }
+.nav__dots i.is-on { width: 12px; border-radius: 2px; opacity: 1; }
+.nav__dots i.is-done { opacity: .6; }
+.nav__caret { width: 10px; height: 10px; opacity: .7; transition: transform var(--d-fast) var(--ease); }
+.nav__story-btn[aria-expanded="true"] .nav__caret { transform: rotate(180deg); }
+
+/* the small glass panel with the four steps */
+.nav__drop {
+  position: absolute; top: calc(100% + 12px); left: -5px; width: 320px; padding: 8px;
+  border-radius: var(--r-lg);
+  background: rgba(14, 16, 20, .8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4); backdrop-filter: blur(28px) saturate(1.4);
+  box-shadow: var(--nav-rim), 0 30px 60px -30px rgba(0, 0, 0, .8);
+}
+.nav__drop:not([hidden]) { animation: nav-in var(--d-med) var(--ease) both; }
+@keyframes nav-in { from { opacity: 0; transform: translateY(-6px); } }
+.nav__links { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.nav__links a {
+  display: grid; grid-template-columns: 28px 1fr; gap: 0 10px; padding: 10px 12px;
+  border-radius: calc(var(--r-lg) - 8px);
+  color: #fff; text-decoration: none;
+  transition: background var(--d-fast) var(--ease);
+}
+.nav__links a:hover, .nav__links a[aria-current] { background: rgba(255, 255, 255, .1); }
+.nav__links i { grid-row: span 2; font: 400 .75rem/1.9 var(--mono); font-style: normal; opacity: .55; }
+.nav__links b { font-weight: 500; font-size: .9375rem; }
+.nav__links small { font-size: .8125rem; color: rgba(255, 255, 255, .64); }
+
+/* right side: Contact us (+ the menu button on phones) */
+.nav__end { display: flex; align-items: center; gap: 4px; }
+.nav__cta { min-height: 44px; padding: 0 1.3rem; box-shadow: 0 10px 28px -12px color-mix(in srgb, var(--accent) 70%, transparent); }
+.nav__menu {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0 1rem 0 .85rem;
+  border-radius: var(--r-pill); font-size: .9375rem; font-weight: 500; color: #fff;
+}
+.nav__menu svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.nav__menu path { transition: transform var(--d-med) var(--ease); transform-origin: 10px 10px; }
+.nav__menu[aria-expanded="true"] .nav__menu-a { transform: translateY(3px) rotate(45deg); }
+.nav__menu[aria-expanded="true"] .nav__menu-b { transform: translateY(-3px) rotate(-45deg); }
+
+/* phones and small tablets: Menu | Contact us share one small capsule */
+@media (max-width: 899px) {
+  .nav__end {
+    padding: 4px; border-radius: var(--r-pill);
+    background: var(--nav-glass);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow: var(--nav-rim), 0 18px 40px -24px rgba(0, 0, 0, .6);
+  }
+  .nav__menu, .nav__cta { min-height: 40px; }
+  .nav__cta { padding: 0 1rem; font-size: .875rem; box-shadow: none; }
+  .nav__menu { background: rgba(255, 255, 255, .12); }
+}
+@media (min-width: 900px) {
+  .nav__caps { display: flex; }
+  .nav__menu, .nav__sheet { display: none !important; }
+}
+
+/* the phone menu: a light glass sheet under the top bar (same glass as the design panels) */
+.nav__sheet {
+  pointer-events: auto;
+  width: 100%; max-width: 520px; margin-top: 8px; padding: 10px;
+  border-radius: var(--r-lg);
+  color: #15171a;
+  background: rgba(246, 247, 249, .88);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4); backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .55) inset, 0 30px 60px -20px rgba(0, 0, 0, .7);
+}
+.nav__sheet:not([hidden]) { animation: nav-in var(--d-med) var(--ease) both; }
+.nav__sheet-title { padding: 6px 8px 2px; font: 500 .6875rem/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #5a5f68; }
+.nav__sheet ul { list-style: none; margin: 0; padding: 0; }
+.nav__sheet-steps { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 4px 12px; border-bottom: 1px solid rgba(0, 0, 0, .08); }
+.nav__sheet-steps a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: var(--r-pill); background: rgba(0, 0, 0, .06); text-decoration: none; font-size: .875rem; }
+.nav__sheet-steps a[aria-current] { background: #111316; color: #fff; }
+.nav__sheet-pages a {
+  display: flex; justify-content: space-between; align-items: center; min-height: 56px; padding: 0 10px;
+  font-size: 1.375rem; font-weight: 500; letter-spacing: -.01em; text-decoration: none;
+}
+.nav__sheet-pages li + li a { border-top: 1px solid rgba(0, 0, 0, .07); }
+.nav__sheet-pages a span { opacity: .4; font-size: 1.1rem; }
+.nav__sheet-pages a[aria-current] { color: #b8300a; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav__caps, .nav__drop, .nav__end { background: rgba(14, 16, 20, .94); }
+  .nav__sheet { background: rgba(246, 247, 249, .98); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav__drop:not([hidden]), .nav__sheet:not([hidden]) { animation: none; }
+}
+
+/* ---------- Round 8: light glass panel + hint chip (CONTRACT 8.2) ----------
+   .glass = the light translucent panel over a 3D view (station controls, viewer bar).
+   .hint  = the one small hint chip style of the page (role="status"). Owners add modifiers. */
+.glass {
+  --glass-ink: #15171a; --glass-ink-2: #4a4f57;
+  color: var(--glass-ink);
+  background: rgba(250, 250, 252, .72);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+  border-radius: var(--r-lg);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .55) inset, 0 0 0 1px rgba(13, 14, 16, .10), var(--shadow-soft);
+}
+.hint {
+  display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 34px; padding: .35rem .9rem;
+  border-radius: var(--r-pill);
+  font-size: .8125rem; line-height: 1.3; color: #15171a;
+  background: rgba(250, 250, 252, .78);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow: 0 0 0 1px rgba(13, 14, 16, .10), var(--shadow-soft);
+  transition: opacity var(--d-med) var(--ease);
+}
+.hint[hidden] { display: none; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background: rgba(250, 250, 252, .94); }
+  .hint { background: rgba(250, 250, 252, .96); }
+}
+
+/* ---------- Reveal (main.js adds .is-in) ----------
+   Use  data-reveal  on an element, and  style="--i:N"  to stagger. */
+[data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity var(--d-slow) var(--ease), transform var(--d-slow) var(--ease); transition-delay: calc(var(--i, 0) * 70ms); }
+[data-reveal].is-in { opacity: 1; transform: none; }
+.no-js [data-reveal] { opacity: 1; transform: none; }
+
+/* ---------- Words over the live 3D scene (29 Oct, James: "no black patches") ----------
+   No dark veils, scrims or radial blobs behind text. Readability comes from the letters:
+   bright ink (never grey over a scene) plus a tight shadow that hugs each glyph, so there is
+   no visible shape around the words. Over the busy 3D model (design stops) the words sit on
+   the same light glass as the station panels instead (see design.css). */
+:root {
+  --halo-big: 0 1px 2px rgba(0, 0, 0, .42), 0 2px 16px rgba(0, 0, 0, .34);
+  --halo-small: 0 1px 1px rgba(0, 0, 0, .72), 0 0 5px rgba(0, 0, 0, .5), 0 1px 14px rgba(0, 0, 0, .38);
+}
+.sec--hero .hero__title, .sec--scan .who__name, .sec--scan .who__what,
+.sec--walk .walk__title, .sec--floor .floor__lead, .sec--contact .contact__title, .sec--contact .contact__verb {
+  text-shadow: var(--halo-big);
+}
+.sec--hero .hero__eyebrow, .sec--hero .hero__sub, .sec--hero .hero__more, .sec--hero .hero__hint,
+.sec--scan .who__line, .sec--scan .who__first, .sec--walk .walk__sub,
+.sec--floor .floor__sub, .sec--contact .contact__lede,
+.sec--contact .contact__mail, .sec--contact .contact__what, .sec--contact .contact__next-title {
+  text-shadow: var(--halo-small);
+}
+
+/* ---------- Palette switcher (only with ?palettes=1) ---------- */
+.palette-switch { position: fixed; z-index: 60; right: 1rem; bottom: 1rem; display: flex; gap: .4rem; padding: .4rem; border-radius: var(--r-pill); background: var(--bg-2); border: 1px solid var(--line); }
+.palette-switch button { min-width: 44px; min-height: 36px; padding: 0 .8rem; border-radius: var(--r-pill); font-family: var(--mono); font-size: .75rem; }
+.palette-switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  [data-reveal] { opacity: 1; transform: none; }
+}
+
+/* Legal strip (4 Nov 2026): registered name, KvK, VAT, address + Privacy / Legal links under every footer
+   (src/parts/legal.html). Small and quiet, but readable (ink-2 on the dark ground) and 44 px tap targets. */
+.legal-strip {
+  grid-column: 1 / -1; justify-self: stretch;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: .25rem var(--s-3); margin-top: var(--s-1); padding-top: var(--s-1);
+  border-top: 1px solid var(--line);
+  font-size: .75rem; line-height: 1.5; color: var(--ink-2); text-align: center;
+}
+.legal-strip p { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--s-2); margin: 0; }
+.legal-strip__ids span { white-space: nowrap; }
+.legal-strip__ids { column-gap: var(--s-3) !important; }
+@media (min-width: 768px) {
+  .legal-strip__ids { column-gap: var(--s-2) !important; }
+  .legal-strip__ids > span + span::before { content: "\00B7"; margin-right: var(--s-2); color: var(--ink-3); }
+}
+.legal-strip a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px;
+}
+.legal-strip a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+.legal-strip [hidden] { display: none; }
+@media (min-width: 768px) { .legal-strip { justify-content: space-between; } }
