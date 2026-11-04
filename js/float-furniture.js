@@ -285,7 +285,8 @@
     var tick = function (now) {
       self.raf = 0;
       if (!self.on || document.hidden) return;
-      if (now - self.last >= step) { self.last = now; self.draw(now); }
+      // (4 Nov 2026) no drawing while a result plays full screen on a phone (html.ex-full): it is hidden anyway
+      if (now - self.last >= step && !document.documentElement.classList.contains("ex-full")) { self.last = now; self.draw(now); }
       self.raf = requestAnimationFrame(tick);
     };
     this.raf = requestAnimationFrame(tick);

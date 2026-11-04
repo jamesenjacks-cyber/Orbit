@@ -42,10 +42,22 @@
   }
   function queuePick() { if (!pickQueued) { pickQueued = true; requestAnimationFrame(pick); } }
 
+  /* (4 Nov 2026, James: "impossible to view splats in examples" on the phone) the Orbit viewer's own settings for
+     a lighter scene: detail=light (800k splats instead of 1.2M) and phonecap=1 (never the sharpest level on a
+     phone). Only added when the link does not set them itself. */
+  function phoneUrl(u) {
+    try {
+      var p = new URL(u);
+      if (!p.searchParams.has("detail")) p.searchParams.set("detail", "light");
+      if (!p.searchParams.has("phonecap")) p.searchParams.set("phonecap", "1");
+      return p.protocol === "https:" && p.origin === VIEWER_ORIGIN ? p.href : u;
+    } catch (e) { return u; }
+  }
   function safeEmbed(src) {
     try {
       var u = new URL(src);
-      return u.origin === VIEWER_ORIGIN ? u.href : "";
+      // (QC-20261104-2042) protocol too: a blob: address made by the viewer's own site has the same origin
+      return u.protocol === "https:" && u.origin === VIEWER_ORIGIN ? u.href : "";
     } catch (e) { return ""; }
   }
 
@@ -92,7 +104,7 @@
       if (frame) { if (done) done(); return; }
       frame = document.createElement("iframe");
       frame.className = "examples__frame";
-      frame.src = url;
+      frame.src = PHONE ? phoneUrl(url) : url;
       frame.title = "Live 3D example by Orbit 3D";
       // (4 Nov 2026 audit) "pointer-lock" is not a browser permission name and "fullscreen" in allow already
       // covers allowfullscreen: both only made console warnings
@@ -130,8 +142,10 @@
     function shut() {
       if (!frame) return;
       frame.tabIndex = -1;
-      box.classList.remove("is-live");
-      if (box.parentElement) box.parentElement.classList.remove("is-live");
+      box.classList.remove("is-live", "is-full");
+      if (box.parentElement) box.parentElement.classList.remove("is-live", "is-full");
+      // the page-wide full-screen state only goes when no other result is still full screen
+      if (!sec.querySelector(".examples__media.is-full")) document.documentElement.classList.remove("ex-full");
       open.focus({ preventScroll: true });
     }
     open.addEventListener("click", function () {
@@ -140,7 +154,18 @@
       frame.tabIndex = 0;
       box.classList.add("is-live", "is-ready", "is-used");   // the cursor demo has done its job
       if (box.parentElement) box.parentElement.classList.add("is-live");
+      /* (4 Nov 2026, James: "when I click on it and I scroll down, I can't see contact form") on a phone the
+         playing scene filled most of the screen and took every swipe, so the page could not be scrolled on. Now
+         Play opens it full screen with a Close button at the top; Close puts the page back where it was. */
+      // (QC-20261104-2042) claim FIRST: that ends the previous holder (its shut() runs now), and only then this one
+      // goes full screen, so the old one's clean-up can not undo this one's full screen
       if (window.OrbitEngage) window.OrbitEngage.claim("frame", id, shut);
+      if (PHONE) {
+        box.classList.add("is-full");
+        if (box.parentElement) box.parentElement.classList.add("is-full");
+        document.documentElement.classList.add("ex-full");
+        fullY = window.scrollY;
+      }
       try { frame.focus({ preventScroll: true }); } catch (e) { /* fine */ }
     });
     function letGo() {
@@ -149,6 +174,12 @@
       shut();
     }
     close.addEventListener("click", letGo);
+    // full screen (phones): if the page itself moves on anyway (a link, a jump), the scene closes by itself
+    var fullY = 0;
+    window.addEventListener("scroll", function () {
+      if (box.classList.contains("is-full") && Math.abs(window.scrollY - fullY) > 200) letGo();
+    }, { passive: true });
+    window.addEventListener("hashchange", function () { if (box.classList.contains("is-full")) letGo(); });
     // Esc inside the viewer: the page never sees the key, the viewer tells us (same message as js/slots.js)
     window.addEventListener("message", function (e) {
       if (!frame || e.source !== frame.contentWindow || e.origin !== VIEWER_ORIGIN) return;

@@ -106,6 +106,22 @@
 .sec--examples .examples__close:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .sec--examples .examples__media.is-live .examples__poster,
 .sec--examples .examples__media.is-live .examples__open { opacity: 0; pointer-events: none; }
+/* (4 Nov 2026, James) phones: a playing scene is full screen (js/sections/examples.js is-full), Close at the top
+   centre (the viewer's own pills sit in the top corners). The card drops its reveal transform, otherwise
+   position: fixed would be fixed to the card instead of the screen. */
+.sec--examples .examples__card.is-full { transform: none !important; filter: none !important; translate: none !important; scale: none !important; }
+.sec--examples .examples__media.is-embed.is-full {
+  position: fixed; inset: 0; z-index: 2000; width: 100%; height: 100%; max-height: none; aspect-ratio: auto;
+  border-radius: 0; box-shadow: none;
+}
+/* the section is lifted above everything else on the page, and the menu bar steps aside while it is full screen */
+html.ex-full .sec--examples { position: relative; z-index: 2000 !important; }
+html.ex-full [data-nav] { visibility: hidden; }
+.sec--examples .examples__card.is-full .examples__close {
+  position: fixed; z-index: 2001; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 12px); translate: -50% 0; margin: 0;
+  background: rgba(13, 14, 16, .78); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+html.ex-full, html.ex-full body { overflow: hidden; }
 
 /* (4 Nov 2026, James, round 2) "Already designed?" = a sub-section of its own under the results: a double-bezel
    frame (outer tray + inner window) so it reads as different from the result frames; a small label, the title,

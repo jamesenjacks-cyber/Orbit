@@ -1720,7 +1720,11 @@
   });
   // (4 Nov 2026 audit) a playing frame only pauses the stage when no 3D section is on or near the screen:
   // pressing Play on the first result while the floor model was still in view made the model vanish
-  core.paused = function () { return (frameHold || root.classList.contains("frame-engaged")) && !beatsNear(); };
+  core.paused = function () {
+    // (4 Nov 2026) a result playing full screen on a phone (html.ex-full) hides the whole page: draw nothing at all
+    if (root.classList.contains("ex-full")) return true;
+    return (frameHold || root.classList.contains("frame-engaged")) && !beatsNear();
+  };
   function beatsNear() {
     var vh = win.innerHeight || 800, m = vh * 0.6;
     for (var i = 0; i < beatEls.length; i++) {
