@@ -235,6 +235,20 @@
   core.whenReady = function (fn) { if (ready) { try { fn(core); } catch (e) { console.warn(e); } } else readyFns.push(fn); };
   core.whenEngine = function (fn) { if (core.engine) { try { fn(core); } catch (e) { console.warn(e); } } else engineFns.push(fn); };
   core.wantHouse = function (why) { wantHouse(why); };
+  /* (4 Nov 2026, phone lag) core.calm(maxMs) -> Promise: resolves once the page has not scrolled for 200 ms
+     (or after maxMs, default 2500). Heavy one-off work (unpacking and building a 3D model) waits for it, so
+     it lands in a pause instead of freezing a swipe halfway. */
+  var lastScrollAt = 0;
+  win.addEventListener("scroll", function () { lastScrollAt = performance.now(); }, { passive: true });
+  core.calm = function (maxMs) {
+    var t0 = performance.now(), cap = maxMs > 0 ? maxMs : 2500;
+    return new Promise(function (ok) {
+      (function check() {
+        var now = performance.now();
+        if (now - lastScrollAt > 200 || now - t0 > cap) ok(); else setTimeout(check, 100);
+      })();
+    });
+  };
 
   /* ---------- beats ---------- */
   var beatEls = [], beatState = {}, collectT = 0;
@@ -325,6 +339,9 @@
     core.dpr = dpr;
     device.maxPixelRatio = dpr;
     device.resizeCanvas(cssW, cssH);
+    // (4 Nov 2026, phone lag) PlayCanvas measured the canvas every frame (a forced page layout each frame);
+    // its size only changes here, so set it here and skip the per-frame measuring (see boot)
+    if (device.clientRect) { device.clientRect.width = cssW; device.clientRect.height = cssH; }
     dirty = true;
     // re-fit the play view when the width changes (not on phone address-bar height changes)
   }
@@ -677,6 +694,9 @@
       // (4 Nov 2026, phone battery) the scenes pose the house every frame: redraw only when the pose changed
       pose: function (pos, yawDeg, scale, centred) {
         var key = pos ? [pos[0], pos[1], pos[2], yawDeg || 0, scale || 1, !!centred].join() : "rest";
+        // (4 Nov 2026, phone lag) the same pose again: setting it anyway made the engine re-place every piece
+        // of the house (and redo all their bounds) each frame
+        if (key === poseKey) return;
         if (!pos) { rootE.setLocalPosition(0, 0, 0); rootE.setLocalEulerAngles(0, 0, 0); rootE.setLocalScale(1, 1, 1); body.setLocalPosition(0, 0, 0); }
         else {
           rootE.setLocalPosition(pos[0], pos[1], pos[2]);
@@ -1856,6 +1876,7 @@
       return pc.createGraphicsDevice(canvas, { deviceTypes: [pc.DEVICETYPE_WEBGL2], antialias: !isPhone, alpha: true, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: "high-performance" });
     }).then(function (dev) {
       device = core.device = dev;
+      if (typeof dev.updateClientRect === "function" && dev.clientRect) dev.updateClientRect = function () { /* set in resize() */ };
       var o = new pc.AppOptions();
       o.graphicsDevice = dev;
       o.componentSystems = [pc.RenderComponentSystem, pc.CameraComponentSystem, pc.LightComponentSystem].concat(pc.GSplatComponentSystem ? [pc.GSplatComponentSystem] : []);
@@ -1965,12 +1986,14 @@
     if (houseState !== "wanted") return;
     houseState = "loading";
     var t0 = performance.now();
-    needRaw("house").then(function () {
+    needRaw("house").then(function () { return core.calm(); }).then(function () {
       var hj = jsonFile("house/house.json"), fl = jsonFile("house/furniture.json") || { items: [] }, lj = null;
       try { lj = jsonFile("house/lights.json"); } catch (e) { lj = null; }
       if (!hj) throw new Error("house.json missing");
       var gW = glbJson("house/walls.glb"), gF = glbJson("house/furniture.glb");
       return Promise.all([loadGlb("house/walls.glb", "house-walls"), loadGlb("house/furniture.glb", "house-furniture")]).then(function (as) {
+        return core.calm().then(function () { return as; });
+      }).then(function (as) {
         buildHouse(as[0], as[1], hj, fl, gW, gF, lj);
         core.house = H;
         core.prewarm(H.root);

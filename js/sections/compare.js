@@ -587,6 +587,9 @@
       loadGlbUrl("assets/compare/walls" + suf + ".glb", "cmp-walls"),
       loadGlbUrl("assets/compare/furniture" + suf + ".glb", "cmp-furn")
     ]).then(function (as) {
+      // (4 Nov 2026, phone lag) build the model in a pause of the scrolling, not halfway a swipe
+      return R.core.calm ? R.core.calm().then(function () { return as; }) : as;
+    }).then(function (as) {
       var pc = R.core.pc;
       if (R.modelP !== myP) {   // dropped while it loaded: give it back at once
         as.forEach(function (a) { try { R.core.app.assets.remove(a); a.unload(); } catch (e) { /* gone */ } });
