@@ -130,8 +130,7 @@
   transition: box-shadow var(--d-med) var(--ease);
 }
 /* No 3D: a still of what the card would show. */
-html.stage-none .sec--scan .scan__fig--splat .scan__card { background: var(--space) url("../assets/stage/still-hero.webp") center / cover no-repeat; }
-html.stage-none .sec--scan .scan__fig--model .scan__card { background: var(--space) url("../assets/stage/still-top.webp") center / cover no-repeat; }
+html.stage-none .sec--scan .scan__fig--splat .scan__card { background: var(--space) url("../../assets/stage/still-hero.webp") center / cover no-repeat; }   /* (5 Nov 2026, Codex QC) was ../assets: wrong folder */
 /* The visitor has taken a card (wheel zoom is on): the accent ring says so. */
 .sec--scan .scan__card.is-engaged { box-shadow: 0 0 0 2px var(--accent); }
 

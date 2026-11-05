@@ -1,79 +1,16 @@
 /* =====================================================================
-   ORBIT 3D WEBSITE - THE ONLY FILE YOU NEED TO EDIT FOR 3D CONTENT
+   ORBIT 3D WEBSITE - THE SETTINGS FILE (scans, examples, email, booking)
    =====================================================================
-
-   EASIEST WAY (once the dashboard has a "Website" page):
-     Paste the website feed link from the Orbit dashboard after  feed:
-     at the bottom of this file. The site then fills itself from the
-     dashboard (hero model, showcase, all previews). Nothing else to do.
-
-   BY HAND (works today):
-     1. Find the window's name below (for example  hero ).
-     2. Paste the Orbit embed code (an <iframe ...> code) OR just the
-        viewer link (for example https://orbit-viewer.pages.dev/xyz)
-        between the two backticks after  embed:
-     3. Optional but recommended: put a still picture in assets/posters/
-        and write its file name after  poster:  (fast first view on phones).
-     4. Save and refresh the page.
-
-   Empty  embed:  = the window shows a placeholder.
+   Edit the values below, save, refresh the page.
    No place names or floor names are shown on the website on purpose.
    alt = a short description for blind visitors, e.g. "Living room scan".
+   (5 Nov 2026, clean-up) the old empty 3D windows (ORBIT_EMBEDS), the preview wall
+   (ORBIT_PREVIEWS), the dashboard feed link and the old demo cards are gone: no page used
+   them any more. Old copy: work/retired-20261105/js/embeds.js.
    ===================================================================== */
-
-window.ORBIT_EMBEDS = {
-
-  /* The big model visitors see first. It starts playing by itself
-     (an Orbit model spins slowly when left alone). Best: a 3D house model. */
-  hero:     { kind: "model",    alt: "3D house model", poster: "", embed: `` },
-
-  /* The multi-model showcase: ONE embed that holds several models with a
-     switcher (made on the dashboard's Website page). Also plays by itself. */
-  showcase: { kind: "model",    alt: "Several 3D models", poster: "", embed: `` },
-
-  /* Inside / Outside switch. */
-  inside:   { kind: "interior", alt: "Interior scan", poster: "", embed: `` },
-  outside:  { kind: "exterior", alt: "Exterior drone scan", poster: "", embed: `` },
-
-  /* House model + the scan / model slider (two stills of the same view). */
-  model:           { kind: "model",    alt: "3D house model", poster: "", embed: `` },
-  "compare-scan":  { kind: "interior", alt: "Room, scan",     poster: "", embed: `` },
-  "compare-model": { kind: "model",    alt: "Room, 3D model", poster: "", embed: `` },
-
-  /* Design tools inside the viewer. */
-  "design-furniture": { kind: "model", alt: "Changing the furniture", poster: "", embed: `` },
-  "design-paint":     { kind: "model", alt: "Painting walls",         poster: "", embed: `` },
-  "design-light":     { kind: "model", alt: "Real light",             poster: "", embed: `` },
-  "tour-360":         { kind: "tour",  alt: "360 photo tour",         poster: "", embed: `` },
-  "stats":            { kind: "stats", alt: "Visitor heat map",       poster: "", embed: `` },
-
-  /* Inside the phone frame. */
-  phone: { kind: "interior", alt: "Walking on a phone", poster: "", embed: `` }
-};
-
-/* PREVIEW WALL: as many as you like. One line per preview.
-   kind  = interior | exterior | model | tour
-   poster = still picture, loop = optional short silent video (.mp4/.webm)
-   that plays while the preview is on screen, embed = what opens on tap. */
-window.ORBIT_PREVIEWS = [
-  { kind: "model",    alt: "House model",         poster: "", loop: "", embed: `` },
-  { kind: "interior", alt: "Living room",         poster: "", loop: "", embed: `` },
-  { kind: "exterior", alt: "Building from the air", poster: "", loop: "", embed: `` },
-  { kind: "interior", alt: "Kitchen",             poster: "", loop: "", embed: `` },
-  { kind: "model",    alt: "Floor model",         poster: "", loop: "", embed: `` },
-  { kind: "interior", alt: "Bedroom",             poster: "", loop: "", embed: `` },
-  { kind: "tour",     alt: "360 photo tour",      poster: "", loop: "", embed: `` },
-  { kind: "exterior", alt: "Street front",        poster: "", loop: "", embed: `` },
-  { kind: "interior", alt: "Hall",                poster: "", loop: "", embed: `` },
-  { kind: "model",    alt: "Furnished model",     poster: "", loop: "", embed: `` },
-  { kind: "interior", alt: "Bathroom",            poster: "", loop: "", embed: `` },
-  { kind: "exterior", alt: "Courtyard",           poster: "", loop: "", embed: `` }
-];
 
 /* Site settings. */
 window.ORBIT_SITE = {
-  /* Website feed from the Orbit dashboard (leave empty until it exists). */
-  feed: "",
   /* Streamed real splats (CONTRACT 7.1): each url is a SOG LOD folder in the scan's OWN frame.
      toModel / toStudio = world = scale * R(quat x,y,z,w) * scan + t. Numbers: work/S7/NOTES.md.
      finest = the sharpest level it may download (0 = full detail; each step halves the download).
@@ -135,12 +72,6 @@ window.ORBIT_SITE = {
     /* (4 Nov 2026, James) fourth frame; names=0 added so the viewer shows no place name (site rule) */
     { embed: "https://orbit-viewer.pages.dev/viewer.html?lib=https%3A%2F%2Fpub-fedb6cdf9f5d40e39a37c4ae7284f3fe.r2.dev%2Flibrary.json&id=de-bnb&names=0",
       poster: "", alt: "A finished Orbit result you can look around in 3D." }
-  ],
-  /* no longer used (the old three demo cards, before 30 Oct late night) */
-  demos: [
-    { alt: "", poster: "", embed: `` },
-    { alt: "", poster: "", embed: `` },
-    { alt: "", poster: "", embed: `` }
   ],
   /* Partners bar, just above "Contact us" (30 Oct 2026). One line per partner, in the order shown.
      logo = a picture in assets/partners/ (a transparent .png or .svg works best; it is shown in white),

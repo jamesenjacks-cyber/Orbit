@@ -15,8 +15,8 @@
    site's caches, and the "big file" rule looks only at the path INSIDE this site's folder. */
 var SCOPE = new URL(self.registration.scope).pathname;
 var PRE = "orbit3dsite:" + SCOPE + ":";
-var DATA = PRE + "data-dfd87770c3";
-var CODE = PRE + "code-20261104-225507";
+var DATA = PRE + "data-f36625135c";
+var CODE = PRE + "code-20261105-113840";
 var BIG = /^(assets\/(scans|stage|space|fonts|brand|posters|howto|partners)|vendor)\/|\.(webp|jpe?g|png|svg|woff2|wasm|mp4|webm)$/i;
 
 self.addEventListener("install", function () { self.skipWaiting(); });

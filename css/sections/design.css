@@ -206,28 +206,6 @@
 .sec--design .design__padbtn:active { scale: .95; }
 .sec--design .design__note { padding-left: 4px; font-size: .75rem; color: var(--glass-ink-2); }
 
-/* the kitchen lights: one big switch */
-.sec--design .design__switch {
-  width: 100%; min-height: 52px; padding: 0 10px 0 14px;
-  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 10px;
-  border-radius: var(--r-md); text-align: left;
-  background: rgba(255, 255, 255, .7); box-shadow: 0 0 0 1px rgba(13, 14, 16, .08);
-  color: var(--glass-ink);
-}
-.sec--design .design__switch-text { font-size: .9375rem; font-weight: 600; letter-spacing: -.01em; }
-.sec--design .design__switch-state { font-family: var(--mono); font-size: .75rem; color: var(--glass-ink-2); }
-.sec--design .design__switch-track {
-  position: relative; width: 44px; height: 26px; border-radius: 999px;
-  background: rgba(13, 14, 16, .18); transition: background var(--d-med) var(--ease);
-}
-.sec--design .design__switch-knob {
-  position: absolute; left: 3px; top: 3px; width: 20px; height: 20px; border-radius: 50%;
-  background: #fff; box-shadow: 0 1px 3px rgba(13, 14, 16, .3);
-  transition: translate var(--d-med) var(--ease);
-}
-.sec--design .design__switch[aria-pressed="true"] .design__switch-track { background: var(--accent); }
-.sec--design .design__switch[aria-pressed="true"] .design__switch-knob { translate: 18px 0; }
-
 /* the touch handle for sliding the piece */
 .sec--design .design__grab {
   position: absolute; left: 0; top: 0; z-index: 4;
@@ -403,10 +381,6 @@
 .sec--design .design__tool--quiet:hover { background: var(--cg-fill); color: var(--cg-ink); }
 .sec--design .design__padbtn { color: var(--cg-on-ink); background: var(--cg-on); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); }
 .sec--design .design__note { color: var(--cg-ink-2); }
-.sec--design .design__switch { background: var(--cg-fill); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); color: var(--cg-ink); }
-.sec--design .design__switch-state { color: var(--cg-ink-2); }
-.sec--design .design__switch-track { background: rgba(255, 255, 255, .22); }
-.sec--design .design__switch[aria-pressed="true"] .design__switch-track { background: var(--accent); }
 /* the callout ring: a soft live dot on the piece */
 .sec--design .design__ring { border-color: #fff; background: rgba(255, 255, 255, .3); box-shadow: 0 0 0 4px rgba(255, 255, 255, .16), 0 1px 4px rgba(0, 0, 0, .4); }
 .sec--design .design__leader { background: linear-gradient(to right, rgba(255, 255, 255, .85), rgba(255, 255, 255, .45)); box-shadow: 0 0 0 .5px rgba(0, 0, 0, .3); }
@@ -564,7 +538,6 @@
   .sec--design .design__swatch { width: 32px; height: 32px; }
   .sec--design .design__swatch:nth-child(n+6) { display: none; }
   .sec--design .design__tool { min-height: 36px; }
-  .sec--design .design__switch { min-height: 44px; }
 }
 
 /* ==========================================================================

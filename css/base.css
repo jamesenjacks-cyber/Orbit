@@ -169,12 +169,7 @@ main { position: relative; z-index: 1; }
 .stage-hit:active { cursor: grabbing; }
 /* No 3D layer (no WebGL2, or the engine failed): the acts show still pictures of their
    3D scenes instead (made by tools/make_stills.py), so nothing looks empty. */
-/* Round 5: the hero is points only (no solid house), so it needs no still of its own. */
-html.stage-none .sec--room .act__pin,
-html.stage-none .sec--real .act__pin { background: var(--bg) center / cover no-repeat; }
-html.stage-none .sec--room .act__pin { background-image: url("../assets/stage/still-room.webp"); }
-html.stage-none .sec--real .act__pin,
-html.real-none .sec--real .act__pin { background: var(--bg) url("../assets/stage/still-real.webp") center / cover no-repeat; }
+/* (5 Nov 2026, clean-up) the old .sec--room / .sec--real stills are gone with their sections. */
 html.stage-none .stage-hit { cursor: auto; }
 html.stage-none .hero__hint { display: none; }   /* a still picture cannot be dragged */
 /* Beats: invisible markers inside tall "act" sections that drive the film (CONTRACT 4.6). */

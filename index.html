@@ -13,7 +13,6 @@
   <!-- (31 Oct, phone speed) the hero photo is the first thing a visitor sees: fetch it first -->
   <link rel="preload" as="image" href="assets/stage/hero-interior.jpg" fetchpriority="high">
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/slot.css">
   <link rel="stylesheet" href="css/sections/hero.css">
   <link rel="stylesheet" href="css/sections/scan.css">
   <link rel="stylesheet" href="css/sections/walk.css">
@@ -738,8 +737,6 @@
   <script src="js/embeds.js"></script>
   <script src="js/film.js"></script>
   <script src="js/engage.js"></script>
-  <script src="js/slots.js"></script>
-  <script src="js/feed.js"></script>
   <script src="js/main.js"></script>
   <script src="js/book.js"></script>
   <script src="js/design-file.js"></script>
@@ -765,9 +762,12 @@
       window.OrbitPointsReady = new Promise(function (ok) { fire = ok; });
       function points() {
         if (started) return; started = true;
-        add(["assets/space/exterior" + lite + ".js", "assets/space/interior" + lite + ".js", "assets/space/outline" + lite + ".js", "assets/space/forms" + lite + ".js", "js/space.js"], function () { fire(); });
+        /* (5 Nov 2026, clean-up) outline + forms points are no longer loaded: they fed only the old point film
+           in the hero (scene "space"), which no section uses since the hero became a real scan. space.js skips
+           them when missing (checked: same picture with and without, no errors). Files kept in assets/space/. */
+        add(["assets/space/exterior" + lite + ".js", "assets/space/interior" + lite + ".js", "js/space.js"], function () { fire(); });
       }
-      add(["js/stage.js", "js/stage-stream.js", "js/stage-aerial.js", "js/stage-real.js", "js/stage-tour.js", "js/stage-stack.js"], function () {
+      add(["js/stage.js", "js/stage-stream.js", "js/stage-aerial.js", "js/stage-tour.js", "js/stage-stack.js"], function () {
         var core = window.OrbitStage && window.OrbitStage._core, gl = false;
         try { var g = document.createElement("canvas").getContext("webgl2"); gl = !!g; var x = g && g.getExtension("WEBGL_lose_context"); if (x) x.loseContext(); } catch (e) {}
         if (!core || !core.laneAfter || !gl || location.protocol === "file:") { points(); return; }

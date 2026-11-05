@@ -1732,7 +1732,7 @@
     if (dimSleep) { dimSleep = false; dimSnap = true; dimC = 0; vDim[0] = 0; } // woken by dim(k >= DIM_OFF): start on the current scene
     if (!reduced) win.requestAnimationFrame(frame);
     // (4 Nov 2026) also nothing while a result plays full screen on a phone (html.ex-full, js/sections/examples.js)
-    if ((doc.body && doc.body.classList.contains("has-max-slot")) || doc.documentElement.classList.contains("ex-full")) { lastT = 0; return; }
+    if (doc.documentElement.classList.contains("ex-full")) { lastT = 0; return; }
     var t = ms / 1000, dt = lastT ? Math.min(t - lastT, 0.1) : 0.016;
     var hiccup = lastT && (t - lastT) > 0.25;
     lastT = t;
@@ -2070,7 +2070,7 @@
       doc.documentElement.addEventListener("mouseleave", function () { ptr.onT = 0; }, o);
       win.addEventListener("blur", function () { if (!ptr.touch) ptr.onT = 0; }, o);
       win.addEventListener("click", function (e) {
-        if (e.target && e.target.closest && e.target.closest("a,button,input,select,textarea,label,summary,iframe,[role=button],[contenteditable],.slot")) return;
+        if (e.target && e.target.closest && e.target.closest("a,button,input,select,textarea,label,summary,iframe,[role=button],[contenteditable]")) return;
         addRipple(e.clientX, e.clientY, 1);
       }, o);
     }
