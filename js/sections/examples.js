@@ -303,7 +303,9 @@
         core.laneAfter("hero").then(first);
       };
       if (document.readyState === "complete") hook0(); else window.addEventListener("load", hook0, { once: true });
-      setTimeout(first, 15000);
+      // (5 Nov 2026) the story site (story/) gives its own laneAfter (= the visitor is near the end of the story) and
+      // asks for no early start: the story's own 3D comes first
+      if (!window.ORBIT_EXAMPLES_LATE) setTimeout(first, 15000);
       return;
     }
     if (!preloads.length) return;

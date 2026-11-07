@@ -90,9 +90,10 @@
   // (4 Nov 2026, James) five steps in page order: 01 Welcome (hero + "We're Orbit 3D."), 02 One space (from
   // "One space." on inside #scan = the zone mark "one-space-zone", and the walk in), 03 Not 360 photos
   // (#compare), 04 Design (#design + the whole floor), 05 Explore (results). Contact lights nothing.
-  var NAV_OF = { top: "#top", scan: "#top", "one-space-zone": "#one-space", walk: "#one-space", compare: "#compare",
+  // (5 Nov 2026) the story site (story/) sets its own steps (window.ORBIT_NAV_OF / ORBIT_NAV_STEPS) before this runs
+  var NAV_OF = window.ORBIT_NAV_OF || { top: "#top", scan: "#top", "one-space-zone": "#one-space", walk: "#one-space", compare: "#compare",
     design: "#design", floor: "#design", examples: "#examples" };
-  var STEPS = ["#top", "#one-space", "#compare", "#design", "#examples"];
+  var STEPS = window.ORBIT_NAV_STEPS || ["#top", "#one-space", "#compare", "#design", "#examples"];
   var story = nav && nav.querySelector(".nav__story");
   var stepSr = nav && nav.querySelector("[data-step-sr]");
   var stepLinks = all(".nav__links a, [data-step-link]");

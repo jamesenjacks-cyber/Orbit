@@ -15,9 +15,11 @@
    site's caches, and the "big file" rule looks only at the path INSIDE this site's folder. */
 var SCOPE = new URL(self.registration.scope).pathname;
 var PRE = "orbit3dsite:" + SCOPE + ":";
-var DATA = PRE + "data-f36625135c";
-var CODE = PRE + "code-20261105-113840";
-var BIG = /^(assets\/(scans|stage|space|fonts|brand|posters|howto|partners)|vendor)\/|\.(webp|jpe?g|png|svg|woff2|wasm|mp4|webm)$/i;
+var DATA = PRE + "data-4a60c69143";
+var CODE = PRE + "code-20261107-115005";
+/* (7 Nov 2026) + assets/compare and assets/furniture and .glb: the 3D models of "Look around" (13 MB on a
+   phone) were fetched again on every visit */
+var BIG = /^(assets\/(scans|stage|space|fonts|brand|posters|howto|partners|compare|furniture)|vendor)\/|\.(webp|jpe?g|png|svg|woff2|wasm|glb|mp4|webm)$/i;
 
 self.addEventListener("install", function () { self.skipWaiting(); });
 self.addEventListener("activate", function (e) {

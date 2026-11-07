@@ -81,3 +81,35 @@
   .sec--hero .hero__sub { margin-top: 18px; }
   .sec--hero .hero__actions { margin-top: 20px; }
 }
+
+/* (7 Nov 2026, James: "more responsive on phone") the whole first screen fits the part of the phone you
+   really see (Safari bars included): no fixed 80 px gap above the dock (space-between puts it at the
+   bottom), no lonely last word, and on short phones the title and gaps shrink with the screen height. */
+.sec--hero .hero__sub { text-wrap: pretty; }
+@media (max-width: 767px) {
+  .sec--hero .hero__dock { margin-top: 0; }
+  .sec--hero .hero__layout { gap: 24px; }
+}
+@media (max-width: 767px) and (max-height: 760px) {
+  .sec--hero .hero__layout { padding-top: calc(var(--nav-h) + 18px); padding-bottom: 66px; gap: 16px; }
+  .sec--hero .hero__eyebrow { margin-bottom: 12px; }
+  .sec--hero .hero__title { font-size: clamp(3.4rem, 11svh, 4.7rem); }
+  .sec--hero .hero__sub { font-size: 1.02rem; margin-top: 14px; }
+  .sec--hero .hero__actions { margin-top: 16px; }
+  .sec--hero .hero__cue { bottom: 8px; }
+  .sec--hero .hero__cue-line { height: 26px; }
+}
+/* phone on its side: words on the left, the dock bottom right, everything inside one screen */
+@media (max-height: 500px) and (orientation: landscape) {
+  .sec--hero .hero__layout { padding-top: calc(var(--nav-h) + 4px); padding-bottom: 14px; gap: 16px;
+    flex-direction: row; align-items: flex-end; }
+  .sec--hero .hero__copy { max-width: min(460px, 58vw); }
+  .sec--hero .hero__eyebrow { margin-bottom: 8px; font-size: .68rem; }
+  .sec--hero .hero__title { font-size: clamp(2.4rem, 15svh, 4rem); }
+  .sec--hero .hero__sub { font-size: .92rem; line-height: 1.4; margin-top: 8px; }
+  .sec--hero .hero__actions { margin-top: 12px; }
+  .sec--hero .hero__actions .btn { min-height: 44px; }
+  .sec--hero .hero__more { padding: 8px 0; }
+  .sec--hero .hero__dock { align-self: flex-end; min-width: 0; justify-items: end; }
+  .sec--hero .hero__cue { display: none; }
+}

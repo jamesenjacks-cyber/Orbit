@@ -655,7 +655,11 @@
     core.lane(id, opt).then(function () { var p = fn(); if (p && p.then) p.then(laneEnd(id), laneEnd(id)); else laneEnd(id)(); });
   }
   var cardEl = doc.querySelector('[data-stage="two"]') || doc.querySelector('[data-stage="aerial"]') || doc.getElementById("scan");
-  inLane("aerial", { after: "stack", el: cardEl, near: 2.5, max: 40 }, loadAerial, cardEl);
+  // (7 Nov 2026, James: "lighter on phone") phones: the drone scan waits until the hero scan is sharp
+  // (hero.js 'hero-sharp'; before, it came right after the stacked house and shared the line with the hero's
+  // sharp level), or until its card is 1 screen away, or 40 s
+  var heroSharp = isPhone && doc.querySelector('[data-stage="hero-room"]');
+  inLane("aerial", { after: heroSharp ? "hero-sharp" : "stack", el: cardEl, near: heroSharp ? 1 : 2.5, max: 40 }, loadAerial, cardEl);
   var walkEl = doc.getElementById("walk") || doc.querySelector('[data-stage="patio"]');
   inLane("walk", { after: "aerial", el: walkEl, near: 1.5 }, loadPatio, walkEl);
   core.whenReady(function () { if (core.house) evTwo.emit("ready", { card: "model" }); });

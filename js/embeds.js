@@ -21,11 +21,14 @@ window.ORBIT_SITE = {
       budget: { desktop: 3500000, phone: 1200000 }, finest: { desktop: 1, phone: 1 } },
     /* 29 Oct: James uses only the newest house scan now (assets/scans/home/); the old v2 (assets/scans/house/,
        toModel scale 1.19, quat [1,0,0,0], t [7.854,0,2.142]) is no longer streamed anywhere */
-    house:  { url: "assets/scans/home/lod-meta.json",
+    /* (7 Nov 2026, phone speed) home-t = the same scan (same Floor 1 ply, same 1.5M / 750k / 350k levels) plus one
+       extra first level of 150k splats (make_sog.py --tail 150000): the first picture needs 3.3 MB instead of 7.4 MB.
+       The old folder assets/scans/home/ is kept (not uploaded); to go back, put "home" in the two urls below. */
+    house:  { url: "assets/scans/home-t/lod-meta.json",
       toModel: { scale: 1.41564623, quat: [0.70868808, -0.00024143, -0.70552032, 0.00149097], t: [6.57457, -0.47278, 3.43426] },
       budget: { desktop: 3500000, phone: 1200000 } },
     /* 29 Oct: the hero's own scan (the same newest house scan, 1.5M splats, own frame registered onto the house scan, ICP) */
-    hero:   { url: "assets/scans/home/lod-meta.json",
+    hero:   { url: "assets/scans/home-t/lod-meta.json",
       toModel: { scale: 1.41564623, quat: [0.70868808, -0.00024143, -0.70552032, 0.00149097], t: [6.57457, -0.47278, 3.43426] },
       budget: { desktop: 3500000, phone: 1200000 }, finest: { desktop: 0, phone: 1 } },   /* round 8: the third scan is retired (work/retired-r8/assets/scans/), nothing streams it */
     /* 3 Nov 2026: "Look around, or move through." [3D scan] (js/sections/compare.js), on the page's own stage.
@@ -67,7 +70,7 @@ window.ORBIT_SITE = {
     /* (4 Nov 2026, James) the new result, shown above the studio + kitchen one */
     { embed: "https://orbit-viewer.pages.dev/viewer.html?lib=https%3A%2F%2Fpub-fedb6cdf9f5d40e39a37c4ae7284f3fe.r2.dev%2Flibrary.json&ref=0d8a130e9d&names=0&start=real&move=still",
       poster: "assets/howto/example-2.webp", alt: "A finished Orbit result you can look around in 3D." },
-    { embed: "https://orbit-viewer.pages.dev/viewer.html?lib=https%3A%2F%2Fpub-fedb6cdf9f5d40e39a37c4ae7284f3fe.r2.dev%2Flibrary.json&id=kasteelplein-55-breda-2",
+    { embed: "https://orbit-viewer.pages.dev/viewer.html?lib=https%3A%2F%2Fpub-fedb6cdf9f5d40e39a37c4ae7284f3fe.r2.dev%2Flibrary.json&ref=a33174e4cc&names=0",   /* (7 Nov 2026) names=0: no place name in the viewer (site rule); ref = first 10 hex of SHA-256 of the record id, so the page source holds no place name either (Codex QC-20261107-1140) */
       poster: "assets/howto/example-3.webp", alt: "A finished Orbit scan: walk through a studio and kitchen in 3D." },
     /* (4 Nov 2026, James) fourth frame; names=0 added so the viewer shows no place name (site rule) */
     { embed: "https://orbit-viewer.pages.dev/viewer.html?lib=https%3A%2F%2Fpub-fedb6cdf9f5d40e39a37c4ae7284f3fe.r2.dev%2Flibrary.json&id=de-bnb&names=0",

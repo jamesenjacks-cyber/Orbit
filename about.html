@@ -130,7 +130,6 @@
           <div class="ab-founder__body">
             <h3 class="ab-founder__name">James Jitkul</h3>
             <p class="meta ab-founder__role"><orbit-text data-i18n="d3a1c00035">Co-Founder | Head of Operations</orbit-text></p>
-            <p class="ab-founder__bio"><orbit-text data-i18n="d3a1c00037">James runs the scans and the 3D work, from the first flight to the link you get.</orbit-text></p>
             <ul class="ab-founder__links" role="list">
               <li><a class="pg-mail" href="mailto:James@orbit3d.nl">James@orbit3d.nl</a></li>
               <li><a class="pg-mail" href="tel:+31629337465" aria-label="Call James Jitkul, +31 62 933 7465">+31 62 933 7465</a></li>
@@ -145,7 +144,6 @@
           <div class="ab-founder__body">
             <h3 class="ab-founder__name">Jack Lattery</h3>
             <p class="meta ab-founder__role"><orbit-text data-i18n="d3a1c00036">Co-Founder | Head of Communications and Sales</orbit-text></p>
-            <p class="ab-founder__bio"><orbit-text data-i18n="d3a1c00038">Jack is your first contact: talking with clients, planning each job and telling the world what Orbit 3D can do.</orbit-text></p>
             <ul class="ab-founder__links" role="list">
               <li><a class="pg-mail" href="mailto:Jack@orbit3d.nl">Jack@orbit3d.nl</a></li>
               <li><a class="pg-mail" href="tel:+31616335318" aria-label="Call Jack Lattery, +31 61 633 5318">+31 61 633 5318</a></li>
@@ -161,9 +159,84 @@
         <h2 id="end-title" class="ab-next__title"><orbit-text data-i18n="d3a1c00049">We’re just getting started.</orbit-text></h2>
         <p class="ab-next__text"><orbit-text data-i18n="d3a1c00050">We are looking for new markets to grow into. Have an idea where Orbit 3D could help? Contact us anytime, or book an online meeting and let’s talk.</orbit-text></p>
         <div class="pg-act ab-next__act">
-          <a class="btn btn--accent pg-cta" href="mailto:Jack@orbit3d.nl?subject=Online%20meeting%20with%20Orbit%203D"><orbit-text data-i18n="d3a1c00051">Book an online meeting</orbit-text></a>
-          <a class="pg-mail" data-mail data-mail-text href="index.html#contact">Jack@orbit3d.nl</a>
+          <!-- (7 Nov 2026, James) the same booking as the home page: a day + time, or the contact form;
+               Jack's own email stays for people who want to write to him personally -->
+          <a class="btn btn--accent pg-cta" data-book-open="call" href="index.html#contact"><orbit-text data-i18n="d3a1c00051">Book an online meeting</orbit-text></a>
+          <a class="btn pg-cta" data-book-open="email" href="index.html#contact"><orbit-text data-i18n="d3a1c00063">Via email</orbit-text></a>
+          <a class="pg-mail" href="mailto:Jack@orbit3d.nl">Jack@orbit3d.nl</a>
         </div>
+<!-- Book a call / Via email (3 Nov 2026, James). Shared part: tools/build.py puts it where a page has the "@book" marker.
+     Opened by any button with data-book-open="call" or "email" (js/book.js). Call mode: name, company (optional),
+     email, short message, then a day and a time. Email mode: the same without day and time.
+     Send: to ORBIT_SITE.booking.endpoint (js/embeds.js) once the calendar is set up; until then it opens an email
+     to ORBIT_SITE.email with everything filled in. -->
+<div class="book" id="book" data-book data-mode="call" inert>
+  <div class="book__clip">
+    <form class="book__form" data-book-form novalidate>
+      <p class="book__head" data-book-head>
+        <span data-book-only="call"><orbit-text data-i18n="d3a1c00052">Book a call with us</orbit-text></span>
+        <span data-book-only="email" hidden><orbit-text data-i18n="d3a1c00053">Send us an email</orbit-text></span>
+      </p>
+      <div class="book__row">
+        <label class="book__field">
+          <span class="book__label"><orbit-text data-i18n="d3a1c00054">Name</orbit-text></span>
+          <input class="book__input" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Guy" required>
+        </label>
+        <label class="book__field">
+          <span class="book__label"><orbit-text data-i18n="d3a1c00055">Company</orbit-text> <span class="book__opt"><orbit-text data-i18n="d3a1c00056">(optional)</orbit-text></span></span>
+          <input class="book__input" name="company" type="text" autocomplete="organization" maxlength="80" placeholder="Orbit3D">
+        </label>
+      </div>
+      <label class="book__field">
+        <span class="book__label"><orbit-text data-i18n="d3a1c00057">Contact info: email</orbit-text></span>
+        <input class="book__input" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" placeholder="guy@example.nl" required>
+      </label>
+      <label class="book__field">
+        <span class="book__label"><orbit-text data-i18n="d3a1c00058">Short message</orbit-text></span>
+        <textarea class="book__input book__area" name="message" rows="4" maxlength="1000" placeholder="I would like to talk about..."></textarea>
+      </label>
+      <fieldset class="book__when" data-book-only="call">
+        <legend class="book__label"><orbit-text data-i18n="d3a1c00059">Pick a day</orbit-text></legend>
+        <div class="book__chips book__days" data-book-days></div>
+        <div class="book__times" data-book-times hidden>
+          <p class="book__label"><orbit-text data-i18n="d3a1c00060">Pick a time</orbit-text></p>
+          <div class="book__chips" data-book-times-row></div>
+        </div>
+      </fieldset>
+      <!-- (4 Nov 2026) spam trap: hidden from people and screen readers, robots fill it in; the backend ignores those -->
+      <div class="book__trap" aria-hidden="true"><label>Website <input name="website" type="text" tabindex="-1" autocomplete="off" maxlength="200"></label></div>
+      <!-- (4 Nov 2026) GDPR art. 13: say what happens with the details where they are asked for -->
+      <p class="book__privacy"><orbit-text data-i18n="legal26a04">We only use your details to answer you and plan the call. Read how in our</orbit-text> <a href="privacy.html"><orbit-text data-i18n="legal26a05">privacy statement</orbit-text></a>.</p>
+      <div class="book__foot">
+        <button class="btn btn--accent book__send" type="submit"><orbit-text data-i18n="d3a1c00061">Send</orbit-text></button>
+        <p class="book__status" data-book-status role="status" aria-live="polite"></p>
+      </div>
+      <!-- (4 Nov 2026, James: SENT-MESSAGE-D5-D1.md) after a successful send: D5 "Stamped" for a call,
+           D1 "Points become the check" for an email (js/book.js showDone) -->
+      <div class="book__done" data-book-done="call" hidden>
+        <div class="book__done-shake">
+          <div class="book__cal" aria-hidden="true">
+            <div class="book__cal-m" data-cal-week></div>
+            <div class="book__cal-d" data-cal-day></div>
+            <div class="book__cal-y" data-cal-month></div>
+            <div class="book__stamp" data-cal-stamp></div>
+          </div>
+          <p class="book__done-title" data-done-title role="status"></p>
+          <p class="book__done-sub" data-done-sub></p>
+          <button class="btn book__done-back" type="button" data-book-again><orbit-text data-i18n="book26d01">Back</orbit-text></button>
+        </div>
+      </div>
+      <div class="book__done book__done--dust" data-book-done="email" hidden>
+        <canvas class="book__dust" aria-hidden="true"></canvas>
+        <div class="book__dust-text">
+          <p class="book__done-title" data-done-title role="status"></p>
+          <p class="book__done-sub" data-done-sub></p>
+          <button class="btn book__done-back" type="button" data-book-again><orbit-text data-i18n="book26d01">Back</orbit-text></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
       </div>
     </section>
   </main>

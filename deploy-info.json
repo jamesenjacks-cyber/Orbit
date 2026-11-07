@@ -1,10 +1,10 @@
 {
- "made": "20261105-113840",
- "files": 345,
- "mb": 279.8,
+ "made": "20261107-115005",
+ "files": 353,
+ "mb": 283.3,
  "scans": [
   "assets/scans/aerial",
-  "assets/scans/home",
+  "assets/scans/home-t",
   "assets/scans/room"
  ],
  "furniture": [

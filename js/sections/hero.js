@@ -183,13 +183,29 @@
       core.heroStream = stream;
       // the hero shows its first level and only sharpens once the next scene (the stacked house) is in, so a
       // visitor who scrolls on finds it ready (31 Oct, phone speed)
-      if (stream.hold && core.laneAfter) { stream.hold(true); core.laneAfter('stack').then(function () { stream.hold(false); }); }
+      if (stream.hold && core.laneAfter) { stream.hold(true); core.laneAfter('stack').then(function () { stream.hold(false); watchSharp(); }); }
+      else watchSharp();
       // (31 Oct, phone speed) the hero scan is the first job of the download lane (stage.js core.lane)
       stream.ready.then(function () { ready = true; say(HINT); laneDone(); }).catch(failed);
       stream.onLost(failed);
     });
     function laneDone() { if (core.laneDone) core.laneDone('hero'); }
-    function failed() { laneDone(); ready = false; available = false; sec.classList.remove('hero--ready'); say('Preview only. Explore more below.'); }
+    /* (7 Nov 2026, James: "lighter on phone") 'hero-sharp' = the hero scan has no tiles left to fetch (two
+       checks in a row, half a second apart). On phones the drone scan waits for it (stage-aerial.js), so the
+       first thing a visitor sees gets the whole line first. */
+    function sharpDone() { if (core.laneDone) core.laneDone('hero-sharp'); }
+    function watchSharp() {
+      var calm = 0, tries = 0;
+      (function check() {
+        var i = stream && stream.info ? stream.info() : null;
+        // (Codex QC-20261107-1140) at most 60 s of checks: a stalled scan never keeps a timer running
+        if (!i || i.state === 'error' || i.state === 'off' || ++tries > 120) { sharpDone(); return; }
+        calm = i.state === 'sharp' && !i.loading ? calm + 1 : 0;
+        if (calm >= 2) { sharpDone(); return; }
+        setTimeout(check, 500);
+      })();
+    }
+    function failed() { laneDone(); sharpDone(); ready = false; available = false; sec.classList.remove('hero--ready'); say('Preview only. Explore more below.'); }
     core.wake('interior hero');
   }
   setTimeout(function () { if (!ready && !available) say('3D is taking longer to open. You can keep scrolling.'); }, 25000);
