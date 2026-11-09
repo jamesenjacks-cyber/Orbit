@@ -26,6 +26,27 @@
   try { lang = localStorage.getItem('orbit-language') === 'nl' ? 'nl' : 'en'; } catch (_) {}
   var requested = new URLSearchParams(location.search).get('lang');
   if (requested === 'en' || requested === 'nl') lang = requested;
+  /* (8 Nov 2026, SEO) Story site: every page also exists as a real Dutch file in the same folder (nl.html,
+     prijzen.html ...; made by tools/story_seo.py), so Google can find the Dutch words. Such a page says so with
+     <link rel="alternate" hreflang="nl">. There the page's own language is the start; a Dutch address always shows
+     Dutch, an English one turns Dutch only for a visitor who picked NL before (or ?lang=nl). The EN | NL switch
+     still swaps the words in place (no reload, the story keeps its spot) and then moves the address to the other
+     language's file. Pages without those links (the big site) work exactly as before. */
+  var NL_FILE = { index: 'nl', pricing: 'prijzen', about: 'over-ons', 'view-design': 'jouw-ontwerp',
+    privacy: 'privacyverklaring', legal: 'juridisch' };
+  var fixed = !!document.querySelector('link[rel="alternate"][hreflang="nl"]');
+  function pageIn(path, to) {
+    var cut = path.lastIndexOf('/') + 1, dir = path.slice(0, cut), file = path.slice(cut).replace(/\.html$/, '') || 'index';
+    var base = null;
+    Object.keys(NL_FILE).forEach(function (k) { if (k === file || NL_FILE[k] === file) base = k; });
+    if (!base) return null;
+    if (to === 'nl') return dir + NL_FILE[base] + '.html';
+    return dir + (base === 'index' ? 'index.html' : base + '.html');
+  }
+  if (fixed) {
+    var pageLang = document.documentElement.lang === 'nl' ? 'nl' : 'en';
+    lang = (requested === 'en' || requested === 'nl') ? requested : (pageLang === 'en' && lang === 'nl' ? 'nl' : pageLang);
+  }
 
   function translate(source, depth) {
     var key = normalize(source), entry = exact.get(key) || folded.get(key.toLowerCase());
@@ -110,18 +131,40 @@
     });
     if (persist) {
       try { localStorage.setItem('orbit-language', lang); } catch (_) {}
-      var url = new URL(location.href); url.searchParams.set('lang', lang);
-      history.replaceState(null, '', url);
     }
-    // Carry the preference even where browser storage is unavailable.
-    document.querySelectorAll('a[href]').forEach(function (a) {
-      var raw = a.getAttribute('href');
-      if (!raw || raw[0] === '#' || /^(mailto:|tel:|javascript:)/i.test(raw)) return;
-      var url = new URL(raw, location.href);
-      if (url.origin === location.origin && /\/(index|about|pricing|portfolio|view-design|privacy|legal)\.html$/.test(url.pathname)) {
-        url.searchParams.set('lang', lang); a.href = url.href;
+    if (fixed) {
+      // the address and the page links follow the language's own files (no ?lang needed)
+      if (location.protocol !== 'file:') {
+        var here = new URL(location.href), to = pageIn(here.pathname, lang);
+        if ((to && to !== here.pathname) || here.searchParams.has('lang')) {
+          if (to) here.pathname = to;
+          here.searchParams.delete('lang');
+          history.replaceState(history.state, '', here);
+        }
       }
-    });
+      document.querySelectorAll('a[href]').forEach(function (a) {
+        var raw = a.getAttribute('href');
+        if (!raw || raw[0] === '#' || /^(mailto:|tel:|javascript:)/i.test(raw)) return;
+        var url = new URL(raw, location.href);
+        if (url.origin !== location.origin) return;
+        var to = pageIn(url.pathname, lang);
+        if (to && to !== url.pathname) { url.pathname = to; url.searchParams.delete('lang'); a.href = url.href; }
+      });
+    } else {
+      if (persist) {
+        var url = new URL(location.href); url.searchParams.set('lang', lang);
+        history.replaceState(null, '', url);
+      }
+      // Carry the preference even where browser storage is unavailable.
+      document.querySelectorAll('a[href]').forEach(function (a) {
+        var raw = a.getAttribute('href');
+        if (!raw || raw[0] === '#' || /^(mailto:|tel:|javascript:)/i.test(raw)) return;
+        var url = new URL(raw, location.href);
+        if (url.origin === location.origin && /\/(index|about|pricing|portfolio|view-design|privacy|legal)\.html$/.test(url.pathname)) {
+          url.searchParams.set('lang', lang); a.href = url.href;
+        }
+      });
+    }
     observe();
     document.dispatchEvent(new CustomEvent('orbit:language', { detail: { language: lang } }));
   }

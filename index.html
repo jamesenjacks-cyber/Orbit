@@ -3,47 +3,65 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Orbit 3D | Step into space.</title>
-  <meta name="description" content="Walk-through Gaussian splat scans and 3D models of real interiors and exteriors, published in the Orbit viewer.">
+  <!-- (8 Nov 2026, SEO) words people search for in the title; "Step into space." stays the slogan (heading +
+       the og:title a shared link shows). Dutch: story-nl.js seo26a01. -->
+  <title>3D scans and virtual tours of houses | Orbit 3D</title>
+  <meta name="description" content="Walk-through 3D scans and 3D models of real houses, in one link, on any device. Fly in from the street, walk through the door, change the furniture.">
   <meta name="theme-color" content="#0b0c0e">
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
-  <!-- Font preload only online: opened from a file (double-click), the browser blocks font preloads -->
+  <!-- (7 Nov 2026) the main address for Google + the picture and words a shared link shows (WhatsApp, LinkedIn ...) -->
+  <link rel="canonical" href="https://orbit3d.nl/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Orbit 3D">
+  <meta property="og:url" content="https://orbit3d.nl/">
+  <meta property="og:title" content="Orbit 3D | Step into space.">
+  <meta property="og:description" content="Walk-through 3D scans and 3D models of real houses, in one link, on any device.">
+  <meta property="og:image" content="https://orbit3d.nl/assets/story/share/orbit3d-share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A real 3D scan of a city block, seen from the air">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" href="assets/story/poster.webp" media="(min-width: 768px)">
+  <link rel="preload" as="image" href="assets/story/poster-phone.webp" media="(max-width: 767px)">
   <script>if (location.protocol !== "file:") { var l = document.createElement("link"); l.rel = "preload"; l.as = "font"; l.type = "font/woff2"; l.href = "assets/fonts/geist-latin.woff2"; l.crossOrigin = ""; document.head.appendChild(l); }</script>
-  <!-- (31 Oct, phone speed) the hero photo is the first thing a visitor sees: fetch it first -->
-  <link rel="preload" as="image" href="assets/stage/hero-interior.jpg" fetchpriority="high">
+  <script>if (!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { document.documentElement.classList.add("rv"); setTimeout(function () { if (!window.OrbitReveal) document.documentElement.classList.add("rv-off"); }, 3000); }</script>
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/sections/hero.css">
-  <link rel="stylesheet" href="css/sections/scan.css">
-  <link rel="stylesheet" href="css/sections/walk.css">
-  <link rel="stylesheet" href="css/sections/compare.css">
-  <link rel="stylesheet" href="css/sections/design.css">
-  <link rel="stylesheet" href="css/sections/floor.css">
+  <link rel="stylesheet" href="css/language.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/story.css">
   <link rel="stylesheet" href="css/sections/examples.css">
   <link rel="stylesheet" href="css/sections/contact.css">
-  <link rel="stylesheet" href="css/language.css">
   <link rel="stylesheet" href="css/book.css">
-  <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/site-extras.css">
+  <script>window.ORBIT_NAV_OF = { top: "#top", c0: "#top", c1: "#top", c2: "#inside", c3: "#inside", c4: "#inside", c5: "#design", c6: "#design", c7: "#design", c8: "#upstairs", c9: "#upstairs", examples: "#examples" };
+    window.ORBIT_NAV_STEPS = ["#top", "#inside", "#design", "#upstairs", "#examples"];
+    // the results' live viewers (js/sections/examples.js) wait until the visitor is near the end of the story
+    window.ORBIT_EXAMPLES_LATE = true;
+    window.OrbitStage = { _core: { laneAfter: function () { return new Promise(function (ok) { var t = setInterval(function () { var s = window.OrbitStory && window.OrbitStory.state; if (s && s.P >= 8.3) { clearInterval(t); ok(); } }, 400); }); } } };</script>
   <script src="js/translations.js"></script>
+  <script src="js/story-nl.js"></script>
   <script src="js/language.js" defer></script>
   <script src="js/glider.js" defer></script>
   <script src="js/press.js" defer></script>
   <script src="js/reveal.js" defer></script>
+  <link rel="alternate" hreflang="en" href="https://orbit3d.nl/">
+  <link rel="alternate" hreflang="nl" href="https://orbit3d.nl/nl.html">
+  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:locale:alternate" content="nl_NL">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://orbit3d.nl/#org", "name": "Orbit 3D", "legalName": "3DGS Orbit Studio", "url": "https://orbit3d.nl/", "logo": "https://orbit3d.nl/assets/brand/apple-touch-icon.png", "email": "Jack@orbit3d.nl", "vatID": "NL869615002B01", "identifier": {"@type": "PropertyValue", "propertyID": "KvK", "value": "42080166"}, "areaServed": {"@type": "Country", "name": "Netherlands"}}, {"@type": "WebSite", "@id": "https://orbit3d.nl/#site", "url": "https://orbit3d.nl/", "name": "Orbit 3D", "publisher": {"@id": "https://orbit3d.nl/#org"}, "inLanguage": ["en", "nl"]}, {"@type": "Service", "provider": {"@id": "https://orbit3d.nl/#org"}, "areaServed": {"@type": "Country", "name": "Netherlands"}, "serviceType": "3D scanning", "name": "3D scan and virtual tour of your house", "description": "A walk-through 3D scan of a real house plus a 3D model to try furniture and colours, in one link.", "url": "https://orbit3d.nl/"}]}</script>
 </head>
-<body>
+<!-- ORBIT STORY SITE (5 Nov 2026, James picked option A "Quiet chapters"). One scroll story, from the street to the
+     first floor: the real scan from the air, the house as a 3D model, the garden with a drag line between model and
+     scan, walking in, swapping furniture, a lamp, paint, and up the stairs. It only loads what the camera shows
+     (js/story-3d.js); exploring freely is the Orbit viewer in the results further down. Made by tools/build_story.py,
+     see story/EXPLANATION.md. -->
+<body class="storysite">
   <a class="sr-only" href="#main"><orbit-text data-i18n="617202bcf9">Skip to content</orbit-text></a>
-  <!-- The living background: real scan points, see js/space.js -->
-  <canvas id="space" aria-hidden="true"></canvas>
-  <!-- The solid 3D house, splat and 360 photo (PlayCanvas), see js/stage.js -->
-  <canvas id="stage" aria-hidden="true"></canvas>
-
-  <!-- (4 Nov 2026, James) "View your design" replaces Portfolio in the menu; portfolio.html is still built
-       from src/pages/portfolio.html, but no menu or footer links to it any more.
-       Top bar (30 Oct 2026, James picked option B "floating pills"): logo on its own, one glass capsule
-       in the middle, "Contact us" on its own. "How it works" holds the four story steps; on the main page
-       it shows the step you are in (js/main.js). Phones: logo + one small capsule (Menu | Contact us) at the
-       top, the menu opens as a glass sheet under it. Built into every page by tools/build.py
-       ( = "" on the main page, "index.html" on the other pages). -->
+  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, EN | NL, orange "Contact us").
+       "How it works" holds the five parts of the story; the pill shows the part you are in (js/main.js with
+       window.ORBIT_NAV_OF / ORBIT_NAV_STEPS from js/story.js).  = "" on the main page, "index.html" elsewhere. -->
   <header class="nav" data-nav>
     <div class="nav__island">
       <a class="nav__logo" href="#top" aria-label="Orbit 3D, home">
@@ -53,19 +71,18 @@
         <div class="nav__story">
           <button type="button" class="nav__chip nav__story-btn" aria-expanded="false" aria-controls="nav-story" data-story-btn>
             <span class="nav__label" aria-hidden="true">
-              <span data-step-label=""><orbit-text data-i18n="914d83456d">How it works</orbit-text></span><span data-step-label="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></span><span data-step-label="#one-space"><orbit-text data-i18n="d3a1c00102">One space</orbit-text></span><span data-step-label="#compare"><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></span><span data-step-label="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></span><span data-step-label="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></span>
+              <span data-step-label=""><orbit-text data-i18n="914d83456d">How it works</orbit-text></span><span data-step-label="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></span><span data-step-label="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></span><span data-step-label="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></span><span data-step-label="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></span><span data-step-label="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></span>
             </span>
             <span class="sr-only" data-step-sr><orbit-text data-i18n="97416feb68">How it works</orbit-text></span>
-            <span class="nav__dots" aria-hidden="true"><i data-dot="#top"></i><i data-dot="#one-space"></i><i data-dot="#compare"></i><i data-dot="#design"></i><i data-dot="#examples"></i></span>
+            <span class="nav__dots" aria-hidden="true"><i data-dot="#top"></i><i data-dot="#inside"></i><i data-dot="#design"></i><i data-dot="#upstairs"></i><i data-dot="#examples"></i></span>
             <svg class="nav__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="nav__drop" id="nav-story" hidden>
             <ul class="nav__links" role="list">
-              <!-- (4 Nov 2026, James) five steps in page order; the pill shows the one you are in (js/main.js NAV_OF) -->
-              <li><a href="#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="d3a1c00105">Who we are and what we make</orbit-text></small></a></li>
-              <li><a href="#one-space"><i>02</i><b><orbit-text data-i18n="d3a1c00102">One space</orbit-text></b><small><orbit-text data-i18n="d3a1c00106">The whole place, from the air</orbit-text></small></a></li>
-              <li><a href="#compare"><i>03</i><b><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></b><small><orbit-text data-i18n="d3a1c00107">Walk freely, not spot to spot</orbit-text></small></a></li>
-              <li><a href="#design-start" data-step-link="#design"><i>04</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="st26a03">The whole place, from the air</orbit-text></small></a></li>
+              <li><a href="#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Step inside</orbit-text></b><small><orbit-text data-i18n="st26a04">Real scan or 3D model, you choose</orbit-text></small></a></li>
+              <li><a href="#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Every floor</orbit-text></b><small><orbit-text data-i18n="st26a05">Up the stairs in one jump</orbit-text></small></a></li>
               <li><a href="#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
             </ul>
           </div>
@@ -90,9 +107,9 @@
       <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">How it works</orbit-text></p>
       <ul class="nav__sheet-steps" role="list">
         <li><a href="#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
-        <li><a href="#one-space" data-step-link="#one-space"><orbit-text data-i18n="d3a1c00102">One space</orbit-text></a></li>
-        <li><a href="#compare" data-step-link="#compare"><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></a></li>
-        <li><a href="#design-start" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></a></li>
+        <li><a href="#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></a></li>
         <li><a href="#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
       </ul>
       <ul class="nav__sheet-pages" role="list">
@@ -104,441 +121,101 @@
   </header>
 
   <main id="main" tabindex="-1">
-<!-- section: 01-hero.html -->
-<section id="top" class="sec sec--hero" data-scene="calm" data-stage="hero-room" aria-labelledby="top-title">
-  <!-- Round 9 (H): the room scan fades out and gently pulls back as the hero leaves (js/sections/hero.js),
-       so it is dark before "We're Orbit 3D." arrives. The toggle says Real scan | 3D model (plain words, no tech names). -->
-  <div class="hero__poster" aria-hidden="true"></div>
-  <div class="hero__view stage-hit" data-hit="hero-room" tabindex="0" role="group" aria-label="Explore the room. Drag or use arrow keys to look around. W, A, S and D to walk. Plus and minus to zoom. Escape to reset."></div>
-  <div class="wrap hero__layout">
-    <div class="hero__copy">
-      <p class="hero__eyebrow"><orbit-text data-i18n="328af22cef">REAL PLACES. NEW POSSIBILITIES.</orbit-text></p>
-      <h1 id="top-title" class="hero__title"><orbit-text data-i18n="b708536e79">Step Into<br>Space.</orbit-text></h1>
-      <p class="hero__sub"><orbit-text data-i18n="3eb1148524">Explore and adjust a space anytime you want.<br>Try it for yourself today.</orbit-text></p>
-      <div class="hero__actions">
-        <button class="btn btn--accent" type="button" data-hero-enter><orbit-text data-i18n="eb6155f421">Explore this space</orbit-text></button>
-        <a class="hero__more" href="#scan"><orbit-text data-i18n="37b81b70b7">See what's possible</orbit-text></a>
-      </div>
-    </div>
-    <div class="hero__dock">
-      <div class="hero__modes" role="group" aria-label="Room presentation">
-        <button type="button" data-hero-mode="scan" aria-pressed="true"><orbit-text data-i18n="6aa4d4408b">Real scan</orbit-text></button>
-        <button type="button" data-hero-mode="model" aria-pressed="false"><orbit-text data-i18n="7ffb22dcdc">3D Model</orbit-text></button>
-      </div>
-      <div class="hero__tools">
-        <p class="hero__hint" role="status" data-hero-status><orbit-text data-i18n="8a06cd156b">Opening the real scan...</orbit-text></p>
-        <button type="button" class="hero__zoom" data-hero-zoom="in" aria-label="Zoom in">+</button>
-        <button type="button" class="hero__zoom" data-hero-zoom="out" aria-label="Zoom out">&minus;</button>
-        <button type="button" data-hero-reset><orbit-text data-i18n="61227ccc7d">Reset</orbit-text></button>
-      </div>
-    </div>
-  </div>
-  <a class="hero__cue" href="#who" data-hero-cue aria-label="Scroll to see more">
-    <span class="hero__cue-line" aria-hidden="true"></span>
-    <span class="hero__cue-text"><orbit-text data-i18n="8a6de4a1f2">Scroll</orbit-text></span>
-  </a>
-</section>
 
-<!-- section: 03-scan.html -->
-<section id="scan" class="sec act sec--scan" style="--act: 1030vh" data-phase="who" aria-labelledby="scan-title">
-  <!-- Steps 2 + 3 in ONE pinned screen (30 Oct, James picked option C "same frame, new words").
-       who: "We're Orbit 3D." on the left, the house (its own scan points) on the right; the frame holds still.
-       Then the frame stays and its contents change: the small lines fade, the title rolls up and out and
-       "One space." rolls up into the very same spot, while the points fly from the house into the whole
-       building (space.js orbit -> condense, never dark). gather: the points land on the building.
-       reveal: the real aerial splat fades in at the same camera. two: TWO cards. Card A = the real splat
-       (explore it as it was captured), card B = the 3D model from above (try what it could become).
-       js/stage-aerial.js renders both INSIDE the rects of [data-card] (scissor). data-phase is read by
-       js/sections/scan.js, data-scene by js/space.js and data-stage by the stage. The who beat starts above
-       the section (at the hero's end), as the old #who section did, so the hero seam keeps its dark breath. -->
-  <!-- 31 Oct (James): during who the whole three-floor house comes apart in the same frame (all floors at the
-       same time), then turns into points that fly into the house's scan points (js/stage-stack.js, beat "stack");
-       the space engine's house points take over and the old house -> building change follows. The who beat is
-       360vh longer for it; every later beat moved down by the same 360vh. -->
-  <!-- (30 Oct evening, James) the house comes apart while "We're Orbit 3D." shows (who, to 340vh); while
-       "One space." rolls in (gather, 340-540vh) its points fly straight into the WHOLE outdoor scan (the
-       condense formation), never through the house-only points; js/space.js takes over at about 500-535vh. -->
-  <!-- (30 Oct late, James) the spin was too fast: who is 200vh longer (to 540vh), every later beat 200vh lower. -->
-  <!-- (30 Oct night, James: "from One space. straight to the two cards") the in-between is short now: gather
-       200 -> 110vh, the full-screen aerial 70 -> 30vh and it shrinks into card A at once; act 1010 -> 880vh. -->
-  <!-- (3 Nov, James: "laggy, not smooth" from One space. to the full-screen aerial) every change after "One space."
-       gets more scroll: the points' flight 0.6 -> 1.0 screen (stack beat 620 -> 660vh), the splat fading in
-       inside card A 13 -> 34vh (two 130 -> 170vh), card A growing to full screen 28 -> 90vh (out 70 -> 140vh);
-       act 880 -> 1030vh. Everything up to 540vh ("We're Orbit 3D." -> "One space.") is unchanged. -->
-  <div class="beat" data-scene="orbit" data-phase="who" aria-hidden="true" style="top: calc(-1 * var(--scan-lead)); height: calc(540vh + var(--scan-lead))"></div>
-  <div class="beat" data-stage="stack" aria-hidden="true" style="top: calc(-1 * var(--scan-lead)); height: calc(660vh + var(--scan-lead))"></div>
-  <!-- (30 Oct, James: smooth) the stack beat ends where the reveal starts (620vh): exactly one scene has the stage.
-       (30 Oct night, James) no full-screen aerial before the cards: from 620vh the points fly into card A's
-       framing (js/stage-aerial.js, OrbitSpace.lead) and the splat then fades in inside card A at 680vh. -->
-  <div class="beat" data-scene="condense" data-phase="gather" aria-hidden="true" style="top: 540vh; height: 180vh"></div>
-  <div class="beat" data-stage="aerial" data-phase="reveal" aria-hidden="true" style="top: 660vh; height: 60vh"></div>
-  <div class="beat" data-stage="two" data-phase="two" aria-hidden="true" style="top: 720vh; height: 170vh"></div>
-  <div class="beat" data-stage="two" data-phase="out" aria-hidden="true" style="top: 890vh; height: 140vh"></div>
-  <!-- (4 Nov 2026, James) the menu's "02 One space": the link lands where the card with the drone scan shows
-       (#one-space), and from "One space." rolling in (540vh) the menu pill says "One space" (data-nav-zone,
-       js/main.js). Before that this section still counts as "01 Welcome". -->
-  <div class="nav-mark" data-nav-zone="#one-space" aria-hidden="true" style="top: 540vh; height: 490vh"></div>
-  <div class="nav-mark" id="one-space" aria-hidden="true" style="top: 760vh; height: 1px"></div>
+    <section id="top" class="story" data-story aria-labelledby="top-title">
+      <!-- the stage: stays on screen while the chapters below scroll past -->
+      <div class="story__stage" data-stage>
+        <div class="story__poster" data-poster aria-hidden="true"></div>
+        <canvas class="story__canvas" data-canvas aria-hidden="true"></canvas>
+        <div class="story__shade" aria-hidden="true"></div>
+        <p class="story__load" data-load role="status"><span></span><orbit-text data-i18n="st26b01">Loading the scan</orbit-text></p>
 
-  <div class="act__pin scan__pin">
+        <!-- pin over the house -->
+        <div class="sd-pin" data-pin aria-hidden="true"><span><orbit-text data-i18n="st26b02">This house</orbit-text><small><orbit-text data-i18n="st26b03">Scroll to go inside</orbit-text></small></span><i></i></div>
 
-    <!-- The subject side while the points gather and the splat appears (desktop: right ~46%, phone: lower ~60%). -->
-    <div class="scan__subject" data-subject aria-hidden="true"></div>
-
-    <!-- Who we are, then "One space." in the same place (the title and the line under it each hold two
-         layers in one spot; js/sections/scan.js drives the change with the scroll). -->
-    <div class="scan__who" id="who">
-      <div class="wrap grid12 who__grid">
-        <div class="who__text">
-          <h2 id="who-title" class="who__title">
-            <span class="who__name" data-reveal>
-              <span class="who__mask">
-                <span class="who__old"><orbit-text data-i18n="5b189e2674">We’re Orbit 3D</orbit-text></span>
-                <span class="who__new" aria-hidden="true"><orbit-text data-i18n="6c3f751fd2">One space.</orbit-text></span>
-              </span>
-            </span>
-            <span class="who__what" data-reveal style="--i:1">
-              <span class="who__fade who__fade--1"><orbit-text data-i18n="cf455cce57">We turn your place into spaces you can explore and redesign.</orbit-text></span>
-              <span class="who__new2" aria-hidden="true"><orbit-text data-i18n="2af1af711a">Not a drawing. Not a render. The place itself.</orbit-text></span>
-            </span>
-          </h2>
-          <p class="who__line" data-reveal style="--i:2"><span class="who__fade who__fade--2"><orbit-text data-i18n="257311a38b">Real scans of real places, in one link, on any device.</orbit-text></span></p>
-          <p class="who__first" data-reveal style="--i:3">
-            <span class="who__fade who__fade--3"><orbit-text data-i18n="a603b3a162">A company in the Netherlands that uses new technology to create walkable 3D house models in one link.</orbit-text></span>
-          </p>
-        </div>
-        <!-- (3 Nov 2026, James) the 3D house sits in this box at one fixed angle and comes apart with the scroll;
-             nothing to drag any more (js/stage-stack.js) -->
-        <div class="who__subject" data-subject-fit role="img"
-             aria-label="A three-floor house that comes apart, floor by floor, as you scroll.">
-          <!-- (3 Nov 2026, James: slow internet) a still picture of the house at the same angle (23 KB) shows at
-               once, so the box is never empty; js/stage-stack.js fades it out when the live 3D house is in -->
-          <picture class="who__poster" aria-hidden="true">
-            <source media="(max-width: 767px)" srcset="assets/stage/still-stack-phone.webp">
-            <img src="assets/stage/still-stack.webp" alt="" decoding="async" fetchpriority="high">
-          </picture>
-        </div>
-      </div>
-    </div>
-
-    <div class="wrap scan__two">
-      <h2 id="scan-title" class="scan__title"><orbit-text data-i18n="6c3f751fd2">One space.</orbit-text> <span><orbit-text data-i18n="50fadb1354">Turn it, zoom in, look around.</orbit-text></span></h2>
-
-      <div class="scan__cards">
-        <figure class="scan__fig scan__fig--splat">
-          <div class="scan__card" data-card="splat">
-            <div class="scan__hit stage-hit" data-hit="two-splat" tabindex="-1" role="group" aria-roledescription="3D view"
-                 aria-label="The place as it was captured. Drag to turn. Pinch or Control and scroll to zoom. Plus and minus keys zoom."></div>
-            <p class="hint scan__chip" data-chip="splat" role="status" hidden></p>
+        <!-- chapter words (option A: low on the left) -->
+        <div class="chap chap--hero is-on" data-words="0">
+          <p class="chap__eyebrow"><orbit-text data-i18n="328af22cef">REAL PLACES. NEW POSSIBILITIES.</orbit-text></p>
+          <h1 id="top-title" class="chap__hero"><orbit-text data-i18n="b708536e79">Step Into<br>Space.</orbit-text></h1>
+          <p class="chap__sub"><orbit-text data-i18n="3eb1148524">Explore and adjust a space anytime you want.<br>Try it for yourself today.</orbit-text></p>
+          <div class="chap__act">
+            <a class="btn btn--accent" href="#c1" data-jump="1"><orbit-text data-i18n="eb6155f421">Explore this space</orbit-text></a>
+            <a class="chap__more" href="#examples"><orbit-text data-i18n="37b81b70b7">See what's possible</orbit-text></a>
           </div>
-          <figcaption class="scan__cap">
-            <span class="scan__cap-text"><orbit-text data-i18n="0145b8878d">Explore it as it was captured.</orbit-text></span>
-            <span class="scan__tools" role="group" aria-label="Zoom the scan">
-              <button type="button" class="scan__btn" data-zoom="out" data-for="splat" aria-label="Zoom the scan out"><span class="scan__icon scan__icon--minus" aria-hidden="true"></span></button>
-              <button type="button" class="scan__btn" data-zoom="in" data-for="splat" aria-label="Zoom the scan in"><span class="scan__icon scan__icon--plus" aria-hidden="true"></span></button>
-              <button type="button" class="scan__btn scan__btn--reset" data-reset data-for="splat" aria-label="Reset the scan view"><orbit-text data-i18n="8691496ca8">Reset</orbit-text></button>
-            </span>
-          </figcaption>
-        </figure>
-
-        <!-- (30 Oct late night, James) card B (the 3D model from above) is gone: one big card, the scan to
-             orbit around; at the end its border goes and it grows to the full-screen aerial (the way into #walk) -->
-      </div>
-    </div>
-    <p class="sr-only" aria-live="polite" data-scan-status></p>
-  </div>
-</section>
-
-<!-- section: 04-walk.html -->
-<section id="walk" class="sec act sec--walk" style="--act: 410vh" data-phase="approach" aria-labelledby="walk-title">
-  <!-- Step 4 (CONTRACT 8.1, 8.7, research/10 section 3): "First, feel like you're there."
-       Full screen. approach: the camera dives from the air into a soft light and comes out of it in the
-       garden at eye height (round 9). patio: three short stops on the real streamed house splat, each with
-       a tiny caption (the stage says which stop: OrbitStage.walk.state(), js/sections/walk.js); then the
-       scene goes dark before the next section's heading comes (handoff rule 9.1).
-       The visitor can grab the scene (.stage-hit[data-hit="walk"], full screen, UNDER the text): the
-       words fade out (opacity only, no layout shift) and stay out while they explore; scrolling brings
-       the words back and the camera eases back onto the scroll path (OrbitStage.walk "explore" /
-       "resume"). The words never take the pointer. -->
-  <!-- (3 Nov, James: smoother) the flight down into the garden gets 50vh more (approach 110 -> 160vh, act 360 -> 410vh) -->
-  <div class="beat" data-stage="aerial-in" data-phase="approach" aria-hidden="true" style="top: 0; height: 160vh"></div>
-  <div class="beat" data-stage="patio" data-phase="patio" data-points-off aria-hidden="true" style="top: 160vh; height: 250vh"></div>
-  <!-- (30 Oct, James: smooth) the patio beat is 60vh longer (190 -> 250vh) so the turn to the third stop is calm -->
-
-  <div class="act__pin walk__pin">
-    <div class="walk__hit stage-hit" data-hit="walk" tabindex="-1" role="group" aria-roledescription="3D view"
-         aria-label="The real garden at eye height. Drag or use the arrow keys to look around. Scroll to continue."></div>
-
-    <div class="wrap walk__words" data-walk-words>
-      <h2 id="walk-title" class="walk__title"><orbit-text data-i18n="59c6aa13ab">First feel like</orbit-text> <span><orbit-text data-i18n="01b8dd2018">you’re there</orbit-text></span></h2>
-      <p class="walk__sub"><orbit-text data-i18n="e6d961f072">Stand in the garden, the way a visitor would.</orbit-text></p>
-    </div>
-
-    <!-- one tiny caption per stop; only the current one shows (data-stop on the section) -->
-    <ol class="wrap walk__stops" data-walk-stops aria-hidden="true">
-      <li class="walk__stop" data-stop="0"><span class="walk__n">1 / 3</span><orbit-text data-i18n="08b6192c7f">Look around.</orbit-text></li>
-      <li class="walk__stop" data-stop="1"><span class="walk__n">2 / 3</span><orbit-text data-i18n="ad8a269f09">Right up to the glass.</orbit-text></li>
-      <li class="walk__stop" data-stop="2"><span class="walk__n">3 / 3</span><orbit-text data-i18n="cfd584e478">Turn around. Every corner is real.</orbit-text></li>
-    </ol>
-
-    <div class="walk__bar" data-walk-bar>
-      <p class="hint walk__chip" role="status" data-walk-chip hidden></p>
-      <span class="walk__turn" role="group" aria-label="Look around" data-walk-turn hidden>
-        <button type="button" class="walk__btn" data-turn="left"><orbit-text data-i18n="3d72923390">Turn left</orbit-text></button>
-        <button type="button" class="walk__btn" data-turn="right"><orbit-text data-i18n="7624c424d0">Turn right</orbit-text></button>
-      </span>
-    </div>
-    <p class="sr-only" aria-live="polite" data-walk-status></p>
-  </div>
-</section>
-
-<!-- section: 05-compare.html -->
-<section id="compare" class="sec sec--compare" data-scene="calm" data-points-off aria-labelledby="compare-title">
-  <!-- 4 Nov 2026 (James picked option B "one frame, split slider"): the section plays by itself.
-       One full-screen frame split by a handle the visitor can drag:
-         left (phone: top)  = a 360 photo tour that hops from spot to spot (js/sections/compare.js, own small
-                              WebGL canvas, photos assets/compare/pano-N.webp);
-         right (phone: bottom) = Orbit on the page's own stage (data-stage="compare-scan"): the 3D scan glides,
-                              melts into the 3D model where furniture moves, grows back into the scan and walks.
-       A drag, tap or key on either side takes over that side; it plays on by itself after a quiet while.
-       Old version (360 photo | 3D scan toggle + viewer iframe): work/backup-20261104-compare-auto/. -->
-  <div class="compare__stage" data-compare-zone data-stage="compare-scan">
-    <div class="compare__orbit" data-cmp-orbit aria-hidden="true">
-      <img class="compare__still is-scan" src="assets/stage/still-compare.webp" alt="" loading="lazy" decoding="async">
-      <img class="compare__still is-model" src="assets/compare/still-model.webp" alt="" loading="lazy" decoding="async">
-    </div>
-
-    <div class="compare__pano" data-cmp-pano>
-      <img class="compare__pano-still" src="assets/compare/still-360.webp" alt="" loading="lazy" decoding="async">
-      <button type="button" class="compare__hop" data-cmp-hop aria-label="Hop to the next spot" hidden><span aria-hidden="true"></span></button>
-    </div>
-
-    <span class="compare__tag is-l" aria-hidden="true"><orbit-text data-i18n="cmp26a01">360 photo: it jumps</orbit-text></span>
-    <span class="compare__tag is-r" aria-hidden="true" data-cmp-tag>3D scan: it glides</span>
-    <span class="compare__grab" data-cmp-grab aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M3 2l7 19 2.6-7.4L20 11z"/></svg>
-      <b data-cmp-grab-name></b>
-    </span>
-
-    <div class="compare__split" data-cmp-split role="slider" tabindex="0" aria-orientation="horizontal"
-         aria-label="Split between the 360 photo and the 3D scan" aria-valuemin="10" aria-valuemax="90" aria-valuenow="50">
-      <i aria-hidden="true"></i>
-    </div>
-
-    <header class="compare__over">
-      <h2 id="compare-title" class="compare__title" data-reveal><orbit-text data-i18n="d9eabea429">Look around,</orbit-text> <span><orbit-text data-i18n="59413af82e">or move through.</orbit-text></span></h2>
-      <p class="compare__lede" data-reveal style="--i:1"><orbit-text data-i18n="cmp26a02">A 360 photo jumps from spot to spot. Orbit glides through the real space, turns it into a 3D model you can rearrange, and lets you walk anywhere.</orbit-text></p>
-    </header>
-
-    <div class="compare__cap" role="group" aria-label="Demo controls">
-      <button type="button" class="compare__play" data-cmp-play aria-pressed="true" aria-label="Pause the demo">
-        <svg class="is-pause" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>
-        <svg class="is-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.2v11.6c0 .6.7 1 1.2.7l9-5.8c.5-.3.5-1 0-1.3l-9-5.8C4.7 1.2 4 1.6 4 2.2z"/></svg>
-      </button>
-      <div class="compare__chaps" role="group" aria-label="Jump to a part of the demo">
-        <button type="button" class="compare__chap" data-cmp-chap="0" aria-pressed="true"><orbit-text data-i18n="faab01aa6f">3D scan</orbit-text><s aria-hidden="true"></s></button>
-        <button type="button" class="compare__chap" data-cmp-chap="1" aria-pressed="false"><orbit-text data-i18n="cmp26a03">3D model</orbit-text><s aria-hidden="true"></s></button>
-        <button type="button" class="compare__chap" data-cmp-chap="2" aria-pressed="false"><orbit-text data-i18n="cmp26a04">Walk in</orbit-text><s aria-hidden="true"></s></button>
-      </div>
-    </div>
-    <p class="compare__hint" role="status" data-cmp-hint></p>
-  </div>
-  <p class="sr-only" aria-live="polite" data-compare-status></p>
-</section>
-
-<!-- section: 06-design.html -->
-<section id="design" class="sec act sec--design" style="--act: 670vh" data-scene="calm" data-station="overview" data-phase="hold" aria-labelledby="design-title">
-  <!-- (4 Nov 2026 audit) where the menu step "Design" lands: the house has fully faded in and the overview
-       words are up (the section top itself is still mid hand-over from #compare) -->
-  <div class="nav-mark" id="design-start" aria-hidden="true" style="top: calc(45vh + var(--nav-h, 64px)); height: 1px"></div>
-  <!-- Round 8 (CONTRACT 8.3): the station tour in the 3D model. Each station = a travel band (70vh, the
-       camera flies, scrubbed by scroll) + a hold band (90vh, the camera parks and the floating glass panel
-       comes up above the piece). The first station (overview) has a hold only. data-stage / data-station /
-       data-phase are read by js/stage-tour.js; js/sections/design.js reads the same beats each frame
-       for the words, the step bar and the panel. -->
-  <!-- Round 9: the overview is longer (the model fades in only once #compare has gone, then the words);
-       the kitchen stop ends 8vh before the pin starts to scroll away (670vh - 50vh): from that moment the
-       stop's UI goes AND the camera starts its flight to the whole floor (js/stage-tour.js), while the
-       pin still stands, so nothing floats and no still frame is left -->
-  <div class="beat" data-stage="tour" data-station="overview" data-phase="hold" aria-hidden="true" style="top: 0; height: 130vh"></div>
-  <div class="beat" data-stage="tour" data-station="tv" data-phase="travel" aria-hidden="true" style="top: 130vh; height: 70vh"></div>
-  <div class="beat" data-stage="tour" data-station="tv" data-phase="hold" aria-hidden="true" style="top: 200vh; height: 90vh"></div>
-  <div class="beat" data-stage="tour" data-station="couch" data-phase="travel" aria-hidden="true" style="top: 290vh; height: 70vh"></div>
-  <div class="beat" data-stage="tour" data-station="couch" data-phase="hold" aria-hidden="true" style="top: 360vh; height: 90vh"></div>
-  <div class="beat" data-stage="tour" data-station="kitchen" data-phase="travel" aria-hidden="true" style="top: 450vh; height: 70vh"></div>
-  <div class="beat" data-stage="tour" data-station="kitchen" data-phase="hold" aria-hidden="true" style="top: 520vh; height: 92vh"></div>
-
-  <div class="act__pin design__pin">
-    <!-- The step bar: a shortcut that scrolls the page to a stop (scroll stays the truth). -->
-    <div class="design__dock">
-      <nav class="design__steps" aria-label="Design tour" data-steps>
-        <span class="design__thumb" data-thumb aria-hidden="true"></span>
-        <button type="button" class="design__step" data-go="overview" aria-current="step"><orbit-text data-i18n="995c05d6a8">Overview</orbit-text></button>
-        <button type="button" class="design__step" data-go="tv"><orbit-text data-i18n="1075e6208d">TV</orbit-text></button>
-        <button type="button" class="design__step" data-go="couch"><orbit-text data-i18n="a914530f95">Couch</orbit-text></button>
-        <button type="button" class="design__step" data-go="kitchen"><orbit-text data-i18n="dcaa7d5367">Kitchen</orbit-text></button>
-        <button type="button" class="design__step" data-go="all"><orbit-text data-i18n="f6497b0d3d">Whole floor</orbit-text></button>
-      </nav>
-      <span class="design__split" aria-hidden="true"></span>
-      <div class="design__view" role="group" aria-label="View of the model" data-view>
-        <button type="button" class="design__vbtn is-round" data-view-act="out" aria-label="Zoom out"><span class="design__icon" aria-hidden="true"></span></button>
-        <button type="button" class="design__vbtn is-round" data-view-act="in" aria-label="Zoom in"><span class="design__icon design__icon--plus" aria-hidden="true"></span></button>
-        <button type="button" class="design__vbtn is-round" data-view-act="reset" aria-label="Reset view" title="Reset view"><svg class="design__svg" viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.7-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M5.6 2.8v3.6h3.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
-    <!-- The 3D view: the whole screen under the words takes drags (js/stage-tour.js listens on it).
-         Keys while it has focus: arrows look around, + and - zoom, Home = the stop's own view. -->
-    <div class="design__hit stage-hit" data-hit="tour" data-zoom tabindex="-1" role="group" aria-roledescription="3D view"
-         aria-label="3D model of the home. Drag to look around. Arrow keys turn, plus and minus zoom, Home goes back to the view of this stop."
-         aria-describedby="design-hint"></div>
-    <!-- Where the stage frames each stop (the free part of the screen: under the words on phones, right of them on desktop) -->
-    <div class="design__subject" data-subject aria-hidden="true"></div>
-
-    <!-- The overview words (29 Oct, James): big, in the middle of the screen over the model, no box;
-         they fade out as the camera starts its flight into the house (design.js sets --intro). -->
-    <div class="design__intro" data-intro>
-      <div class="design__line design__line--overview is-on" data-line="overview">
-        <p class="design__kicker"><orbit-text data-i18n="e16cd55fe4">The 3D model</orbit-text></p>
-        <h2 id="design-title" class="design__lead"><orbit-text data-i18n="0ef0ee47ec">Now explore what it could become</orbit-text></h2>
-        <p class="design__sub"><orbit-text data-i18n="b135069000">The 3D model, built from the same scan. Three stops, three things to try.</orbit-text></p>
-      </div>
-    </div>
-
-    <!-- The words of each stop: a card where the stop's sheet will open (design.js places it). -->
-    <div class="wrap design__text" data-design-text>
-      <div class="design__lines">
-        <div class="design__line" data-line="tv">
-          <p class="design__kicker"><orbit-text data-i18n="c03517d179">Stop 1 of 3</orbit-text></p>
-          <h3 class="design__head"><orbit-text data-i18n="4ff023a70f">Not your style?<br>Change it!</orbit-text></h3>
-          <p class="design__sub"><orbit-text data-i18n="aee7bb918a">Paint the walls. Swap the TV furniture.</orbit-text></p>
         </div>
-        <div class="design__line" data-line="couch">
-          <p class="design__kicker"><orbit-text data-i18n="2b403f183f">Stop 2 of 3</orbit-text></p>
-          <h3 class="design__head"><orbit-text data-i18n="b08b887d31">Place it however you like it.</orbit-text></h3>
-          <p class="design__sub" data-couch-sub><orbit-text data-i18n="4f633a5fdb">Drag the sofa to a new spot, turn it, or try another.</orbit-text></p>
-        </div>
-        <div class="design__line" data-line="kitchen">
-          <p class="design__kicker">Stop 3 of 3</p>
-          <h3 class="design__head"><orbit-text data-i18n="b88d941361">Lights on or off.</orbit-text></h3>
-          <p class="design__sub"><orbit-text data-i18n="a13d4131fa">Tap a lamp in the kitchen to switch it.</orbit-text></p>
-        </div>
-      </div>
-    </div>
+        <div class="chap" data-words="1"><p class="chap__n">01 / 09 &middot; <orbit-text data-i18n="st26c01">Outside</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="6c3f751fd2">One space.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="2af1af711a">Not a drawing. Not a render. The place itself.</orbit-text></p></div>
+        <div class="chap" data-words="2"><p class="chap__n">02 / 09 &middot; <orbit-text data-i18n="st26c04">3D model</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="0ef0ee47ec">Now explore what it could become</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="b135069000">The 3D model, built from the same scan. Three stops, three things to try.</orbit-text></p></div>
+        <div class="chap" data-words="3"><p class="chap__n">03 / 09 &middot; <orbit-text data-i18n="st26c07">Garden</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26c08">Real, or 3D?</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c09">Drag the line. Left is the 3D model, right is the real scan. Same garden, same spot.</orbit-text></p></div>
+        <div class="chap" data-words="4"><p class="chap__n">04 / 09 &middot; <orbit-text data-i18n="st26c10">Walk in</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="59c6aa13ab">First feel like</orbit-text> <span><orbit-text data-i18n="01b8dd2018">you’re there</orbit-text></span></h2><p class="chap__p"><orbit-text data-i18n="cfd584e478">Turn around. Every corner is real.</orbit-text></p></div>
+        <div class="chap" data-words="5"><p class="chap__n">05 / 09 &middot; <orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="4ff023a70f">Not your style?<br>Change it!</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c14">Tap a piece to swap it, drag it to move it. Hundreds of real pieces, sized to fit the room.</orbit-text></p>
+          <div class="chap__try"><button type="button" class="btn sd-glass" data-try><orbit-text data-i18n="st26c15">Try it yourself</orbit-text></button></div></div>
+        <div class="chap" data-words="6"><p class="chap__n">06 / 09 &middot; <orbit-text data-i18n="st26c16">Light</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="b88d941361">Lights on or off.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c18">Every lamp works. Tap a lamp to switch it and see the room change.</orbit-text></p></div>
+        <div class="chap" data-words="7"><p class="chap__n">07 / 09 &middot; <orbit-text data-i18n="st26c19">Paint</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26c20">Any colour.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c21">Paint one wall or the whole room. Only the model changes, the scan stays real.</orbit-text></p></div>
+        <div class="chap" data-words="8"><p class="chap__n">08 / 09 &middot; <orbit-text data-i18n="st26c22">Upstairs</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26a02">Every floor</orbit-text>.</h2><p class="chap__p"><orbit-text data-i18n="st26c23">Up the stairs in one jump. The whole house, floor by floor.</orbit-text></p></div>
+        <div class="chap" data-words="9"><p class="chap__n">09 / 09 &middot; <orbit-text data-i18n="d3a1c00104">Explore</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26c24">Now it is your turn.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c25">Open a finished space below and walk around yourself.</orbit-text></p></div>
 
-    <!-- The stop's sheet (29 Oct, James: "B2 on the right"): the words + the choices in ONE clear glass
-         sheet. Tablets / computers: a side sheet (tall on computers) on the side that hides the least
-         of the model; phones: a compact strip above the step bar. Placed by design.js every frame.
-         Filled from OrbitStage.tour; hidden (inert) between stops. -->
-    <span class="design__leader" data-leader aria-hidden="true"></span>
-    <span class="design__ring is-round" data-ring aria-hidden="true"></span>
-    <div class="design__panel" data-panel role="group" aria-labelledby="design-panel-title" inert>
-      <div class="design__pcore">
-        <!-- the stop's words, copied in from its line (design.js); the line itself stays for screen readers -->
-        <div class="design__pwords" data-pwords aria-hidden="true"></div>
-        <!-- (3 Nov, James) the same switch as the hero: this exact view as the real scan (Gaussian splat).
-             Every stop; touching any choice below goes back to the 3D model. -->
-        <div class="design__modes" role="group" aria-label="Show this view as" data-modes hidden>
-          <button type="button" data-design-mode="scan" aria-pressed="false"><orbit-text data-i18n="6aa4d4408b">Real scan</orbit-text></button>
-          <button type="button" data-design-mode="model" aria-pressed="true"><orbit-text data-i18n="7ffb22dcdc">3D Model</orbit-text></button>
+        <!-- the drag line (chapter 3) -->
+        <div class="sd-wipe" data-wipe hidden>
+          <span class="sd-wipe__tag"><orbit-text data-i18n="7ffb22dcdc">3D Model</orbit-text></span>
+          <span class="sd-wipe__tag is-r"><orbit-text data-i18n="6aa4d4408b">Real scan</orbit-text></span>
+          <div class="sd-wipe__line" data-wipe-line role="slider" tabindex="0" aria-label="Line between the 3D model and the real scan" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></div>
         </div>
-        <div class="design__phead" data-phead>
-          <p class="design__ptitle" id="design-panel-title" data-ptitle><orbit-text data-i18n="1075e6208d">TV</orbit-text></p>
-          <!-- a stop with more than one piece: the picker takes the title's place -->
-          <div class="design__picks" role="group" aria-label="Pick a piece" data-picks hidden></div>
-        </div>
-        <div class="design__prow" data-prow="options" hidden>
-          <p class="design__plabel" id="design-opt-label" data-opt-label><orbit-text data-i18n="6881ee6677">Try another</orbit-text></p>
-          <div class="design__opts" role="group" aria-labelledby="design-opt-label" data-opts></div>
-        </div>
-        <div class="design__prow" data-prow="paints" hidden>
-          <p class="design__plabel" id="design-paint-label" data-paint-label><orbit-text data-i18n="81220d618b">Wall colour</orbit-text></p>
-          <div class="design__swatches" role="group" aria-labelledby="design-paint-label" data-swatches></div>
-        </div>
-        <div class="design__prow" data-prow="tools" hidden>
-          <div class="design__tools">
-            <button type="button" class="design__tool" data-tool="move" aria-pressed="false" aria-describedby="design-move-note"><orbit-text data-i18n="6af4ce9262">Move</orbit-text></button>
-            <button type="button" class="design__tool" data-tool="turn"><orbit-text data-i18n="39b0a1f0a9">Turn</orbit-text></button>
+
+        <!-- the design demo (chapters 5-7): glossy panels like the Orbit viewer, a guiding cursor -->
+        <div class="sd-box" data-box aria-hidden="true"><span class="sd-box__tag"><span data-box-tag></span><small><orbit-text data-i18n="st26e25">Drag to move</orbit-text></small></span></div>
+        <!-- the three lamps: tap rings over them (chapter 6) -->
+        <button type="button" class="sd-lamp" data-lamp="0" hidden aria-pressed="true"><span class="sr-only"><orbit-text data-i18n="st26e26">Ceiling lamp</orbit-text></span></button>
+        <button type="button" class="sd-lamp" data-lamp="1" hidden aria-pressed="true"><span class="sr-only"><orbit-text data-i18n="st26e26">Ceiling lamp</orbit-text></span></button>
+        <button type="button" class="sd-lamp" data-lamp="2" hidden aria-pressed="true"><span class="sr-only"><orbit-text data-i18n="st26e27">Dining lamp</orbit-text></span></button>
+        <p class="sd-look" data-look aria-hidden="true"><orbit-text data-i18n="st26e29">Drag to look around</orbit-text></p>
+        <aside class="sd-panel sd-panel--furn" data-panel="furniture" hidden aria-label="Swap the furniture">
+          <!-- 5 Nov night (James): the tabs work (they filter the pieces and pick which piece in the room you change);
+               the title and the line under it follow the piece (js/story.js).
+               7 Nov (James: "can I not adjust this?"): phones show one row of pieces; swipe the grab bar up (or tap
+               "More pieces") for all of them, down to make it small again, like the paint sheet -->
+          <button type="button" class="sd-panel__grab" data-grab aria-expanded="false" aria-label="Show all pieces"></button>
+          <header class="sd-panel__head"><div><b data-slot-name>Coffee table</b><small data-slot-room>In the living room. Room for 110 &times; 90 cm here</small></div>
+            <button type="button" class="sd-panel__more" data-more aria-expanded="false"><span class="is-more"><orbit-text data-i18n="st26e32">More pieces</orbit-text></span><span class="is-less"><orbit-text data-i18n="st26e33">Fewer pieces</orbit-text></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></header>
+          <div class="sd-chips" role="tablist" aria-label="Kind of furniture" data-chips>
+            <button type="button" role="tab" data-cat="all" aria-selected="true"><orbit-text data-i18n="st26d03">All</orbit-text> <i></i></button>
+            <button type="button" role="tab" data-cat="sofa" aria-selected="false"><orbit-text data-i18n="st26d04">Sofas</orbit-text> <i></i></button>
+            <button type="button" role="tab" data-cat="table" aria-selected="false"><orbit-text data-i18n="st26d06">Tables</orbit-text> <i></i></button>
           </div>
-          <div class="design__pad" data-pad hidden>
-            <button type="button" class="design__padbtn is-round" data-move="-1,0" aria-label="Move left">&larr;</button>
-            <button type="button" class="design__padbtn is-round" data-move="0,-1" aria-label="Move away">&uarr;</button>
-            <button type="button" class="design__padbtn is-round" data-move="0,1" aria-label="Move closer">&darr;</button>
-            <button type="button" class="design__padbtn is-round" data-move="1,0" aria-label="Move right">&rarr;</button>
-          </div>
-          <p class="design__note" id="design-move-note" data-move-note><orbit-text data-i18n="63c834f7f4">Arrow keys move it.</orbit-text></p>
-        </div>
-        <!-- the kitchen: no switch here (29 Oct, James); the lamps themselves are the switches -->
-        <div class="design__prow" data-prow="lights" hidden>
-          <p class="design__lampcount"><span class="design__lampcount-dot is-round" aria-hidden="true"></span><span data-lamp-count><orbit-text data-i18n="de2d161ed4">3 of 3 lamps on</orbit-text></span></p>
-        </div>
-        <div class="design__pfoot">
-          <p class="design__pnote"><orbit-text data-i18n="7f7bb5638b">Changes stay for the whole tour.</orbit-text></p>
-          <button type="button" class="design__tool design__tool--quiet" data-tool="restore" hidden><orbit-text data-i18n="ddb575ede3">Restore</orbit-text></button>
-        </div>
+          <div class="sd-tiles" data-tiles></div>
+        </aside>
+        <aside class="sd-panel sd-panel--paint" data-panel="paint" hidden aria-label="Paint the wall">
+          <!-- phones: one row of colours; swipe the grab bar up (or tap "More colours") for all of them -->
+          <button type="button" class="sd-panel__grab" data-grab aria-expanded="false" aria-label="Show all colours"></button>
+          <header class="sd-panel__head"><div><b><orbit-text data-i18n="st26d07">Paint and floors</orbit-text></b><small><orbit-text data-i18n="st26d08">One wall of the living room</orbit-text></small></div>
+            <button type="button" class="sd-panel__more" data-more aria-expanded="false"><span class="is-more"><orbit-text data-i18n="st26e30">More colours</orbit-text></span><span class="is-less"><orbit-text data-i18n="st26e31">Fewer colours</orbit-text></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></header>
+          <div class="sd-swatches" data-swatches></div>
+        </aside>
+        <button type="button" class="sd-switch" data-switch hidden aria-pressed="true"><i aria-hidden="true"></i><span><orbit-text data-i18n="st26e28">All lights</orbit-text></span></button>
+        <div class="sd-floors" data-floors hidden aria-hidden="true"><span data-fl="0"><orbit-text data-i18n="st26d11">Ground</orbit-text></span><span data-fl="1"><orbit-text data-i18n="st26d12">1st</orbit-text></span><span data-fl="2"><orbit-text data-i18n="st26d13">2nd</orbit-text></span></div>
+        <p class="sd-toast" data-toast hidden></p>
+        <div class="sd-cursor" data-cursor aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.6L9.6 20z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+
+        <!-- where you are: a rail on the right (computers), a thin bar under the top bar (phones) -->
+        <nav class="rail" data-rail aria-label="Story stops"></nav>
+        <div class="bar" data-bar aria-hidden="true"></div>
+        <a class="story__cue" href="#c1" data-jump="1" data-cue><span><orbit-text data-i18n="8a6de4a1f2">Scroll</orbit-text></span><i aria-hidden="true"></i></a>
       </div>
-    </div>
-    <!-- The kitchen's lamps (29 Oct, James): a small glow dot on each lamp is its switch. Its name tag
-         shows on hover, on keyboard focus and for a few seconds after a tap. Until the first tap a
-         finger shows the way (the tap demo), then it is gone. Buttons are made by design.js. -->
-    <div class="design__lamps" role="group" aria-label="Kitchen lamps" data-lamps hidden></div>
-    <div class="design__tapdemo" data-tapdemo aria-hidden="true">
-      <span class="design__tapdemo-ripple is-round"></span>
-      <svg class="design__tapdemo-finger" viewBox="0 0 24 24"><path d="M9 2.5a1.5 1.5 0 0 1 3 0V10l1-.2a1.5 1.5 0 0 1 1.8 1V11a1.5 1.5 0 0 1 2.7.6 1.5 1.5 0 0 1 2.5 1.1V17a5 5 0 0 1-5 5h-2.3a5 5 0 0 1-3.9-1.9L4 15.3a1.5 1.5 0 0 1 2.3-1.9L9 16V2.5z" fill="#fff" stroke="rgba(0,0,0,.35)" stroke-width=".8"/></svg>
-      <span class="design__tapdemo-bubble"><orbit-text data-i18n="d3a1c00004">Tap here</orbit-text></span>
-    </div>
-    <!-- Touch only: the handle that slides the chosen piece (a finger on the piece itself still scrolls).
-         Round 9 (review C design 5): a move icon (four arrows) says what it does. -->
-    <div class="design__grab stage-hit is-round" data-hit="tour" data-grab aria-hidden="true"><svg class="design__grab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
-    <p class="hint design__hint" id="design-hint" role="status" data-hint><orbit-text data-i18n="e38bdc289e">Drag to look around</orbit-text></p>
-
-    <p class="sr-only" aria-live="polite" data-status></p>
-  </div>
-</section>
-
-<!-- section: 07-floor.html -->
-<section id="floor" class="sec act sec--floor" style="--act: 250vh" data-scene="calm" data-phase="arrive" aria-labelledby="floor-title">
-  <!-- Round 8 (CONTRACT 8.3, research/10 section 6): the whole floor with every change of the tour.
-       arrive = the flight from the kitchen to the reference view; explore = drag / zoom it; return = the
-       view eases back to the reference view (drag is off from here); exit = the transition out.
-       Read by js/stage-tour.js and js/sections/floor.js. -->
-  <div class="beat" data-stage="floor" data-phase="arrive" aria-hidden="true" style="top: 0; height: 70vh"></div>
-  <div class="beat" data-stage="floor" data-phase="explore" aria-hidden="true" style="top: 70vh; height: 80vh"></div>
-  <div class="beat" data-stage="floor" data-phase="return" aria-hidden="true" style="top: 150vh; height: 35vh"></div>
-  <div class="beat" data-stage="floor" data-phase="exit" aria-hidden="true" style="top: 185vh; height: 60vh"></div>
-
-  <div class="act__pin floor__pin">
-    <div class="floor__hit stage-hit" data-hit="floor" data-zoom tabindex="-1" role="group" aria-roledescription="3D view"
-         aria-label="3D model of the whole floor. Drag to look around. Arrow keys turn, plus and minus zoom, Home goes back to the whole floor."
-         aria-describedby="floor-hint"></div>
-    <div class="floor__subject" data-subject aria-hidden="true"></div>
-
-    <div class="wrap floor__text">
-      <div class="floor__card">
-        <h2 id="floor-title" class="floor__lead"><orbit-text data-i18n="f45288af6d">The space is limited to your creativity</orbit-text></h2>
-        <p class="floor__sub"><orbit-text data-i18n="ccd2cb46d2">Every change from the three stops, together on the whole floor.</orbit-text></p>
-        <p class="floor__spin" aria-hidden="true" data-spin>
-          <svg class="floor__spin-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <ellipse cx="12" cy="12" rx="9.5" ry="4.2" opacity=".45"/>
-            <path d="M4.2 14.6c1.6 1.6 4.5 2.6 7.8 2.6 1.4 0 2.7-.2 3.9-.5"/>
-            <path d="M14.2 14.4l2.2 2.2-2.6 1.6"/>
-          </svg>
-          <span data-spin-text><orbit-text data-i18n="951f4a5ba5">Drag to spin it around</orbit-text></span>
-        </p>
+      <!-- the scroll track: one block per chapter (its height = how long that part plays) -->
+      <div class="story__track" aria-hidden="true">
+        <div class="story__c" id="c0" data-nav-zone="top" data-chap="0" style="--len:90"></div>
+        <div class="story__c" id="c1" data-nav-zone="top" data-chap="1" style="--len:300"></div>
+        <div class="story__c" id="c2" data-nav-zone="inside" data-chap="2" style="--len:150"><span class="story__mark" id="inside"></span></div>
+        <div class="story__c" id="c3" data-nav-zone="inside" data-chap="3" style="--len:170"></div>
+        <div class="story__c" id="c4" data-nav-zone="inside" data-chap="4" style="--len:170"></div>
+        <div class="story__c" id="c5" data-nav-zone="design" data-chap="5" style="--len:300"><span class="story__mark" id="design"></span></div>
+        <div class="story__c" id="c6" data-nav-zone="design" data-chap="6" style="--len:200"></div>
+        <div class="story__c" id="c7" data-nav-zone="design" data-chap="7" style="--len:200"></div>
+        <div class="story__c" id="c8" data-nav-zone="upstairs" data-chap="8" style="--len:220"><span class="story__mark" id="upstairs"></span></div>
+        <div class="story__c" id="c9" data-nav-zone="upstairs" data-chap="9" style="--len:60"></div>
       </div>
-    </div>
+    </section>
 
-    <p class="hint floor__hint" id="floor-hint" role="status" data-hint><orbit-text data-i18n="38d986a509">Drag to look around</orbit-text></p>
-    <div class="floor__ctl glass" role="group" aria-label="View of the floor" data-ctl>
-      <button type="button" class="floor__btn is-round" data-view-act="out" aria-label="Zoom out"><span class="floor__icon" aria-hidden="true"></span></button>
-      <button type="button" class="floor__btn is-round" data-view-act="in" aria-label="Zoom in"><span class="floor__icon floor__icon--plus" aria-hidden="true"></span></button>
-      <button type="button" class="floor__btn floor__btn--text" data-view-act="reset"><orbit-text data-i18n="1f53dd0105">Reset view</orbit-text></button>
-    </div>
-    <p class="sr-only" aria-live="polite" data-status></p>
-  </div>
-</section>
-
-<!-- section: 08-examples.html -->
 <section id="examples" class="sec sec--examples" data-scene="calm" aria-labelledby="examples-title">
   <!-- (3 Nov 2026, James: "just show our product there") "Results? Take a look" = our finished work only, no
        step texts. Up to FOUR large frames, each filled from ORBIT_SITE.howto (js/embeds.js) by
@@ -593,31 +270,14 @@
   </div>
 </section>
 
-<!-- section: 09-contact.html -->
-<section id="contact" class="sec sec--contact" data-scene="planet" aria-labelledby="contact-title">
-  <!-- Step 9 (CONTRACT 8.1): the next step. One call, "Book a scan" (mailto from ORBIT_SITE.email, filled by
-       js/main.js), then what happens next from true facts only, then the small footer with the main nav.
-       Round 9: the page ends where it began. The house's own points gather once more into the building with an
-       orbit ring around it (the logo, made of the house), inside the empty box above the words; js/space.js fits
-       it into that box and moves it with the page, so the words and the button never sit on it. -->
-  <div class="wrap contact__wrap">
-    <!-- (30 Oct 2026, James) Partners bar just above "Contact us": logos from ORBIT_SITE.partners (js/main.js) -->
-    <div class="partners" data-partners hidden>
-      <p class="partners__label"><orbit-text data-i18n="c6b916d607">Partners</orbit-text></p>
-      <ul class="partners__row" role="list" data-partners-row aria-label="Our partners"></ul>
-    </div>
-    <div class="seg1 contact__close">
-      <!-- (30 Oct night, James) the ring goes AROUND the line: its box sits on the title, not above it -->
-      <div class="contact__ringed">
-        <div class="contact__subject" data-subject data-subject-fit aria-hidden="true"></div>
-        <h2 id="contact-title" class="contact__title" data-reveal><orbit-text data-i18n="1d4c96699b">Your space.<br>In a new perspective.</orbit-text></h2>
-      </div>
-      <!-- (3 Nov 2026, James) "Contact us" became two buttons that open the shared form below:
-           Book a call (day + time) or Via email (ends with the short message). Form: src/parts/book.html. -->
-      <div class="contact__act" data-reveal style="--i:1">
-        <a class="btn btn--accent contact__cta" data-book-open="call" data-magnet href="#contact"><orbit-text data-i18n="d3a1c00062">Book a call</orbit-text></a>
-        <a class="btn contact__cta contact__cta--alt" data-book-open="email" href="#contact"><orbit-text data-i18n="d3a1c00063">Via email</orbit-text></a>
-      </div>
+    <section id="contact" class="sec sec--contact" aria-labelledby="contact-title">
+      <div class="wrap contact__wrap">
+        <div class="seg1 contact__close">
+          <h2 id="contact-title" class="contact__title" data-reveal><orbit-text data-i18n="1d4c96699b">Your space.<br>In a new perspective.</orbit-text></h2>
+          <div class="contact__act" data-reveal style="--i:1">
+            <a class="btn btn--accent contact__cta" data-book-open="call" data-magnet href="#contact"><orbit-text data-i18n="d3a1c00062">Book a call</orbit-text></a>
+            <a class="btn contact__cta contact__cta--alt" data-book-open="email" href="#contact"><orbit-text data-i18n="d3a1c00063">Via email</orbit-text></a>
+          </div>
 <!-- Book a call / Via email (3 Nov 2026, James). Shared part: tools/build.py puts it where a page has the "@book" marker.
      Opened by any button with data-book-open="call" or "email" (js/book.js). Call mode: name, company (optional),
      email, short message, then a day and a time. Email mode: the same without day and time.
@@ -690,29 +350,18 @@
     </form>
   </div>
 </div>
-    </div>
-
-    <div class="contact__next" aria-labelledby="contact-next">
-      <h3 id="contact-next" class="contact__next-title" data-reveal><orbit-text data-i18n="7f69ab6748">What happens next?</orbit-text></h3>
-      <ol class="contact__steps" role="list">
-        <li class="contact__step" data-reveal style="--i:1"><span class="contact__verb"><orbit-text data-i18n="6c1380e43a">Capture</orbit-text></span><span class="contact__what"><orbit-text data-i18n="37e6936bbb">We capture the place.</orbit-text></span></li>
-        <li class="contact__step" data-reveal style="--i:2"><span class="contact__verb"><orbit-text data-i18n="88d066ca09">Design</orbit-text></span><span class="contact__what"><orbit-text data-i18n="dfa7d1c31d">We design the scan.</orbit-text></span></li>
-        <li class="contact__step" data-reveal style="--i:3"><span class="contact__verb"><orbit-text data-i18n="aa9ada9a2b">Model</orbit-text></span><span class="contact__what"><orbit-text data-i18n="c451cab2e4">We build the 3D model from the same scan.</orbit-text></span></li>
-        <li class="contact__step" data-reveal style="--i:4"><span class="contact__verb"><orbit-text data-i18n="4f20256277">Publish</orbit-text></span><span class="contact__what"><orbit-text data-i18n="50d1d44e9d">You get one link. Delivered by us directly.</orbit-text></span></li>
-      </ol>
-    </div>
-
-    <footer class="contact__foot">
-      <a href="#top" class="contact__logo" aria-label="Orbit 3D, back to top">
-        <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
-      </a>
-      <nav class="contact__nav" aria-label="Footer">
-        <a href="#scan"><orbit-text data-i18n="4a8890578d">How it works</orbit-text></a>
-        <a href="view-design.html"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text></a>
-        <a href="pricing.html"><orbit-text data-i18n="7b7dfcebe6">Pricing</orbit-text></a>
-        <a href="about.html"><orbit-text data-i18n="2492b280ea">About us</orbit-text></a>
-      </nav>
-      <p class="meta contact__copy"><span class="tagline contact__tag"><orbit-text data-i18n="82e263ab7f">Step into space.</orbit-text></span> <orbit-text data-i18n="cb5e8f7e4e">© 2026 3DGS Orbit Studio</orbit-text></p>
+        </div>
+        <footer class="contact__foot">
+          <a href="#top" class="contact__logo" aria-label="Orbit 3D, back to top">
+            <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
+          </a>
+          <nav class="contact__nav" aria-label="Footer">
+            <a href="#inside"><orbit-text data-i18n="4a8890578d">How it works</orbit-text></a>
+            <a href="view-design.html"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text></a>
+            <a href="pricing.html"><orbit-text data-i18n="7b7dfcebe6">Pricing</orbit-text></a>
+            <a href="about.html"><orbit-text data-i18n="2492b280ea">About us</orbit-text></a>
+          </nav>
+          <p class="meta contact__copy"><span class="tagline contact__tag"><orbit-text data-i18n="82e263ab7f">Step into space.</orbit-text></span> <orbit-text data-i18n="cb5e8f7e4e">&copy; 2026 3DGS Orbit Studio</orbit-text></p>
 <!-- Legal strip (4 Nov 2026, James: "compliant with EU rules"). Shared part: tools/build.py puts it where a page has
      the "@legal" marker (main page footer + every sub page footer). Dutch law (Handelsregisterbesluit art. 27,
      BW 3:15d) asks for the registered name, KvK number, VAT number and address on the website. The address comes
@@ -729,65 +378,23 @@
     <a href="legal.html"><orbit-text data-i18n="legal26a03">Legal</orbit-text></a>
   </p>
 </div>
-    </footer>
-  </div>
-</section>
+        </footer>
+      </div>
+    </section>
   </main>
 
+  <!-- (7 Nov 2026) phones: "Book a call" stays at the bottom from the results down to the contact section (js/site-extras.js) -->
+  <a class="btn btn--accent stick-cta" data-stick-cta data-book-open="call" href="#contact"><orbit-text data-i18n="d3a1c00062">Book a call</orbit-text></a>
+
   <script src="js/embeds.js"></script>
-  <script src="js/film.js"></script>
-  <script src="js/engage.js"></script>
+  <script src="js/story-data.js"></script>
   <script src="js/main.js"></script>
   <script src="js/book.js"></script>
-  <script src="js/design-file.js"></script>
-  <script src="js/float-furniture.js" defer></script>
-  <script>
-    /* The 3D stage first (31 Oct, phone speed: the hero's real scan needs it at once), then the
-       background points (phones get the small files, 70,000 points each, what they draw; computers
-       the full ones) and their engine.
-       (3 Nov, phone speed) the ~2 MB of points are not shown in the hero, so they wait until the hero's real
-       scan is in, or the visitor scrolls towards #scan, or 9 s. Before, they shared the 4G line with the 3D
-       engine and the hero scan. window.OrbitPointsReady resolves once space.js has run. */
-    (function () {
-      var lite = matchMedia("(max-width: 767px), (pointer: coarse)").matches ? "-lite" : "";
-      function add(list, done) {
-        list.forEach(function (src, i) {
-          var s = document.createElement("script");
-          s.src = src; s.async = false;
-          if (done && i === list.length - 1) { s.onload = done; s.onerror = done; }
-          document.body.appendChild(s);
-        });
-      }
-      var fire, started = false;
-      window.OrbitPointsReady = new Promise(function (ok) { fire = ok; });
-      function points() {
-        if (started) return; started = true;
-        /* (5 Nov 2026, clean-up) outline + forms points are no longer loaded: they fed only the old point film
-           in the hero (scene "space"), which no section uses since the hero became a real scan. space.js skips
-           them when missing (checked: same picture with and without, no errors). Files kept in assets/space/. */
-        add(["assets/space/exterior" + lite + ".js", "assets/space/interior" + lite + ".js", "js/space.js"], function () { fire(); });
-      }
-      add(["js/stage.js", "js/stage-stream.js", "js/stage-aerial.js", "js/stage-tour.js", "js/stage-stack.js"], function () {
-        var core = window.OrbitStage && window.OrbitStage._core, gl = false;
-        try { var g = document.createElement("canvas").getContext("webgl2"); gl = !!g; var x = g && g.getExtension("WEBGL_lose_context"); if (x) x.loseContext(); } catch (e) {}
-        if (!core || !core.laneAfter || !gl || location.protocol === "file:") { points(); return; }
-        core.laneAfter("hero").then(points);
-        setTimeout(points, 9000);
-        var scan = document.getElementById("scan");
-        if (scan && "IntersectionObserver" in window) {
-          var io = new IntersectionObserver(function (en) { if (en.some(function (e) { return e.isIntersecting; })) { io.disconnect(); points(); } });
-          io.observe(scan);
-        }
-      });
-    })();
-  </script>
-  <script src="js/sections/hero.js"></script>
-  <script src="js/sections/scan.js"></script>
-  <script src="js/sections/walk.js"></script>
-  <script src="js/sections/compare.js"></script>
-  <script src="js/sections/design.js"></script>
-  <script src="js/sections/floor.js"></script>
-  <script src="js/sections/examples.js"></script>
   <script src="js/sections/contact.js"></script>
+  <script src="js/design-file.js"></script>
+  <script src="js/sections/examples.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/story-3d.js" defer></script>
+  <script src="js/site-extras.js"></script>
 </body>
 </html>

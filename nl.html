@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="nl" data-palette="void" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- (8 Nov 2026, SEO) words people search for in the title; "Step into space." stays the slogan (heading +
+       the og:title a shared link shows). Dutch: story-nl.js seo26a01. -->
+  <title>3D-scan en virtuele rondleiding van je woning | Orbit 3D</title>
+  <meta name="description" content="Loop door een echte 3D-scan van je huis en probeer meubels en kleuren uit in het 3D-model. In één link, op elk apparaat. Vlieg in vanaf de straat en stap door de voordeur.">
+  <meta name="theme-color" content="#0b0c0e">
+  <link rel="icon" type="image/png" href="assets/brand/favicon.png">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <!-- (7 Nov 2026) the main address for Google + the picture and words a shared link shows (WhatsApp, LinkedIn ...) -->
+  <link rel="canonical" href="https://orbit3d.nl/nl.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Orbit 3D">
+  <meta property="og:url" content="https://orbit3d.nl/nl.html">
+  <meta property="og:title" content="Orbit 3D | Stap de ruimte in.">
+  <meta property="og:description" content="3D-scans en 3D-modellen van echte huizen om doorheen te lopen, in één link, op elk apparaat.">
+  <meta property="og:image" content="https://orbit3d.nl/assets/story/share/orbit3d-share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Een echte 3D-scan van een woonblok, vanuit de lucht">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" href="assets/story/poster.webp" media="(min-width: 768px)">
+  <link rel="preload" as="image" href="assets/story/poster-phone.webp" media="(max-width: 767px)">
+  <script>if (location.protocol !== "file:") { var l = document.createElement("link"); l.rel = "preload"; l.as = "font"; l.type = "font/woff2"; l.href = "assets/fonts/geist-latin.woff2"; l.crossOrigin = ""; document.head.appendChild(l); }</script>
+  <script>if (!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { document.documentElement.classList.add("rv"); setTimeout(function () { if (!window.OrbitReveal) document.documentElement.classList.add("rv-off"); }, 3000); }</script>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/language.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/story.css">
+  <link rel="stylesheet" href="css/sections/examples.css">
+  <link rel="stylesheet" href="css/sections/contact.css">
+  <link rel="stylesheet" href="css/book.css">
+  <link rel="stylesheet" href="css/site-extras.css">
+  <script>window.ORBIT_NAV_OF = { top: "#top", c0: "#top", c1: "#top", c2: "#inside", c3: "#inside", c4: "#inside", c5: "#design", c6: "#design", c7: "#design", c8: "#upstairs", c9: "#upstairs", examples: "#examples" };
+    window.ORBIT_NAV_STEPS = ["#top", "#inside", "#design", "#upstairs", "#examples"];
+    // the results' live viewers (js/sections/examples.js) wait until the visitor is near the end of the story
+    window.ORBIT_EXAMPLES_LATE = true;
+    window.OrbitStage = { _core: { laneAfter: function () { return new Promise(function (ok) { var t = setInterval(function () { var s = window.OrbitStory && window.OrbitStory.state; if (s && s.P >= 8.3) { clearInterval(t); ok(); } }, 400); }); } } };</script>
+  <script src="js/translations.js"></script>
+  <script src="js/story-nl.js"></script>
+  <script src="js/language.js" defer></script>
+  <script src="js/glider.js" defer></script>
+  <script src="js/press.js" defer></script>
+  <script src="js/reveal.js" defer></script>
+  <link rel="alternate" hreflang="en" href="https://orbit3d.nl/">
+  <link rel="alternate" hreflang="nl" href="https://orbit3d.nl/nl.html">
+  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:locale:alternate" content="en_GB">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://orbit3d.nl/#org", "name": "Orbit 3D", "legalName": "3DGS Orbit Studio", "url": "https://orbit3d.nl/", "logo": "https://orbit3d.nl/assets/brand/apple-touch-icon.png", "email": "Jack@orbit3d.nl", "vatID": "NL869615002B01", "identifier": {"@type": "PropertyValue", "propertyID": "KvK", "value": "42080166"}, "areaServed": {"@type": "Country", "name": "Netherlands"}}, {"@type": "WebSite", "@id": "https://orbit3d.nl/#site", "url": "https://orbit3d.nl/", "name": "Orbit 3D", "publisher": {"@id": "https://orbit3d.nl/#org"}, "inLanguage": ["en", "nl"]}, {"@type": "Service", "provider": {"@id": "https://orbit3d.nl/#org"}, "areaServed": {"@type": "Country", "name": "Netherlands"}, "serviceType": "3D-scannen", "name": "3D-scan en virtuele rondleiding van je woning", "description": "Een 3D-scan van een echt huis om doorheen te lopen, plus een 3D-model om meubels en kleuren uit te proberen, in één link.", "url": "https://orbit3d.nl/nl.html"}]}</script>
+</head>
+<!-- ORBIT STORY SITE (5 Nov 2026, James picked option A "Quiet chapters"). One scroll story, from the street to the
+     first floor: the real scan from the air, the house as a 3D model, the garden with a drag line between model and
+     scan, walking in, swapping furniture, a lamp, paint, and up the stairs. It only loads what the camera shows
+     (js/story-3d.js); exploring freely is the Orbit viewer in the results further down. Made by tools/build_story.py,
+     see story/EXPLANATION.md. -->
+<body class="storysite">
+  <a class="sr-only" href="#main"><orbit-text data-i18n="617202bcf9">Naar de inhoud</orbit-text></a>
+  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, EN | NL, orange "Contact us").
+       "How it works" holds the five parts of the story; the pill shows the part you are in (js/main.js with
+       window.ORBIT_NAV_OF / ORBIT_NAV_STEPS from js/story.js).  = "" on the main page, "index.html" elsewhere. -->
+  <header class="nav" data-nav>
+    <div class="nav__island">
+      <a class="nav__logo" href="#top" aria-label="Orbit 3D, thuis">
+        <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22">
+      </a>
+      <nav class="nav__caps" aria-label="Hoofdmenu">
+        <div class="nav__story">
+          <button type="button" class="nav__chip nav__story-btn" aria-expanded="false" aria-controls="nav-story" data-story-btn>
+            <span class="nav__label" aria-hidden="true">
+              <span data-step-label=""><orbit-text data-i18n="914d83456d">Hoe het werkt</orbit-text></span><span data-step-label="#top"><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></span><span data-step-label="#inside"><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></span><span data-step-label="#design"><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></span><span data-step-label="#upstairs"><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></span><span data-step-label="#examples"><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></span>
+            </span>
+            <span class="sr-only" data-step-sr><orbit-text data-i18n="97416feb68">Hoe het werkt</orbit-text></span>
+            <span class="nav__dots" aria-hidden="true"><i data-dot="#top"></i><i data-dot="#inside"></i><i data-dot="#design"></i><i data-dot="#upstairs"></i><i data-dot="#examples"></i></span>
+            <svg class="nav__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="nav__drop" id="nav-story" hidden>
+            <ul class="nav__links" role="list">
+              <li><a href="#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></b><small><orbit-text data-i18n="st26a03">De hele plek, vanuit de lucht</orbit-text></small></a></li>
+              <li><a href="#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></b><small><orbit-text data-i18n="st26a04">Echte scan of 3D-model, jij kiest</orbit-text></small></a></li>
+              <li><a href="#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Verander de meubels en kleuren</orbit-text></small></a></li>
+              <li><a href="#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></b><small><orbit-text data-i18n="st26a05">In één sprong de trap op</orbit-text></small></a></li>
+              <li><a href="#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Afgemaakte ruimtes, en je eigen ontwerp</orbit-text></small></a></li>
+            </ul>
+          </div>
+        </div>
+        <a class="nav__chip" href="jouw-ontwerp.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">Bekijk je ontwerp</orbit-text></a>
+        <a class="nav__chip" href="prijzen.html" data-page-link="pricing"><orbit-text data-i18n="f6b4e37dda">Prijzen</orbit-text></a>
+        <a class="nav__chip" href="over-ons.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">Over ons</orbit-text></a>
+      </nav>
+      <div class="nav__end">
+        <div class="language-switch" role="group" aria-label="Language / Taal">
+          <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+          <button type="button" data-language="nl" lang="nl" aria-label="Nederlands" aria-pressed="false">NL</button>
+        </div>
+        <button type="button" class="nav__menu" aria-expanded="false" aria-controls="nav-sheet" data-menu-btn>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path class="nav__menu-a" d="M3 7h14"/><path class="nav__menu-b" d="M3 13h14"/></svg>
+          <span data-menu-text><orbit-text data-i18n="b9c827b8c8">Menu</orbit-text></span>
+        </button>
+        <a class="btn btn--accent nav__cta" href="#contact"><orbit-text data-i18n="fc313f67b0">Contact</orbit-text></a>
+      </div>
+    </div>
+    <div class="nav__sheet" id="nav-sheet" hidden>
+      <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">Hoe het werkt</orbit-text></p>
+      <ul class="nav__sheet-steps" role="list">
+        <li><a href="#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></a></li>
+        <li><a href="#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></a></li>
+        <li><a href="#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></a></li>
+        <li><a href="#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></a></li>
+        <li><a href="#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></a></li>
+      </ul>
+      <ul class="nav__sheet-pages" role="list">
+        <li><a href="jouw-ontwerp.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">Bekijk je ontwerp</orbit-text> <span aria-hidden="true">→</span></a></li>
+        <li><a href="prijzen.html" data-page-link="pricing"><orbit-text data-i18n="f6b4e37dda">Prijzen</orbit-text> <span aria-hidden="true">→</span></a></li>
+        <li><a href="over-ons.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">Over ons</orbit-text> <span aria-hidden="true">→</span></a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <section id="top" class="story" data-story aria-labelledby="top-title">
+      <!-- the stage: stays on screen while the chapters below scroll past -->
+      <div class="story__stage" data-stage>
+        <div class="story__poster" data-poster aria-hidden="true"></div>
+        <canvas class="story__canvas" data-canvas aria-hidden="true"></canvas>
+        <div class="story__shade" aria-hidden="true"></div>
+        <p class="story__load" data-load role="status"><span></span><orbit-text data-i18n="st26b01">De scan laadt</orbit-text></p>
+
+        <!-- pin over the house -->
+        <div class="sd-pin" data-pin aria-hidden="true"><span><orbit-text data-i18n="st26b02">Dit huis</orbit-text><small><orbit-text data-i18n="st26b03">Scroll om naar binnen te gaan</orbit-text></small></span><i></i></div>
+
+        <!-- chapter words (option A: low on the left) -->
+        <div class="chap chap--hero is-on" data-words="0">
+          <p class="chap__eyebrow"><orbit-text data-i18n="328af22cef">ECHTE PLEKKEN. NIEUWE MOGELIJKHEDEN.</orbit-text></p>
+          <h1 id="top-title" class="chap__hero"><orbit-text data-i18n="b708536e79">Stap De<br>Ruimte In.</orbit-text></h1>
+          <p class="chap__sub"><orbit-text data-i18n="3eb1148524">Ontdek en creëer een ruimte waar en wanneer je wilt.<br>Probeer het nu zelf.</orbit-text></p>
+          <div class="chap__act">
+            <a class="btn btn--accent" href="#c1" data-jump="1"><orbit-text data-i18n="eb6155f421">Ontdek deze ruimte</orbit-text></a>
+            <a class="chap__more" href="#examples"><orbit-text data-i18n="37b81b70b7">Zie de mogelijkheden</orbit-text></a>
+          </div>
+        </div>
+        <div class="chap" data-words="1"><p class="chap__n">01 / 09 · <orbit-text data-i18n="st26c01">Buiten</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="6c3f751fd2">Een ruimte</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="2af1af711a">Geen tekening. Geen render. De plek zelf</orbit-text></p></div>
+        <div class="chap" data-words="2"><p class="chap__n">02 / 09 · <orbit-text data-i18n="st26c04">3D-model</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="0ef0ee47ec">Ontdek nu wat het kan worden</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="b135069000">Het 3D-model, gemaakt van dezelfde scan. Drie stops, drie dingen om te proberen.</orbit-text></p></div>
+        <div class="chap" data-words="3"><p class="chap__n">03 / 09 · <orbit-text data-i18n="st26c07">Tuin</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26c08">Echt, of 3D?</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c09">Sleep de lijn. Links het 3D-model, rechts de echte scan. Dezelfde tuin, dezelfde plek.</orbit-text></p></div>
+        <div class="chap" data-words="4"><p class="chap__n">04 / 09 · <orbit-text data-i18n="st26c10">Naar binnen</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="59c6aa13ab">Ervaar het eerst</orbit-text> <span><orbit-text data-i18n="01b8dd2018">Alsof je er al bent</orbit-text></span></h2><p class="chap__p"><orbit-text data-i18n="cfd584e478">Draai je om. Elke hoek is echt.</orbit-text></p></div>
+        <div class="chap" data-words="5"><p class="chap__n">05 / 09 · <orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="4ff023a70f">Niet jouw stijl?<br>Verander het!</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c14">Tik op een meubel om het te wisselen, sleep het om het te verplaatsen. Honderden echte meubels, op maat voor de kamer.</orbit-text></p>
+          <div class="chap__try"><button type="button" class="btn sd-glass" data-try><orbit-text data-i18n="st26c15">Probeer het zelf</orbit-text></button></div></div>
+        <div class="chap" data-words="6"><p class="chap__n">06 / 09 · <orbit-text data-i18n="st26c16">Licht</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="b88d941361">Licht aan of uit.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c18">Elke lamp werkt. Tik op een lamp om hem aan of uit te zetten en zie de kamer veranderen.</orbit-text></p></div>
+        <div class="chap" data-words="7"><p class="chap__n">07 / 09 · <orbit-text data-i18n="st26c19">Verf</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26c20">Elke kleur.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c21">Verf één muur of de hele kamer. Alleen het model verandert, de scan blijft echt.</orbit-text></p></div>
+        <div class="chap" data-words="8"><p class="chap__n">08 / 09 · <orbit-text data-i18n="st26c22">Boven</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text>.</h2><p class="chap__p"><orbit-text data-i18n="st26c23">In één sprong de trap op. Het hele huis, verdieping voor verdieping.</orbit-text></p></div>
+        <div class="chap" data-words="9"><p class="chap__n">09 / 09 · <orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></p><h2 class="chap__t"><orbit-text data-i18n="st26c24">Nu ben jij aan de beurt.</orbit-text></h2><p class="chap__p"><orbit-text data-i18n="st26c25">Open hieronder een klaar project en loop zelf rond.</orbit-text></p></div>
+
+        <!-- the drag line (chapter 3) -->
+        <div class="sd-wipe" data-wipe hidden>
+          <span class="sd-wipe__tag"><orbit-text data-i18n="7ffb22dcdc">3D Model</orbit-text></span>
+          <span class="sd-wipe__tag is-r"><orbit-text data-i18n="6aa4d4408b">De scan</orbit-text></span>
+          <div class="sd-wipe__line" data-wipe-line role="slider" tabindex="0" aria-label="Lijn tussen het 3D-model en de echte scan" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></i></div>
+        </div>
+
+        <!-- the design demo (chapters 5-7): glossy panels like the Orbit viewer, a guiding cursor -->
+        <div class="sd-box" data-box aria-hidden="true"><span class="sd-box__tag"><span data-box-tag></span><small><orbit-text data-i18n="st26e25">Sleep om te verplaatsen</orbit-text></small></span></div>
+        <!-- the three lamps: tap rings over them (chapter 6) -->
+        <button type="button" class="sd-lamp" data-lamp="0" hidden aria-pressed="true"><span class="sr-only"><orbit-text data-i18n="st26e26">Plafondlamp</orbit-text></span></button>
+        <button type="button" class="sd-lamp" data-lamp="1" hidden aria-pressed="true"><span class="sr-only"><orbit-text data-i18n="st26e26">Plafondlamp</orbit-text></span></button>
+        <button type="button" class="sd-lamp" data-lamp="2" hidden aria-pressed="true"><span class="sr-only"><orbit-text data-i18n="st26e27">Eettafellamp</orbit-text></span></button>
+        <p class="sd-look" data-look aria-hidden="true"><orbit-text data-i18n="st26e29">Sleep om rond te kijken</orbit-text></p>
+        <aside class="sd-panel sd-panel--furn" data-panel="furniture" hidden aria-label="Swap the furniture">
+          <!-- 5 Nov night (James): the tabs work (they filter the pieces and pick which piece in the room you change);
+               the title and the line under it follow the piece (js/story.js).
+               7 Nov (James: "can I not adjust this?"): phones show one row of pieces; swipe the grab bar up (or tap
+               "More pieces") for all of them, down to make it small again, like the paint sheet -->
+          <button type="button" class="sd-panel__grab" data-grab aria-expanded="false" aria-label="Show all pieces"></button>
+          <header class="sd-panel__head"><div><b data-slot-name>Salontafel</b><small data-slot-room>In de woonkamer. Hier is plek voor 110 × 90 cm</small></div>
+            <button type="button" class="sd-panel__more" data-more aria-expanded="false"><span class="is-more"><orbit-text data-i18n="st26e32">Meer meubels</orbit-text></span><span class="is-less"><orbit-text data-i18n="st26e33">Minder meubels</orbit-text></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></header>
+          <div class="sd-chips" role="tablist" aria-label="Kind of furniture" data-chips>
+            <button type="button" role="tab" data-cat="all" aria-selected="true"><orbit-text data-i18n="st26d03">Alles</orbit-text> <i></i></button>
+            <button type="button" role="tab" data-cat="sofa" aria-selected="false"><orbit-text data-i18n="st26d04">Banken</orbit-text> <i></i></button>
+            <button type="button" role="tab" data-cat="table" aria-selected="false"><orbit-text data-i18n="st26d06">Tafels</orbit-text> <i></i></button>
+          </div>
+          <div class="sd-tiles" data-tiles></div>
+        </aside>
+        <aside class="sd-panel sd-panel--paint" data-panel="paint" hidden aria-label="Paint the wall">
+          <!-- phones: one row of colours; swipe the grab bar up (or tap "More colours") for all of them -->
+          <button type="button" class="sd-panel__grab" data-grab aria-expanded="false" aria-label="Show all colours"></button>
+          <header class="sd-panel__head"><div><b><orbit-text data-i18n="st26d07">Verf en vloeren</orbit-text></b><small><orbit-text data-i18n="st26d08">Eén muur van de woonkamer</orbit-text></small></div>
+            <button type="button" class="sd-panel__more" data-more aria-expanded="false"><span class="is-more"><orbit-text data-i18n="st26e30">Meer kleuren</orbit-text></span><span class="is-less"><orbit-text data-i18n="st26e31">Minder kleuren</orbit-text></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></header>
+          <div class="sd-swatches" data-swatches></div>
+        </aside>
+        <button type="button" class="sd-switch" data-switch hidden aria-pressed="true"><i aria-hidden="true"></i><span><orbit-text data-i18n="st26e28">Alle lampen</orbit-text></span></button>
+        <div class="sd-floors" data-floors hidden aria-hidden="true"><span data-fl="0"><orbit-text data-i18n="st26d11">Begane grond</orbit-text></span><span data-fl="1"><orbit-text data-i18n="st26d12">1e</orbit-text></span><span data-fl="2"><orbit-text data-i18n="st26d13">2e</orbit-text></span></div>
+        <p class="sd-toast" data-toast hidden></p>
+        <div class="sd-cursor" data-cursor aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l16 9-7 1.6L9.6 20z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+
+        <!-- where you are: a rail on the right (computers), a thin bar under the top bar (phones) -->
+        <nav class="rail" data-rail aria-label="Stappen van het verhaal"></nav>
+        <div class="bar" data-bar aria-hidden="true"></div>
+        <a class="story__cue" href="#c1" data-jump="1" data-cue><span><orbit-text data-i18n="8a6de4a1f2">Scrollen</orbit-text></span><i aria-hidden="true"></i></a>
+      </div>
+
+      <!-- the scroll track: one block per chapter (its height = how long that part plays) -->
+      <div class="story__track" aria-hidden="true">
+        <div class="story__c" id="c0" data-nav-zone="top" data-chap="0" style="--len:90"></div>
+        <div class="story__c" id="c1" data-nav-zone="top" data-chap="1" style="--len:300"></div>
+        <div class="story__c" id="c2" data-nav-zone="inside" data-chap="2" style="--len:150"><span class="story__mark" id="inside"></span></div>
+        <div class="story__c" id="c3" data-nav-zone="inside" data-chap="3" style="--len:170"></div>
+        <div class="story__c" id="c4" data-nav-zone="inside" data-chap="4" style="--len:170"></div>
+        <div class="story__c" id="c5" data-nav-zone="design" data-chap="5" style="--len:300"><span class="story__mark" id="design"></span></div>
+        <div class="story__c" id="c6" data-nav-zone="design" data-chap="6" style="--len:200"></div>
+        <div class="story__c" id="c7" data-nav-zone="design" data-chap="7" style="--len:200"></div>
+        <div class="story__c" id="c8" data-nav-zone="upstairs" data-chap="8" style="--len:220"><span class="story__mark" id="upstairs"></span></div>
+        <div class="story__c" id="c9" data-nav-zone="upstairs" data-chap="9" style="--len:60"></div>
+      </div>
+    </section>
+
+<section id="examples" class="sec sec--examples" data-scene="calm" aria-labelledby="examples-title">
+  <!-- (3 Nov 2026, James: "just show our product there") "Results? Take a look" = our finished work only, no
+       step texts. Up to FOUR large frames, each filled from ORBIT_SITE.howto (js/embeds.js) by
+       js/sections/examples.js: a live Orbit viewer (loads on tap), a picture or a video. Empty frames are
+       hidden online. Old version with the four steps: work/backup-20261103-examples/. -->
+  <div class="wrap examples__wrap">
+    <header class="examples__head">
+      <h2 id="examples-title" class="examples__title" data-reveal><orbit-text data-i18n="79e991b5ee">Resultaat?<br>Neem een kijkje.</orbit-text></h2>
+      <p class="examples__lede" data-reveal style="--i:1"><orbit-text data-i18n="837a32fe83">Van één bezoek tot een link die je kunt delen.</orbit-text></p>
+    </header>
+    <ol class="examples__list" role="list" data-examples-list>
+      <li class="examples__card" data-reveal><div class="examples__media" data-media></div></li>
+      <li class="examples__card" data-reveal style="--i:1"><div class="examples__media" data-media></div></li>
+      <li class="examples__card" data-reveal><div class="examples__media" data-media></div></li>
+      <li class="examples__card" data-reveal style="--i:1"><div class="examples__media" data-media></div></li>
+    </ol>
+    <!-- (4 Nov 2026, James) "Already designed?" = a sub-section of its own under the results, in its own frame:
+         a visitor who saved their design in the Orbit viewer ("Save to file") uploads that .json here and sees
+         it again on view-design.html (js/sections/examples.js + js/design-file.js; nothing goes to a server).
+         Behind it real furniture pieces float in live 3D (js/float-furniture.js, still picture first). -->
+    <section class="mine" aria-labelledby="mine-title" data-reveal>
+      <div class="mine__frame bezel bezel--stage">
+        <div class="mine__core bezel__core" data-design-drop>
+          <div class="furn mine__furn" data-furniture="card" aria-hidden="true">
+            <picture>
+              <source media="(max-width: 767px)" srcset="assets/furniture/still-card-phone.webp">
+              <img class="furn__still" src="assets/furniture/still-card.webp" alt="" loading="lazy" decoding="async">
+            </picture>
+          </div>
+          <div class="mine__body">
+            <p class="mine__label"><orbit-text data-i18n="d3a1c00109">Je eigen ontwerp</orbit-text></p>
+            <h3 id="mine-title" class="mine__title"><orbit-text data-i18n="d3a1c00072">Al ontworpen?</orbit-text></h3>
+            <p class="mine__text"><orbit-text data-i18n="d3a1c00073">Je ontwerp in Orbit bewaard? Upload het bestand en zie het terug.</orbit-text></p>
+            <ol class="mine__steps" role="list">
+              <li><b><orbit-text data-i18n="d3a1c00110">Ontwerp in Orbit</orbit-text></b><span><orbit-text data-i18n="d3a1c00111">Verplaats, wissel en verf met de Design-tools.</orbit-text></span></li>
+              <li><b><orbit-text data-i18n="d3a1c00112">Bewaar als bestand</orbit-text></b><span><orbit-text data-i18n="d3a1c00113">Eén klein bestand, op je eigen apparaat.</orbit-text></span></li>
+              <li><b><orbit-text data-i18n="d3a1c00114">Upload hier</orbit-text></b><span><orbit-text data-i18n="d3a1c00115">Je huis opent met jouw ontwerp erin.</orbit-text></span></li>
+            </ol>
+            <div class="mine__act">
+              <button type="button" class="btn btn--accent mine__btn" data-design-pick>
+                <svg class="up-arrow" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path class="up-arrow__a" d="M12 15.5V4.5m0 0-4.5 4.5M12 4.5l4.5 4.5"/><path d="M5 14.5v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3"/></svg>
+                <orbit-text data-i18n="d3a1c00074">Upload je ontwerp</orbit-text>
+              </button>
+              <span class="mine__drop"><orbit-text data-i18n="d3a1c00075">of sleep het bestand hierheen</orbit-text></span>
+            </div>
+            <p class="mine__note" role="alert" data-design-error hidden></p>
+            <input class="mine__input" type="file" accept=".json,application/json" tabindex="-1" aria-hidden="true" data-design-input>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+    <section id="contact" class="sec sec--contact" aria-labelledby="contact-title">
+      <div class="wrap contact__wrap">
+        <div class="seg1 contact__close">
+          <h2 id="contact-title" class="contact__title" data-reveal><orbit-text data-i18n="1d4c96699b">Jouw ruimte.<br>Een nieuw perspectief.</orbit-text></h2>
+          <div class="contact__act" data-reveal style="--i:1">
+            <a class="btn btn--accent contact__cta" data-book-open="call" data-magnet href="#contact"><orbit-text data-i18n="d3a1c00062">Plan een gesprek</orbit-text></a>
+            <a class="btn contact__cta contact__cta--alt" data-book-open="email" href="#contact"><orbit-text data-i18n="d3a1c00063">Via e-mail</orbit-text></a>
+          </div>
+<!-- Book a call / Via email (3 Nov 2026, James). Shared part: tools/build.py puts it where a page has the "@book" marker.
+     Opened by any button with data-book-open="call" or "email" (js/book.js). Call mode: name, company (optional),
+     email, short message, then a day and a time. Email mode: the same without day and time.
+     Send: to ORBIT_SITE.booking.endpoint (js/embeds.js) once the calendar is set up; until then it opens an email
+     to ORBIT_SITE.email with everything filled in. -->
+<div class="book" id="book" data-book data-mode="call" inert>
+  <div class="book__clip">
+    <form class="book__form" data-book-form novalidate>
+      <p class="book__head" data-book-head>
+        <span data-book-only="call"><orbit-text data-i18n="d3a1c00052">Plan een gesprek met ons</orbit-text></span>
+        <span data-book-only="email" hidden><orbit-text data-i18n="d3a1c00053">Stuur ons een e-mail</orbit-text></span>
+      </p>
+      <div class="book__row">
+        <label class="book__field">
+          <span class="book__label"><orbit-text data-i18n="d3a1c00054">Naam</orbit-text></span>
+          <input class="book__input" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Guy" required>
+        </label>
+        <label class="book__field">
+          <span class="book__label"><orbit-text data-i18n="d3a1c00055">Bedrijf</orbit-text> <span class="book__opt"><orbit-text data-i18n="d3a1c00056">(optioneel)</orbit-text></span></span>
+          <input class="book__input" name="company" type="text" autocomplete="organization" maxlength="80" placeholder="Orbit3D">
+        </label>
+      </div>
+      <label class="book__field">
+        <span class="book__label"><orbit-text data-i18n="d3a1c00057">Contactgegevens: e-mail</orbit-text></span>
+        <input class="book__input" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" placeholder="guy@example.nl" required>
+      </label>
+      <label class="book__field">
+        <span class="book__label"><orbit-text data-i18n="d3a1c00058">Kort bericht</orbit-text></span>
+        <textarea class="book__input book__area" name="message" rows="4" maxlength="1000" placeholder="Ik wil graag praten over..."></textarea>
+      </label>
+      <fieldset class="book__when" data-book-only="call">
+        <legend class="book__label"><orbit-text data-i18n="d3a1c00059">Kies een dag</orbit-text></legend>
+        <div class="book__chips book__days" data-book-days></div>
+        <div class="book__times" data-book-times hidden>
+          <p class="book__label"><orbit-text data-i18n="d3a1c00060">Kies een tijd</orbit-text></p>
+          <div class="book__chips" data-book-times-row></div>
+        </div>
+      </fieldset>
+      <!-- (4 Nov 2026) spam trap: hidden from people and screen readers, robots fill it in; the backend ignores those -->
+      <div class="book__trap" aria-hidden="true"><label>Website <input name="website" type="text" tabindex="-1" autocomplete="off" maxlength="200"></label></div>
+      <!-- (4 Nov 2026) GDPR art. 13: say what happens with the details where they are asked for -->
+      <p class="book__privacy"><orbit-text data-i18n="legal26a04">We gebruiken je gegevens alleen om je te antwoorden en het gesprek te plannen. Lees hoe in onze</orbit-text> <a href="privacyverklaring.html"><orbit-text data-i18n="legal26a05">privacyverklaring</orbit-text></a>.</p>
+      <div class="book__foot">
+        <button class="btn btn--accent book__send" type="submit"><orbit-text data-i18n="d3a1c00061">Versturen</orbit-text></button>
+        <p class="book__status" data-book-status role="status" aria-live="polite"></p>
+      </div>
+      <!-- (4 Nov 2026, James: SENT-MESSAGE-D5-D1.md) after a successful send: D5 "Stamped" for a call,
+           D1 "Points become the check" for an email (js/book.js showDone) -->
+      <div class="book__done" data-book-done="call" hidden>
+        <div class="book__done-shake">
+          <div class="book__cal" aria-hidden="true">
+            <div class="book__cal-m" data-cal-week></div>
+            <div class="book__cal-d" data-cal-day></div>
+            <div class="book__cal-y" data-cal-month></div>
+            <div class="book__stamp" data-cal-stamp></div>
+          </div>
+          <p class="book__done-title" data-done-title role="status"></p>
+          <p class="book__done-sub" data-done-sub></p>
+          <button class="btn book__done-back" type="button" data-book-again><orbit-text data-i18n="book26d01">Terug</orbit-text></button>
+        </div>
+      </div>
+      <div class="book__done book__done--dust" data-book-done="email" hidden>
+        <canvas class="book__dust" aria-hidden="true"></canvas>
+        <div class="book__dust-text">
+          <p class="book__done-title" data-done-title role="status"></p>
+          <p class="book__done-sub" data-done-sub></p>
+          <button class="btn book__done-back" type="button" data-book-again><orbit-text data-i18n="book26d01">Terug</orbit-text></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+        </div>
+        <footer class="contact__foot">
+          <a href="#top" class="contact__logo" aria-label="Orbit 3D, terug naar boven">
+            <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
+          </a>
+          <nav class="contact__nav" aria-label="Voettekst">
+            <a href="#inside"><orbit-text data-i18n="4a8890578d">Hoe het werkt</orbit-text></a>
+            <a href="jouw-ontwerp.html"><orbit-text data-i18n="d3a1c00087">Bekijk je ontwerp</orbit-text></a>
+            <a href="prijzen.html"><orbit-text data-i18n="7b7dfcebe6">Prijzen</orbit-text></a>
+            <a href="over-ons.html"><orbit-text data-i18n="2492b280ea">Over ons</orbit-text></a>
+          </nav>
+          <p class="meta contact__copy"><span class="tagline contact__tag"><orbit-text data-i18n="82e263ab7f">Stap de ruimte in.</orbit-text></span> <orbit-text data-i18n="cb5e8f7e4e">© 2026 3DGS Orbit Studio</orbit-text></p>
+<!-- Legal strip (4 Nov 2026, James: "compliant with EU rules"). Shared part: tools/build.py puts it where a page has
+     the "@legal" marker (main page footer + every sub page footer). Dutch law (Handelsregisterbesluit art. 27,
+     BW 3:15d) asks for the registered name, KvK number, VAT number and address on the website. The address comes
+     from ORBIT_SITE.company.address in js/embeds.js (js/main.js fills it; hidden while empty). -->
+<div class="legal-strip" role="group" aria-label="Bedrijfsgegevens">
+  <p class="legal-strip__ids">
+    <span>3DGS Orbit Studio</span>
+    <span data-company-address hidden><span data-company-address-text></span></span>
+    <span>KvK 42080166</span>
+    <span><orbit-text data-i18n="legal26a01">Btw</orbit-text> NL869615002B01</span>
+  </p>
+  <p class="legal-strip__links">
+    <a href="privacyverklaring.html"><orbit-text data-i18n="legal26a02">Privacy &amp; cookies</orbit-text></a>
+    <a href="juridisch.html"><orbit-text data-i18n="legal26a03">Juridisch</orbit-text></a>
+  </p>
+</div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- (7 Nov 2026) phones: "Book a call" stays at the bottom from the results down to the contact section (js/site-extras.js) -->
+  <a class="btn btn--accent stick-cta" data-stick-cta data-book-open="call" href="#contact"><orbit-text data-i18n="d3a1c00062">Plan een gesprek</orbit-text></a>
+
+  <script src="js/embeds.js"></script>
+  <script src="js/story-data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/book.js"></script>
+  <script src="js/sections/contact.js"></script>
+  <script src="js/design-file.js"></script>
+  <script src="js/sections/examples.js"></script>
+  <script src="js/story.js"></script>
+  <script src="js/story-3d.js" defer></script>
+  <script src="js/site-extras.js"></script>
+</body>
+</html>

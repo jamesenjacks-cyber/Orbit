@@ -1,0 +1,23 @@
+/* Story site extras (7 Nov 2026, James: "make the site real" list). Loaded by every story page.
+   1. A black backing behind the top bar once the page scrolls under it (results, contact, sub pages), so text
+      never runs through the logo (js/site-extras.js sets .is-solid on .nav).
+   2. Phones: a "Book a call" button that stays at the bottom from the results down to the contact section. */
+.nav::before {
+  content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: -10px; height: 98px; pointer-events: none;
+  background: linear-gradient(to bottom, var(--space, #0b0c0e) 0, var(--space, #0b0c0e) 66%, rgba(11, 12, 14, 0) 100%);
+  opacity: 0; transition: opacity .35s ease;
+}
+.nav.is-solid::before { opacity: 1; }
+
+.stick-cta { display: none; }
+@media (max-width: 899px) {
+  .stick-cta {
+    display: flex; position: fixed; z-index: 40; left: 50%; bottom: max(16px, env(safe-area-inset-bottom));
+    transform: translate(-50%, 140%); opacity: 0; pointer-events: none;
+    min-height: 52px; padding: 0 1.6rem; align-items: center; white-space: nowrap;
+    box-shadow: 0 14px 34px -12px rgba(0, 0, 0, .7);
+    transition: transform .4s cubic-bezier(.2, .8, .2, 1), opacity .3s ease;
+  }
+  .stick-cta.is-on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .stick-cta, .nav::before { transition: opacity .2s linear; } .stick-cta { transform: translate(-50%, 0); } }

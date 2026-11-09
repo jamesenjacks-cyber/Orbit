@@ -3,37 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Pricing | Orbit 3D</title>
+  <title>Pricing for 3D house scans | Orbit 3D</title>
   <meta name="description" content="What an Orbit 3D scan includes and how we price it. Tell us about your space and get a price.">
   <meta name="theme-color" content="#0b0c0e">
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <!-- (7 Nov 2026) main address for Google + what a shared link shows -->
+  <link rel="canonical" href="https://orbit3d.nl/pricing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Orbit 3D">
+  <meta property="og:url" content="https://orbit3d.nl/pricing.html">
+  <meta property="og:title" content="Pricing | Orbit 3D">
+  <meta property="og:description" content="What an Orbit 3D scan includes and how we price it. Tell us about your space and get a price.">
+  <meta property="og:image" content="https://orbit3d.nl/assets/story/share/orbit3d-share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A real 3D scan of a city block, seen from the air">
+  <meta name="twitter:card" content="summary_large_image">
   <script>if (location.protocol !== "file:") { var l = document.createElement("link"); l.rel = "preload"; l.as = "font"; l.type = "font/woff2"; l.href = "assets/fonts/geist-latin.woff2"; l.crossOrigin = ""; document.head.appendChild(l); }</script>
-  <!-- (4 Nov 2026) parts appear as you scroll (css/motion.css part 5, js/reveal.js). Hidden only when motion is
-       allowed; if js/reveal.js never runs, everything shows after 3 s. -->
   <script>if (!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) { document.documentElement.classList.add("rv"); setTimeout(function () { if (!window.OrbitReveal) document.documentElement.classList.add("rv-off"); }, 3000); }</script>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/pages.css">
   <link rel="stylesheet" href="css/language.css">
   <link rel="stylesheet" href="css/book.css">
   <link rel="stylesheet" href="css/motion.css">
+  <link rel="stylesheet" href="css/site-extras.css">
   <script src="js/translations.js"></script>
+  <script src="js/story-nl.js"></script>
   <script src="js/language.js" defer></script>
   <script src="js/glider.js" defer></script>
   <script src="js/press.js" defer></script>
   <script src="js/reveal.js" defer></script>
+  <link rel="alternate" hreflang="en" href="https://orbit3d.nl/pricing.html">
+  <link rel="alternate" hreflang="nl" href="https://orbit3d.nl/prijzen.html">
+  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/pricing.html">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:locale:alternate" content="nl_NL">
 </head>
-<!-- A page of its own (View your design, Pricing, About us, and Portfolio which is out of the menu since 4 Nov 2026). Made by tools/build.py from src/pages/<name>.html:
-     same top bar and colours as the main page, no 3D background (opens fast). -->
+<!-- Story site (5 Nov 2026): a page of its own (Pricing, About us, View your design, Privacy, Legal), made by
+     tools/build_story.py from the big site's src/pages/<name>.html with the story menu and footer. -->
 <body class="page page--pricing" data-page="pricing">
   <a class="sr-only" href="#main"><orbit-text data-i18n="444cdc672b">Skip to content</orbit-text></a>
-  <!-- (4 Nov 2026, James) "View your design" replaces Portfolio in the menu; portfolio.html is still built
-       from src/pages/portfolio.html, but no menu or footer links to it any more.
-       Top bar (30 Oct 2026, James picked option B "floating pills"): logo on its own, one glass capsule
-       in the middle, "Contact us" on its own. "How it works" holds the four story steps; on the main page
-       it shows the step you are in (js/main.js). Phones: logo + one small capsule (Menu | Contact us) at the
-       top, the menu opens as a glass sheet under it. Built into every page by tools/build.py
-       (index.html = "" on the main page, "index.html" on the other pages). -->
+  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, EN | NL, orange "Contact us").
+       "How it works" holds the five parts of the story; the pill shows the part you are in (js/main.js with
+       window.ORBIT_NAV_OF / ORBIT_NAV_STEPS from js/story.js). index.html = "" on the main page, "index.html" elsewhere. -->
   <header class="nav" data-nav>
     <div class="nav__island">
       <a class="nav__logo" href="index.html#top" aria-label="Orbit 3D, home">
@@ -43,19 +56,18 @@
         <div class="nav__story">
           <button type="button" class="nav__chip nav__story-btn" aria-expanded="false" aria-controls="nav-story" data-story-btn>
             <span class="nav__label" aria-hidden="true">
-              <span data-step-label=""><orbit-text data-i18n="914d83456d">How it works</orbit-text></span><span data-step-label="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></span><span data-step-label="#one-space"><orbit-text data-i18n="d3a1c00102">One space</orbit-text></span><span data-step-label="#compare"><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></span><span data-step-label="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></span><span data-step-label="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></span>
+              <span data-step-label=""><orbit-text data-i18n="914d83456d">How it works</orbit-text></span><span data-step-label="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></span><span data-step-label="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></span><span data-step-label="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></span><span data-step-label="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></span><span data-step-label="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></span>
             </span>
             <span class="sr-only" data-step-sr><orbit-text data-i18n="97416feb68">How it works</orbit-text></span>
-            <span class="nav__dots" aria-hidden="true"><i data-dot="#top"></i><i data-dot="#one-space"></i><i data-dot="#compare"></i><i data-dot="#design"></i><i data-dot="#examples"></i></span>
+            <span class="nav__dots" aria-hidden="true"><i data-dot="#top"></i><i data-dot="#inside"></i><i data-dot="#design"></i><i data-dot="#upstairs"></i><i data-dot="#examples"></i></span>
             <svg class="nav__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="nav__drop" id="nav-story" hidden>
             <ul class="nav__links" role="list">
-              <!-- (4 Nov 2026, James) five steps in page order; the pill shows the one you are in (js/main.js NAV_OF) -->
-              <li><a href="index.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="d3a1c00105">Who we are and what we make</orbit-text></small></a></li>
-              <li><a href="index.html#one-space"><i>02</i><b><orbit-text data-i18n="d3a1c00102">One space</orbit-text></b><small><orbit-text data-i18n="d3a1c00106">The whole place, from the air</orbit-text></small></a></li>
-              <li><a href="index.html#compare"><i>03</i><b><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></b><small><orbit-text data-i18n="d3a1c00107">Walk freely, not spot to spot</orbit-text></small></a></li>
-              <li><a href="index.html#design-start" data-step-link="#design"><i>04</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="index.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="st26a03">The whole place, from the air</orbit-text></small></a></li>
+              <li><a href="index.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Step inside</orbit-text></b><small><orbit-text data-i18n="st26a04">Real scan or 3D model, you choose</orbit-text></small></a></li>
+              <li><a href="index.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="index.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Every floor</orbit-text></b><small><orbit-text data-i18n="st26a05">Up the stairs in one jump</orbit-text></small></a></li>
               <li><a href="index.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
             </ul>
           </div>
@@ -80,9 +92,9 @@
       <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">How it works</orbit-text></p>
       <ul class="nav__sheet-steps" role="list">
         <li><a href="index.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
-        <li><a href="index.html#one-space" data-step-link="#one-space"><orbit-text data-i18n="d3a1c00102">One space</orbit-text></a></li>
-        <li><a href="index.html#compare" data-step-link="#compare"><orbit-text data-i18n="d3a1c00103">Not 360 photos</orbit-text></a></li>
-        <li><a href="index.html#design-start" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="index.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></a></li>
+        <li><a href="index.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="index.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></a></li>
         <li><a href="index.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
       </ul>
       <ul class="nav__sheet-pages" role="list">
@@ -213,8 +225,8 @@
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
       </a>
       <nav class="site-foot__nav" aria-label="Footer">
-        <a href="index.html#scan"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
-        <a href="view-design.html"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text></a>
+        <a href="index.html#inside"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
+        <a href="index.html#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a>
         <a href="pricing.html"><orbit-text data-i18n="b767503acc">Pricing</orbit-text></a>
         <a href="about.html"><orbit-text data-i18n="2ca466a9b9">About us</orbit-text></a>
         <a href="index.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Contact us</orbit-text></a>
@@ -243,5 +255,6 @@
   <script src="js/main.js"></script>
   <script src="js/pages.js"></script>
   <script src="js/book.js"></script>
+  <script src="js/site-extras.js"></script>
 </body>
 </html>
