@@ -80,10 +80,11 @@
     var dx = k.at[0] - k.pos[0], dy = k.at[1] - k.pos[1], dz = k.at[2] - k.pos[2], h = Math.hypot(dx, dz);
     return { yaw: Math.atan2(dx, dz), pitch: Math.atan2(dy, h), dist: Math.hypot(h, dy) };
   }
-  function track(T, P, d) {
+  function easeOut(k) { k = clamp(k, 0, 1); return 1 - Math.pow(1 - k, 3); }
+  function track(T, P, d, ez) {
     if (!T || !T.length) return d === undefined ? 0 : d;
     if (P <= T[0][0]) return T[0][1];
-    for (var i = 0; i < T.length - 1; i++) if (P <= T[i + 1][0]) return lerp(T[i][1], T[i + 1][1], smooth((P - T[i][0]) / (T[i + 1][0] - T[i][0] || 1)));
+    for (var i = 0; i < T.length - 1; i++) if (P <= T[i + 1][0]) return lerp(T[i][1], T[i + 1][1], (ez || smooth)((P - T[i][0]) / (T[i + 1][0] - T[i][0] || 1)));
     return T[T.length - 1][1];
   }
 
@@ -240,6 +241,40 @@
       var a = new pc.Asset(url, "container", { url: url });
       a.once("load", function () { ok(a); }); a.once("error", no);
       app.assets.add(a); app.assets.load(a);
+    });
+  }
+  // 9 Nov (James: "smoother transitions"): ceilings + roof show with k = 0..1. In between they float up (up to 2.2 m)
+  // and are see-through; at 1 they are the normal opaque parts again. Their materials are copied first, so walls that
+  // share a material never fade with them.
+  var TOP_LIFT = 2.2;
+  function setTops(p, k) {
+    if (!p.topMats) {
+      var copies = {}, mats = [], own = {};
+      var roots = p.tops.filter(function (e) { for (var q = e.parent; q; q = q.parent) if (p.tops.indexOf(q) >= 0) return false; return true; });
+      p.topRoots = roots.map(function (e) { var l = e.getLocalPosition(); return { e: e, base: new pc.Vec3(l.x, l.y, l.z) }; });
+      meshInstances(roots).forEach(function (mi) {
+        var m = mi.material; if (!m) return;
+        if (!copies[m.id]) { copies[m.id] = m.clone(); copies[m.id].name = m.name; mats.push(copies[m.id]); own[copies[m.id].id] = 1; }
+        mi.material = copies[m.id];
+      });
+      (p.topMis || []).forEach(function (mi) { var m = mi.material; if (m && !own[m.id]) { own[m.id] = 1; mats.push(m); } });
+      p.topMats = mats.map(function (m) { return { m: m, blend: m.blendType, op: m.opacity, dw: m.depthWrite }; });
+    }
+    var on = k > 0.005;
+    p.tops.forEach(function (e) { e.enabled = on; });
+    (p.topMis || []).forEach(function (mi) { mi.visible = on; });
+    if (!on) return;
+    var solid = k >= 0.995;
+    p.topMats.forEach(function (t) {
+      if (solid) { t.m.blendType = t.blend; t.m.opacity = t.op; t.m.depthWrite = t.dw; }
+      else { t.m.blendType = pc.BLEND_NORMAL; t.m.opacity = t.op * k; t.m.depthWrite = false; }
+      t.m.update();
+    });
+    var lift = (1 - k) * (1 - k) * TOP_LIFT, up = new pc.Vec3();
+    p.topRoots.forEach(function (r) {
+      var par = r.e.parent; up.set(0, lift, 0);
+      if (par) { var inv = par.getWorldTransform().clone().invert(); inv.transformVector(up, up); }
+      r.e.setLocalPosition(r.base.x + up.x, r.base.y + up.y, r.base.z + up.z);
     });
   }
   function makeModel(name, cfg) {
@@ -655,19 +690,29 @@
   };
 
   /* ---------- every frame ---------- */
-  var lastP = -1, lastWipe = -1, shownOnce = false, lastW = 0, lastH = 0, lensY = 0, Pc = null;
+  var lastP = -1, lastWipe = -1, shownOnce = false, lastW = 0, lastH = 0, lensY = 0, Pc = null, Pv = 0;
   function tick(dt) {
     var S = OS.state, now = performance.now();
     wantParts(S.P);
     // 5 Nov, evening: the camera glides after the scroll (a mouse wheel moves in steps: the picture used to jump with each
     // step). Far jumps (menu, rail) and reduced motion: straight there.
+    // 9 Nov (James: "smoother transitions and animation"): a spring with weight instead of a plain follow. The plain
+    // follow started at full speed on every wheel step (a small jolt each time); the spring keeps its speed between
+    // steps, so it speeds up and slows down softly. Only really far jumps (> 2.5 chapters) go straight there.
     var target = S.P;
-    if (Pc === null || OS.reduced() || Math.abs(target - Pc) > 1.2) Pc = target;
-    else { Pc += (target - Pc) * (1 - Math.exp(-Math.min(dt, 0.1) * 6.5)); if (Math.abs(target - Pc) < 0.0004) Pc = target; }
+    if (Pc === null || OS.reduced() || Math.abs(target - Pc) > 2.5) { Pc = target; Pv = 0; }
+    else {
+      var st = 0.3, om = 2 / st, h = Math.min(dt, 0.1), x = om * h, ex = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x);
+      var ch = Pc - target, tmp = (Pv + om * ch) * h;
+      Pv = (Pv - om * tmp) * ex; Pc = target + (ch + tmp) * ex;
+      if (Math.abs(target - Pc) < 0.0003 && Math.abs(Pv) < 0.002) { Pc = target; Pv = 0; }
+    }
     var P = Pc;
     S.Pcam = P;
     if (dirty && OS.ask) OS.ask();   // the pin / box / cursor follow the new picture
     if (P !== lastP || S.wipe !== lastWipe) { dirty = true; busyUntil = now + 1200; }
+    // 9 Nov: the panels / cursor follow S.Pcam, so they must also hear the camera's very last (settling) step
+    if (P !== lastP && OS.ask) OS.ask();
     lastP = P; lastWipe = S.wipe;
     if (canvas.clientWidth !== lastW || canvas.clientHeight !== lastH) { lastW = canvas.clientWidth; lastH = canvas.clientHeight; resize(); }
 
@@ -717,10 +762,12 @@
       } else {
         var vis = k > 0.5;
         if (p.root.enabled !== vis) { p.root.enabled = vis; dirty = true; }
-        var tops = track(M[name + "Tops"], P, 1) > 0.5;
-        if (p.topsOn !== tops) { p.topsOn = tops; p.tops.forEach(function (e) { e.enabled = tops; }); (p.topMis || []).forEach(function (mi) { mi.visible = tops; }); dirty = true; }
+        // 9 Nov: ceilings and roof no longer pop: they lift up and fade (k between 0 and 1), opaque again when down
+        var tk = Math.round(track(M[name + "Tops"], P, 1) * 200) / 200;
+        if (p.topsOn !== tk) { setTops(p, tk); p.topsOn = tk; dirty = true; }
         if (M[name + "Y"]) {
-          var y = track(M[name + "Y"], P), b = p.cfg.to.m ? [p.cfg.to.m[0][3], p.cfg.to.m[1][3], p.cfg.to.m[2][3]] : [0, 0, 0];
+          // 9 Nov: the floors drop in fast and land softly (ease-out), instead of the same ease at both ends
+          var y = track(M[name + "Y"], P, 0, easeOut), b = p.cfg.to.m ? [p.cfg.to.m[0][3], p.cfg.to.m[1][3], p.cfg.to.m[2][3]] : [0, 0, 0];
           p.root.setLocalPosition(b[0], b[1] + y, b[2]);
         }
       }

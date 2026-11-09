@@ -95,7 +95,10 @@
       changed("at");
     }
     barBits.forEach(function (b, k) { b.style.setProperty("--k", k + 1 === S.at ? S.t.toFixed(3) : "0"); });
-    demo(S.at, S.t);
+    // (9 Nov, James: "smoother transitions") the cursor, panels, pin and box follow the GLIDING camera (S.Pcam), not the
+    // raw scroll: they used to run ahead of the picture by a moment and then wait for it
+    var Pv = S.Pcam != null ? S.Pcam : P, atv = Math.floor(Pv);
+    demo(atv, Pv - atv);
     if (api.onFrame) api.onFrame(S);
   }
   function ask() { if (!raf) raf = requestAnimationFrame(frame); }

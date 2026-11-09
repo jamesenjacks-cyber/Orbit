@@ -82,7 +82,8 @@
       skyClip: [[2.42, 40], [2.84, -1.5], [2.9, -1.5], [2.91, 1e9]],
       // hidden while the indoor scan alone is shown (walls of both in the same place would cut into each other)
       house: [[2.4, 0], [2.45, 1], [3.98, 1], [4.0, 0], [5.2, 0], [5.22, 1]],
-      houseTops: [[2.4, 0], [4.55, 0], [4.6, 1], [8.05, 1], [8.1, 0]],
+      // 9 Nov: the ceilings lift off and fade over a longer stretch (was 8.05 -> 8.1, a pop)
+      houseTops: [[2.4, 0], [4.55, 0], [4.6, 1], [8.0, 1], [8.3, 0]],
       // the scan melts into the 3D model AFTER the turn to the sofa has arrived (5.26), not during it
       ground: [[3.25, 0], [3.4, 1], [5.26, 1], [5.44, 0]],
       floor1: [[8.38, 0], [8.4, 1]],
