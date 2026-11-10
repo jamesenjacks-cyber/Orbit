@@ -21,7 +21,36 @@
   var pc, app, dev, cam, sun, scanLayer;
   var parts = {};
   var need = D.need || {};
+  var splatLoading = false;
   var dirty = true, busyUntil = 0;
+
+  /* ---------- how fast is this visitor's internet (10 Nov 2026, James: "on my phone with a poor connection it lags") ----------
+     NET.slow = a weak connection: data saver on, the phone says 2g/3g, or the big files so far came in at under 5 Mbit/s
+     (measured with the browser's own timing of the engine and the scan files). Then: scans load strictly coarse first and
+     only get sharper when nothing more urgent is loading; the live viewers in the results wait for a tap
+     (js/sections/examples.js). NET is checked again after every big file, so a connection that gets better counts. */
+  var NET = win.ORBIT_NET = { slow: false, mbps: null, why: "" };
+  function judgeNet() {
+    var c = navigator.connection, iv = [], bytes = 0;
+    try {
+      // this site's own files of 50 kB or more (the live viewers in the results come from elsewhere). Files load side
+      // by side, so: all their bytes / the time anything was downloading (overlaps counted once)
+      performance.getEntriesByType("resource").forEach(function (e) {
+        var b = e.encodedBodySize || 0, a = e.responseStart || e.requestStart || e.startTime;
+        if (b > 50000 && e.responseEnd > a && e.name.indexOf(location.origin) === 0) { iv.push([a, e.responseEnd]); bytes += b; }
+      });
+    } catch (e) { /* old browser: no timing */ }
+    iv.sort(function (x, y) { return x[0] - y[0]; });
+    var busy = 0, end = -1;
+    iv.forEach(function (x) { if (x[0] > end) { busy += x[1] - x[0]; end = x[1]; } else if (x[1] > end) { busy += x[1] - end; end = x[1]; } });
+    // a cached visit (service worker) downloads in no time: that says nothing about the connection
+    NET.mbps = bytes > 400000 && busy > 150 ? +(bytes * 8 / 1000 / busy).toFixed(1) : NET.mbps;
+    var why = c && c.saveData ? "data saver" : c && /2g|^3g$/.test(c.effectiveType || "") ? c.effectiveType : NET.mbps != null && NET.mbps < 5 ? NET.mbps + " Mbit/s" : "";
+    if (NET.slow !== !!why) log("connection", why ? "slow: " + why : "fine", NET.mbps);
+    NET.slow = !!why; NET.why = why;
+    return NET.slow;
+  }
+  judgeNet();
 
   /* ---------- small maths ---------- */
   function clamp(x, a, b) { return x < a ? a : x > b ? b : x; }
@@ -92,12 +121,18 @@
   function hasWebGL2() {
     try { var c = doc.createElement("canvas"), g = c.getContext("webgl2"); if (!g) return false; var x = g.getExtension("WEBGL_lose_context"); if (x) x.loseContext(); return true; } catch (e) { return false; }
   }
-  function loadEngine() {
+  // 10 Nov: a dropped connection no longer means "no 3D for this visit": the engine is asked for up to 3 times
+  function loadEngine(tries) {
     if (win.pc && win.pc.AppBase) return Promise.resolve(win.pc);
+    tries = tries || 1;
     return new Promise(function (ok, no) {
       var s = doc.createElement("script"); s.src = "vendor/playcanvas.min.js";
       s.onload = function () { win.pc ? ok(win.pc) : no(new Error("engine missing")); };
-      s.onerror = function () { no(new Error("engine script missing")); };
+      s.onerror = function () {
+        s.remove();
+        if (tries >= 3) { no(new Error("engine script missing")); return; }
+        setTimeout(function () { loadEngine(tries + 1).then(ok, no); }, 2500 * tries);
+      };
       doc.head.appendChild(s);
     });
   }
@@ -132,6 +167,9 @@
       app.setCanvasFillMode(pc.FILLMODE_NONE);
       app.setCanvasResolution(pc.RESOLUTION_AUTO);
       app.autoRender = false;
+      // 10 Nov (poor connections): a file that fails halfway is asked for again (up to 4 times, waiting longer each time)
+      // instead of leaving a hole in the scan or a missing house for the rest of the visit
+      ["container", "texture", "gsplat", "binary", "json"].forEach(function (t) { try { var h = app.loader.getHandler(t); if (h) h.maxRetries = 4; } catch (e) { /* */ } });
       app.scene.ambientLight = new pc.Color(D.ambient[0], D.ambient[1], D.ambient[2]);
       var bg = new pc.Color(0.039, 0.043, 0.051, 1);
       cam = new pc.Entity("cam");
@@ -151,7 +189,10 @@
       try {
         app.systems.gsplat.on("frame:request", function () { dirty = true; });
         // keep drawing while a scan is still sorting or fetching tiles (the engine only asks for tiles while it draws)
-        app.systems.gsplat.on("frame:ready", function (c, layer, ready, loading) { if (!ready || loading > 0) { dirty = true; busyUntil = performance.now() + 300; } });
+        app.systems.gsplat.on("frame:ready", function (c, layer, ready, loading) {
+          splatLoading = loading > 0 || !ready;
+          if (splatLoading) { dirty = true; busyUntil = performance.now() + 300; }
+        });
       } catch (e) { /* */ }
       resize();
       win.addEventListener("resize", resize);
@@ -226,20 +267,48 @@
         if (cfg.parent && D.models[cfg.parent]) { par = new pc.Entity("frame-" + name); place(par, D.models[cfg.parent].to); app.root.addChild(par); }
         par.addChild(e);
         p.ent = e; p.state = "ready";
-        p.sharpAt = performance.now() + 900;
+        // 10 Nov: sharper only once the coarse level is in (they used to download side by side, so on a slow line the
+        // first picture waited for both); see tick
+        p.sharpWait = true; p.readyAt = performance.now();
         log(name, "scan in,", p.levels, "levels, finest", p.finest);
         dirty = true;
-      } catch (err) { p.state = "error"; console.warn("[story-3d] scan", name, err); }
+      } catch (err) { failed(p, err); }
     });
-    a.once("error", function (err) { p.state = "error"; console.warn("[story-3d] scan", name, err); });
+    a.once("error", function (err) { failed(p, err); });
     app.assets.add(a); app.assets.load(a);
     return p;
   }
 
+  // 10 Nov (poor connections): a part that still failed after the loader's own retries is tried again from scratch a
+  // little later (3 times), so a short drop-out does not leave the house or a scan missing for the rest of the visit
+  var tries = {};
+  function failed(p, err) {
+    p.state = "error"; console.warn("[story-3d]", p.kind, p.name, err);
+    tries[p.name] = (tries[p.name] || 0) + 1;
+    if (tries[p.name] > 3) return;
+    setTimeout(function () {
+      if (parts[p.name] !== p) return;
+      if (p.root) p.root.destroy();
+      (p.asset ? [p.asset] : []).concat(p.assets || []).forEach(function (a) { try { app.assets.remove(a); a.unload(); } catch (e) { /* */ } });
+      delete parts[p.name];   // wantParts makes it again when the story still needs it
+      dirty = true;
+    }, 3000 * tries[p.name]);
+  }
+  // 10 Nov: has the scan's coarse level really arrived? = every file of its coarsest level is loaded in the engine's
+  // octree (the engine's own "loading" count said 0 before those files were even asked for). Unknown engine inside:
+  // the old way (nothing loading for a moment).
+  function coarseLoaded(p) {
+    try {
+      var oct = p.asset.resource.octree, L = p.levels - 1, want = [];
+      oct.files.forEach(function (f, i) { var m = /(\d+)_\d+\/meta\.json$/.exec(f.url); if (m && +m[1] === L) want.push(i); });
+      if (want.length && oct.fileResources && oct.fileResources.has) return want.every(function (i) { return oct.fileResources.has(i); });
+    } catch (e) { /* */ }
+    return !splatLoading && performance.now() > p.readyAt + 1500;
+  }
   function loadGlb(url) {
     return new Promise(function (ok, no) {
       var a = new pc.Asset(url, "container", { url: url });
-      a.once("load", function () { ok(a); }); a.once("error", no);
+      a.once("load", function () { ok(a); }); a.once("error", function (err) { try { app.assets.remove(a); } catch (x) { /* */ } no(err); });
       app.assets.add(a); app.assets.load(a);
     });
   }
@@ -284,7 +353,9 @@
     p.root.enabled = false;
     app.root.addChild(p.root);
     var urls = [cfg.walls].concat(cfg.furniture ? [cfg.furniture] : []);
-    Promise.all(urls.map(loadGlb)).then(function (assets) {
+    // (10 Nov, Codex QC-20261110-2015) the model's files are remembered, so a retry from scratch can remove them first
+    p.assets = [];
+    Promise.all(urls.map(function (u) { return loadGlb(u).then(function (a) { p.assets.push(a); return a; }); })).then(function (assets) {
       assets.forEach(function (a) { p.root.addChild(a.resource.instantiateRenderEntity()); });
       var hide = {}; (cfg.hide || []).forEach(function (n) { hide[n] = 1; });
       var hideRe = cfg.hideRe ? new RegExp(cfg.hideRe, "i") : null;
@@ -337,7 +408,7 @@
       p.state = "ready";
       log(name, "model in,", Object.keys(p.nodes).length, "nodes,", p.tops.length, "tops");
       dirty = true;
-    }).catch(function (err) { p.state = "error"; console.warn("[story-3d] model", name, err); });
+    }).catch(function (err) { failed(p, err); });
     return p;
   }
   // the window bake has the panes in Blender's "missing picture" pink: make those pixels see-through (once, on the
@@ -372,8 +443,31 @@
     Object.keys(need).forEach(function (name) {
       var r = need[name];
       if (parts[name] || !(P > r[0] - 1.1 && P < r[1] + 0.6)) return;
+      // slow connection: one part at a time, unless the story is about to show this one (then it starts anyway)
+      if (NET.slow && P < r[0] - 0.5 && busyParts()) return;
       var sc = D.scans[name], mo = D.models[name];
       parts[name] = sc ? makeScan(name, sc) : makeModel(name, mo);
+    });
+    // 10 Nov (poor connections): while the visitor reads and nothing is loading, the NEXT model in story order already
+    // comes in (one at a time, up to 3 chapters ahead), so a slow line has a head start. Only models: a scan made early
+    // would have to be registered again later, which fetches its tiles twice (engine lesson of 5 Nov).
+    if (busyParts() || splatLoading) return;
+    var next = Object.keys(need).filter(function (n) { return !parts[n] && D.models[n] && P < need[n][1] && need[n][0] - P < 3; })
+      .sort(function (a, b) { return need[a][0] - need[b][0]; })[0];
+    if (next) { log("early start:", next); parts[next] = makeModel(next, D.models[next]); }
+  }
+  // something the story waits for is still on its way (a model, or a scan that has no coarse picture yet)
+  function busyParts() {
+    return Object.keys(parts).some(function (n) { var p = parts[n]; return p.state === "load" || p.kind === "scan" && p.state === "ready" && p.ent.enabled && !p.coarseIn; });
+  }
+  // the part(s) the camera shows right now are not in yet: the page shows "Loading" (is-wait) instead of an empty stage
+  function waiting(P) {
+    var M = D.mix;
+    return Object.keys(need).some(function (n) {
+      if (track(M[n], P) < 0.05) return false;
+      var p = parts[n];
+      if (tries[n] > 3) return false;   // given up on: no endless "Loading"
+      return !p || p.state !== "ready" || p.kind === "scan" && !p.coarseIn;
     });
   }
 
@@ -690,7 +784,7 @@
   };
 
   /* ---------- every frame ---------- */
-  var lastP = -1, lastWipe = -1, shownOnce = false, lastW = 0, lastH = 0, lensY = 0, Pc = null, Pv = 0;
+  var judgeAt = 0, lastP = -1, lastWipe = -1, shownOnce = false, lastW = 0, lastH = 0, lensY = 0, Pc = null, Pv = 0;
   function tick(dt) {
     var S = OS.state, now = performance.now();
     wantParts(S.P);
@@ -758,7 +852,14 @@
         if (Math.abs(p.fade - k) > 0.002) { p.fade = k; p.ent.gsplat.setParameter("uFade", k); dirty = true; }
         var clip = M[name + "Clip"] ? track(M[name + "Clip"], P) : 1e9;
         if (Math.abs(p.clip - clip) > 0.003) { p.clip = clip; p.ent.gsplat.setParameter("uClipY", clip); dirty = true; }
-        if (p.sharpAt && now > p.sharpAt) { p.sharpAt = 0; p.ent.gsplat.lodRangeMin = p.finest; p.ent.gsplat.lodRangeMax = 99; dirty = true; busyUntil = now + 3000; }
+        if (!p.coarseIn && on && coarseLoaded(p)) { p.coarseIn = now; log(name, "coarse level in"); dirty = true; }
+        // 10 Nov: get sharper once its coarse level is in. On a slow connection only when nothing more urgent is loading
+        // (a model, another scan's coarse level) and the story still shows this scan for a while.
+        // (half a second after the coarse level: first the next model gets its turn to start, see wantParts)
+        if (p.sharpWait && on && p.coarseIn && now > p.coarseIn + 500) {
+          var calm = !NET.slow || (!busyParts() && P < r[1] - 0.6);
+          if (calm) { p.sharpWait = false; p.ent.gsplat.lodRangeMin = p.finest; p.ent.gsplat.lodRangeMax = 99; dirty = true; busyUntil = now + 3000; log(name, "sharper, connection", NET.slow ? "slow" : "fine", NET.mbps); }
+        }
       } else {
         var vis = k > 0.5;
         if (p.root.enabled !== vis) { p.root.enabled = vis; dirty = true; }
@@ -793,10 +894,21 @@
       if (gr.sideA !== sa) { gr.sideA = sa; gr.ent.gsplat.setParameter("uSideA", sa); dirty = true; }
     }
 
+    // 10 Nov: "Loading" shows again whenever the picture waits for a part (it used to show only before the first picture)
+    var w8 = shownOnce && waiting(P);
+    if (w8 !== root.classList.contains("is-wait")) root.classList.toggle("is-wait", w8);
+    if (now > (judgeAt || 0)) { judgeAt = now + 4000; judgeNet(); }
+
     var house = parts[D.designOn];
     applyTable(house); applyLight(house, Math.min(dt, 0.1)); applyPaint(house); applyMove(house, Math.min(dt, 0.1));
 
-    if (!shownOnce && parts.sky && parts.sky.state === "ready" && parts.sky.ent.enabled && now > (parts.sky.readyAt || (parts.sky.readyAt = now + 700))) {
+    // 10 Nov: the poster makes way only once the street scan's coarse picture is really in (measured on slow 4G: it used
+    // to make way after 9 s while the scan was complete only after 37 s, so visitors saw a half-built scan). After 30 s
+    // it makes way anyway.
+    var sk = parts.sky;
+    // (a visitor who comes back half-way down the page, past the street scan: as soon as what the camera shows is in)
+    if (!shownOnce && (sk && sk.state === "ready" && sk.ent.enabled && (sk.coarseIn && now > sk.readyAt + 700 || now > sk.readyAt + 30000)
+        || P > 2.9 && Object.keys(parts).length && !waiting(P) && !splatLoading)) {
       shownOnce = true; root.classList.add("is-live");
     }
     // draw only when needed (and keep drawing a moment after a change, while tiles stream in)

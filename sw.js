@@ -15,8 +15,8 @@
    site's caches, and the "big file" rule looks only at the path INSIDE this site's folder. */
 var SCOPE = new URL(self.registration.scope).pathname;
 var PRE = "orbit3dsite:" + SCOPE + ":";
-var DATA = PRE + "story-data-cba5c1645f";
-var CODE = PRE + "story-code-20261109-163225";
+var DATA = PRE + "story-data-1b8fda92f4";
+var CODE = PRE + "story-code-20261110-201250";
 /* (7 Nov 2026) + assets/compare and assets/furniture and .glb: the 3D models of "Look around" (13 MB on a
    phone) were fetched again on every visit */
 var BIG = /^(assets\/(scans|stage|space|fonts|brand|posters|howto|partners|compare|furniture)|vendor)\/|\.(webp|jpe?g|png|svg|woff2|wasm|glb|mp4|webm)$/i;
@@ -28,10 +28,12 @@ self.addEventListener("activate", function (e) {
   }).then(function () { return self.clients.claim(); }));
 });
 
-function keep(cacheName, req, res) {
+function keep(cacheName, req, res, ev) {
   if (res && res.ok && res.status === 200 && res.type === "basic") {
     var copy = res.clone();
-    caches.open(cacheName).then(function (c) { return c.put(req, copy); }).catch(function () { /* phone storage full: just skip */ });
+    var saving = caches.open(cacheName).then(function (c) { return c.put(req, copy); }).catch(function () { /* phone storage full: just skip */ });
+    // (10 Nov 2026, Codex QC-20261110-2015) the helper stays awake until the copy is really saved
+    if (ev) try { ev.waitUntil(saving); } catch (x) { /* event already finished: the copy may still be saved */ }
   }
   return res;
 }
@@ -44,12 +46,22 @@ self.addEventListener("fetch", function (e) {
   if (BIG.test(url.pathname.slice(SCOPE.length))) {
     // cache first
     e.respondWith(caches.open(DATA).then(function (c) {
-      return c.match(req).then(function (hit) { return hit || fetch(req).then(function (res) { return keep(DATA, req, res); }); });
+      return c.match(req).then(function (hit) { return hit || fetch(req).then(function (res) { return keep(DATA, req, res, e); }); });
     }));
     return;
   }
   // network first, the saved copy only without internet
-  e.respondWith(fetch(req).then(function (res) { return keep(CODE, req, res); }).catch(function () {
-    return caches.open(CODE).then(function (c) { return c.match(req, { ignoreSearch: true }); }).then(function (hit) { return hit || Response.error(); });
+  // (10 Nov 2026, poor connections) ... or when the internet takes longer than 4 s and a saved copy exists: the visitor
+  // gets the saved page at once (the fresh one is still saved for next time when it arrives)
+  var net = fetch(req).then(function (res) { return keep(CODE, req, res, e); });
+  e.waitUntil(net.catch(function () { /* offline */ }));
+  var saved = function () { return caches.open(CODE).then(function (c) { return c.match(req, { ignoreSearch: true }); }); };
+  e.respondWith(new Promise(function (ok) {
+    var done = false, give = function (r) { if (!done && r) { done = true; ok(r); } };
+    var t = setTimeout(function () { saved().then(give).catch(function () { /* */ }); }, 4000);
+    net.then(function (r) { clearTimeout(t); give(r); }).catch(function () {
+      clearTimeout(t);
+      saved().then(function (hit) { give(hit || Response.error()); }).catch(function () { give(Response.error()); });
+    });
   }));
 });

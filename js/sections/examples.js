@@ -37,6 +37,9 @@
     var keep = near.slice(0, MAX_ALIVE).map(function (n) { return n.a; });
     // computers: before the visitor reaches the results, the first frame stays ready
     if (!keep.length && early && entries[0] && entries[0].box.getBoundingClientRect().top > 0) keep = [entries[0]];
+    // (10 Nov 2026, poor connections) the story site's js/story-3d.js sets ORBIT_NET.slow on a weak connection: then a
+    // live viewer (a whole 3D scene of its own) only loads when the visitor taps it; the poster shows until then
+    if (window.ORBIT_NET && window.ORBIT_NET.slow) keep = [];
     entries.forEach(function (a) { if (keep.indexOf(a) < 0) a.unload(); });
     keep.forEach(function (a) { a.make(); });
   }

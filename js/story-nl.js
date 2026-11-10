@@ -11,6 +11,7 @@ window.ORBIT_TRANSLATIONS = window.ORBIT_TRANSLATIONS || {};
     st26a04: { en: "Real scan or 3D model, you choose", nl: "Echte scan of 3D-model, jij kiest" },
     st26a05: { en: "Up the stairs in one jump", nl: "In één sprong de trap op" },
     st26b01: { en: "Loading the scan", nl: "De scan laadt" },
+    st26b05: { en: "Loading the next part", nl: "Het volgende deel laadt" },
     st26b02: { en: "This house", nl: "Dit huis" },
     st26b03: { en: "Scroll to go inside", nl: "Scroll om naar binnen te gaan" },
     st26c01: { en: "Outside", nl: "Buiten" },

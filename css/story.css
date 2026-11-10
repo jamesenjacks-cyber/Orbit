@@ -38,6 +38,10 @@
   font: 500 .75rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--on-space-2); transition: opacity .5s ease; }
 .story__load span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: st-pulse 1.1s ease-in-out infinite; }
 .story.is-live .story__load, .story.is-fallback .story__load { opacity: 0; pointer-events: none; }
+/* (10 Nov 2026, poor connections) "Loading" comes back whenever the picture waits for a part (js/story-3d.js is-wait) */
+.story__load-b { display: none; }
+.story.is-live.is-wait .story__load { opacity: 1; }
+.story.is-wait .story__load-a { display: none; } .story.is-wait .story__load-b { display: inline; }
 @keyframes st-pulse { 50% { opacity: .25; transform: scale(.7); } }
 
 /* ---------- words ---------- */

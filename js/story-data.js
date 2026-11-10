@@ -52,6 +52,7 @@
       // finest = the sharpest level it may fetch; computers the sharpest, phones one level lighter.
       // Sky: unchanged (level 0 = 100% not shipped; 1 = 50%, 2 = 25%, 3 = 10%). A "coarser far edges" version was
       // tried on 5 Nov night: the scan's own regions mix near and far, so it showed holes, for only ~0.4 MB. Dropped.
+      // 10 Nov: level 3 (the rough first picture) has no shN "colour shimmer" layer any more (-2.4 MB, looks the same).
       // Ground: rebuilt 5 Nov night from its original PLY with 3 levels: 0 = 100%, 1 = 50%, 2 = 10% (the 25% level
       // was never the final picture: computers end at 100%, phones at 50%). See story/EXPLANATION.md.
       sky: { url: base + "scans/sky/lod-meta.json", to: { euler: [180, 0, 0] }, finest: { desktop: 1, phone: 2 } },
