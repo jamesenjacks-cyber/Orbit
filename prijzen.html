@@ -30,13 +30,14 @@
   <link rel="stylesheet" href="css/site-extras.css">
   <script src="js/translations.js"></script>
   <script src="js/story-nl.js"></script>
+  <script src="js/story-ru.js"></script>
   <script src="js/language.js" defer></script>
   <script src="js/glider.js" defer></script>
   <script src="js/press.js" defer></script>
   <script src="js/reveal.js" defer></script>
   <link rel="alternate" hreflang="en" href="https://orbit3d.nl/pricing.html">
   <link rel="alternate" hreflang="nl" href="https://orbit3d.nl/prijzen.html">
-  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/pricing.html">
+  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/prijzen.html">
   <meta property="og:locale" content="nl_NL">
   <meta property="og:locale:alternate" content="en_GB">
 </head>
@@ -44,12 +45,12 @@
      tools/build_story.py from the big site's src/pages/<name>.html with the story menu and footer. -->
 <body class="page page--pricing" data-page="pricing">
   <a class="sr-only" href="#main"><orbit-text data-i18n="444cdc672b">Naar de inhoud</orbit-text></a>
-  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, EN | NL, orange "Contact us").
+  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, language drop-down NL / EN / RU, orange "Contact us").
        "How it works" holds the five parts of the story; the pill shows the part you are in (js/main.js with
        window.ORBIT_NAV_OF / ORBIT_NAV_STEPS from js/story.js). index.html = "" on the main page, "index.html" elsewhere. -->
   <header class="nav" data-nav>
     <div class="nav__island">
-      <a class="nav__logo" href="nl.html#top" aria-label="Orbit 3D, thuis">
+      <a class="nav__logo" href="index.html#top" aria-label="Orbit 3D, thuis">
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22">
       </a>
       <nav class="nav__caps" aria-label="Hoofdmenu">
@@ -64,11 +65,11 @@
           </button>
           <div class="nav__drop" id="nav-story" hidden>
             <ul class="nav__links" role="list">
-              <li><a href="nl.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></b><small><orbit-text data-i18n="st26a03">De hele plek, vanuit de lucht</orbit-text></small></a></li>
-              <li><a href="nl.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></b><small><orbit-text data-i18n="st26a04">Echte scan of 3D-model, jij kiest</orbit-text></small></a></li>
-              <li><a href="nl.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Verander de meubels en kleuren</orbit-text></small></a></li>
-              <li><a href="nl.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></b><small><orbit-text data-i18n="st26a05">In één sprong de trap op</orbit-text></small></a></li>
-              <li><a href="nl.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Afgemaakte ruimtes, en je eigen ontwerp</orbit-text></small></a></li>
+              <li><a href="index.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></b><small><orbit-text data-i18n="st26a03">De hele plek, vanuit de lucht</orbit-text></small></a></li>
+              <li><a href="index.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></b><small><orbit-text data-i18n="st26a04">Echte scan of 3D-model, jij kiest</orbit-text></small></a></li>
+              <li><a href="index.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Verander de meubels en kleuren</orbit-text></small></a></li>
+              <li><a href="index.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></b><small><orbit-text data-i18n="st26a05">In één sprong de trap op</orbit-text></small></a></li>
+              <li><a href="index.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Afgemaakte ruimtes, en je eigen ontwerp</orbit-text></small></a></li>
             </ul>
           </div>
         </div>
@@ -77,25 +78,34 @@
         <a class="nav__chip" href="over-ons.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">Over ons</orbit-text></a>
       </nav>
       <div class="nav__end">
-        <div class="language-switch" role="group" aria-label="Language / Taal">
-          <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
-          <button type="button" data-language="nl" lang="nl" aria-label="Nederlands" aria-pressed="false">NL</button>
+        <!-- (14 Nov 2026, James) language drop-down: Dutch (default), English, Russian. Opens and closes in js/language.js;
+             the button shows the chosen language. The language names stay in their own language (never translated). -->
+        <div class="language-switch language-switch--menu" data-lang-menu>
+          <button type="button" class="language-switch__btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu" aria-label="Taal / Language / Язык" data-lang-btn>
+            <span data-language-current>NL</span>
+            <svg class="language-switch__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="language-switch__list" id="lang-menu" role="list" hidden>
+            <li><button type="button" data-language="nl" lang="nl" aria-pressed="true"><b>NL</b> Nederlands</button></li>
+            <li><button type="button" data-language="en" lang="en" aria-pressed="false"><b>EN</b> English</button></li>
+            <li><button type="button" data-language="ru" lang="ru" aria-pressed="false"><b>RU</b> Русский</button></li>
+          </ul>
         </div>
         <button type="button" class="nav__menu" aria-expanded="false" aria-controls="nav-sheet" data-menu-btn>
           <svg viewBox="0 0 20 20" aria-hidden="true"><path class="nav__menu-a" d="M3 7h14"/><path class="nav__menu-b" d="M3 13h14"/></svg>
           <span data-menu-text><orbit-text data-i18n="b9c827b8c8">Menu</orbit-text></span>
         </button>
-        <a class="btn btn--accent nav__cta" href="nl.html#contact"><orbit-text data-i18n="fc313f67b0">Contact</orbit-text></a>
+        <a class="btn btn--accent nav__cta" href="index.html#contact"><orbit-text data-i18n="fc313f67b0">Contact</orbit-text></a>
       </div>
     </div>
     <div class="nav__sheet" id="nav-sheet" hidden>
       <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">Hoe het werkt</orbit-text></p>
       <ul class="nav__sheet-steps" role="list">
-        <li><a href="nl.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></a></li>
-        <li><a href="nl.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></a></li>
-        <li><a href="nl.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></a></li>
-        <li><a href="nl.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></a></li>
-        <li><a href="nl.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></a></li>
+        <li><a href="index.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welkom</orbit-text></a></li>
+        <li><a href="index.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Stap naar binnen</orbit-text></a></li>
+        <li><a href="index.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Ontwerpen</orbit-text></a></li>
+        <li><a href="index.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Elke verdieping</orbit-text></a></li>
+        <li><a href="index.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></a></li>
       </ul>
       <ul class="nav__sheet-pages" role="list">
         <li><a href="jouw-ontwerp.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">Bekijk je ontwerp</orbit-text> <span aria-hidden="true">→</span></a></li>
@@ -114,7 +124,7 @@
       <p class="pg-text quote-help"><orbit-text data-i18n="quote-help">Vertel ons meer over uw ruimte en ontvang een offerte op maat</orbit-text></p>
       <p class="pg-text portfolio-quote"><orbit-text data-i18n="portfolio-quote">Heeft u meerdere panden? Ontvang een offerte die bij uw vastgoedportefeuille past</orbit-text></p>
       <div class="pg-act">
-        <a class="btn btn--accent pg-cta" data-book-open="call" href="nl.html#contact"><orbit-text data-i18n="d3a1c00052">Plan een gesprek met ons</orbit-text></a>
+        <a class="btn btn--accent pg-cta" data-book-open="call" href="index.html#contact"><orbit-text data-i18n="d3a1c00052">Plan een gesprek met ons</orbit-text></a>
       </div>
 <!-- Book a call / Via email (3 Nov 2026, James). Shared part: tools/build.py puts it where a page has the "@book" marker.
      Opened by any button with data-book-open="call" or "email" (js/book.js). Call mode: name, company (optional),
@@ -213,23 +223,23 @@
       <h2 class="pg-h2"><orbit-text data-i18n="5df9ec678d">Vertel ons over je ruimte</orbit-text></h2>
       <p class="pg-text"><orbit-text data-i18n="453a19bcab">Neem gerust contact met ons op<br>Vertel ons wat voor ruimte u heeft en in welke diensten u geïnteresseerd bent</orbit-text></p>
       <div class="pg-act">
-        <a class="btn btn--accent pg-cta" data-mail href="nl.html#contact"><orbit-text data-i18n="a94089cc17">Contact</orbit-text></a>
-        <a class="meta pg-mail" data-mail data-mail-text href="nl.html#contact"><orbit-text data-i18n="7c27014b08">e-mail</orbit-text></a>
+        <a class="btn btn--accent pg-cta" data-mail href="index.html#contact"><orbit-text data-i18n="a94089cc17">Contact</orbit-text></a>
+        <a class="meta pg-mail" data-mail data-mail-text href="index.html#contact"><orbit-text data-i18n="7c27014b08">e-mail</orbit-text></a>
       </div>
     </section>
   </main>
 
   <footer class="site-foot">
     <div class="wrap site-foot__row">
-      <a href="nl.html#top" class="site-foot__logo" aria-label="Orbit 3D, thuis">
+      <a href="index.html#top" class="site-foot__logo" aria-label="Orbit 3D, thuis">
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
       </a>
       <nav class="site-foot__nav" aria-label="Voettekst">
-        <a href="nl.html#inside"><orbit-text data-i18n="6e49d9ec8d">Hoe het werkt</orbit-text></a>
-        <a href="nl.html#examples"><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></a>
+        <a href="index.html#inside"><orbit-text data-i18n="6e49d9ec8d">Hoe het werkt</orbit-text></a>
+        <a href="index.html#examples"><orbit-text data-i18n="d3a1c00104">Ontdek</orbit-text></a>
         <a href="prijzen.html"><orbit-text data-i18n="b767503acc">Prijzen</orbit-text></a>
         <a href="over-ons.html"><orbit-text data-i18n="2ca466a9b9">Over ons</orbit-text></a>
-        <a href="nl.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Neem contact op</orbit-text></a>
+        <a href="index.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Neem contact op</orbit-text></a>
       </nav>
       <p class="meta site-foot__copy"><orbit-text data-i18n="c77e4f4800">© 2026 3DGS Orbit Studio</orbit-text></p>
 <!-- Legal strip (4 Nov 2026, James: "compliant with EU rules"). Shared part: tools/build.py puts it where a page has

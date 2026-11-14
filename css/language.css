@@ -39,3 +39,25 @@ html[lang="nl"] .sec--hero .hero__title { font-size: clamp(3.7rem, 9vw, 8rem); m
 @media (min-width: 375px) and (max-width: 899px) {
   .language-switch button { min-width: 36px; }
 }
+
+/* (14 Nov 2026, James) Story site: the language as a drop-down (NL default, EN, RU) instead of the EN | NL switch.
+   Same dark capsule; the list opens under it, right-aligned, rounded like the menu's drop. */
+.language-switch--menu { position: relative; padding: 3px; }
+.language-switch--menu .language-switch__btn { display: inline-flex; align-items: center; gap: 5px; min-width: 52px; min-height: 40px; padding: 0 10px 0 12px; border-radius: var(--r-pill); color: #fff; font-size: .75rem; font-weight: 600; }
+.language-switch--menu .language-switch__btn:hover, .language-switch--menu.is-open .language-switch__btn { background: rgba(255,255,255,.12); }
+.language-switch__caret { width: 10px; height: 10px; transition: transform .2s ease; }
+.language-switch--menu.is-open .language-switch__caret { transform: rotate(180deg); }
+.language-switch__list { position: absolute; top: calc(100% + 8px); right: 0; z-index: 60; min-width: 168px; margin: 0; padding: 6px; list-style: none; border-radius: 20px; background: rgba(14,16,20,.96); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 14px 40px rgba(0,0,0,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.language-switch__list[hidden] { display: none; }
+.language-switch--menu .language-switch__list button { display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0; min-height: 44px; padding: 0 14px; border-radius: 14px; color: #fff; font-size: .875rem; font-weight: 500; text-align: left; }
+.language-switch__list button b { min-width: 22px; font-size: .7rem; font-weight: 700; letter-spacing: .04em; opacity: .6; }
+.language-switch--menu .language-switch__list button:hover { background: rgba(255,255,255,.1); }
+.language-switch--menu .language-switch__list button[aria-pressed="true"] { background: #fff; color: #111; }
+.language-switch--menu .language-switch__list button[aria-pressed="true"] b { opacity: 1; color: var(--accent); }
+@media (max-width: 899px) {
+  .language-switch--menu .language-switch__btn { min-width: 46px; padding: 0 8px 0 10px; }
+}
+/* (14 Nov 2026) Russian page titles have long words ("Конфиденциальность"): smaller on phones, may break */
+@media (max-width: 767px) {
+  html[lang="ru"] .pg-title { font-size: clamp(2.2rem, .8rem + 6vw, 3.2rem); overflow-wrap: break-word; hyphens: auto; }
+}

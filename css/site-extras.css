@@ -21,3 +21,25 @@
   .stick-cta.is-on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .stick-cta, .nav::before { transition: opacity .2s linear; } .stick-cta { transform: translate(-50%, 0); } }
+
+/* 5. (12 Nov 2026) The cookie question for HubSpot (js/site-extras.js block 5). Bottom of the screen, small dark
+   glass card; "No thanks" and "Accept" the same size (the Dutch privacy authority wants refusing to be as easy). */
+.consent {
+  position: fixed; z-index: 60; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  width: min(560px, calc(100% - 24px)); padding: 16px 18px; border-radius: 22px;
+  background: rgba(20, 22, 26, .92); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14), 0 20px 50px -20px rgba(0, 0, 0, .7);
+  color: #fff; font-size: .875rem; line-height: 1.45;
+}
+.consent__q { margin: 0 0 12px; }
+.consent__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.consent__btn {
+  flex: 1 1 120px; min-height: 44px; padding: 0 1rem; border: 0; border-radius: 999px; cursor: pointer;
+  font: 600 .875rem var(--font, sans-serif); color: #fff; background: rgba(255, 255, 255, .1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22);
+}
+.consent__btn--yes { background: #fff; color: #111; box-shadow: none; }
+.consent__btn:focus-visible, .consent__more:focus-visible { outline: 2px solid var(--accent, #ff5f00); outline-offset: 2px; }
+.consent__more { flex: none; padding: 10px 6px; color: rgba(255, 255, 255, .8); font-size: .8125rem; text-underline-offset: 4px; }
+/* while the question is open, the phone "Book a call" button waits so the two never overlap */
+.has-consent-q .stick-cta { display: none !important; }

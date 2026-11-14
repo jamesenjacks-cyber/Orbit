@@ -16,7 +16,7 @@
 var SCOPE = new URL(self.registration.scope).pathname;
 var PRE = "orbit3dsite:" + SCOPE + ":";
 var DATA = PRE + "story-data-1b8fda92f4";
-var CODE = PRE + "story-code-20261110-201250";
+var CODE = PRE + "story-code-20261114-172737";
 /* (7 Nov 2026) + assets/compare and assets/furniture and .glb: the 3D models of "Look around" (13 MB on a
    phone) were fetched again on every visit */
 var BIG = /^(assets\/(scans|stage|space|fonts|brand|posters|howto|partners|compare|furniture)|vendor)\/|\.(webp|jpe?g|png|svg|woff2|wasm|glb|mp4|webm)$/i;

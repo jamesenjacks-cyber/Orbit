@@ -56,7 +56,7 @@
   var slots = null, slotsAsked = false;
   var T = function (s) { return window.OrbitLanguage ? window.OrbitLanguage.text(s) : s; };
 
-  function lang() { return document.documentElement.lang === "nl" ? "nl-NL" : "en-GB"; }
+  function lang() { var l = document.documentElement.lang; return l === "nl" ? "nl-NL" : l === "ru" ? "ru-RU" : "en-GB"; }
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
   function timeout(ms) { return new Promise(function (_, no) { setTimeout(function () { no(new Error("timeout")); }, ms); }); }
@@ -269,7 +269,7 @@
     var panel = box.querySelector('[data-book-done="' + sentMode + '"]');
     if (!panel) return false;
     if (sentMode === "call") {
-      var d = new Date(info.day + "T12:00:00"), loc = nl ? "nl-NL" : "en-GB";
+      var d = new Date(info.day + "T12:00:00"), loc = lang();
       panel.querySelector("[data-cal-week]").textContent = d.toLocaleDateString(loc, { weekday: "long" });
       panel.querySelector("[data-cal-day]").textContent = String(d.getDate());
       panel.querySelector("[data-cal-month]").textContent = d.toLocaleDateString(loc, { month: "short", year: "numeric" }) + (info.time ? " · " + info.time : "");

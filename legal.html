@@ -30,13 +30,14 @@
   <link rel="stylesheet" href="css/site-extras.css">
   <script src="js/translations.js"></script>
   <script src="js/story-nl.js"></script>
+  <script src="js/story-ru.js"></script>
   <script src="js/language.js" defer></script>
   <script src="js/glider.js" defer></script>
   <script src="js/press.js" defer></script>
   <script src="js/reveal.js" defer></script>
   <link rel="alternate" hreflang="en" href="https://orbit3d.nl/legal.html">
   <link rel="alternate" hreflang="nl" href="https://orbit3d.nl/juridisch.html">
-  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/legal.html">
+  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/juridisch.html">
   <meta property="og:locale" content="en_GB">
   <meta property="og:locale:alternate" content="nl_NL">
 </head>
@@ -44,12 +45,12 @@
      tools/build_story.py from the big site's src/pages/<name>.html with the story menu and footer. -->
 <body class="page page--legal" data-page="legal">
   <a class="sr-only" href="#main"><orbit-text data-i18n="444cdc672b">Skip to content</orbit-text></a>
-  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, EN | NL, orange "Contact us").
+  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, language drop-down NL / EN / RU, orange "Contact us").
        "How it works" holds the five parts of the story; the pill shows the part you are in (js/main.js with
        window.ORBIT_NAV_OF / ORBIT_NAV_STEPS from js/story.js). index.html = "" on the main page, "index.html" elsewhere. -->
   <header class="nav" data-nav>
     <div class="nav__island">
-      <a class="nav__logo" href="index.html#top" aria-label="Orbit 3D, home">
+      <a class="nav__logo" href="en.html#top" aria-label="Orbit 3D, home">
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22">
       </a>
       <nav class="nav__caps" aria-label="Main">
@@ -64,11 +65,11 @@
           </button>
           <div class="nav__drop" id="nav-story" hidden>
             <ul class="nav__links" role="list">
-              <li><a href="index.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="st26a03">The whole place, from the air</orbit-text></small></a></li>
-              <li><a href="index.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Step inside</orbit-text></b><small><orbit-text data-i18n="st26a04">Real scan or 3D model, you choose</orbit-text></small></a></li>
-              <li><a href="index.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
-              <li><a href="index.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Every floor</orbit-text></b><small><orbit-text data-i18n="st26a05">Up the stairs in one jump</orbit-text></small></a></li>
-              <li><a href="index.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
+              <li><a href="en.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="st26a03">The whole place, from the air</orbit-text></small></a></li>
+              <li><a href="en.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Step inside</orbit-text></b><small><orbit-text data-i18n="st26a04">Real scan or 3D model, you choose</orbit-text></small></a></li>
+              <li><a href="en.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="en.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Every floor</orbit-text></b><small><orbit-text data-i18n="st26a05">Up the stairs in one jump</orbit-text></small></a></li>
+              <li><a href="en.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
             </ul>
           </div>
         </div>
@@ -77,25 +78,34 @@
         <a class="nav__chip" href="about.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">About us</orbit-text></a>
       </nav>
       <div class="nav__end">
-        <div class="language-switch" role="group" aria-label="Language / Taal">
-          <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
-          <button type="button" data-language="nl" lang="nl" aria-label="Nederlands" aria-pressed="false">NL</button>
+        <!-- (14 Nov 2026, James) language drop-down: Dutch (default), English, Russian. Opens and closes in js/language.js;
+             the button shows the chosen language. The language names stay in their own language (never translated). -->
+        <div class="language-switch language-switch--menu" data-lang-menu>
+          <button type="button" class="language-switch__btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu" aria-label="Taal / Language / Язык" data-lang-btn>
+            <span data-language-current>NL</span>
+            <svg class="language-switch__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="language-switch__list" id="lang-menu" role="list" hidden>
+            <li><button type="button" data-language="nl" lang="nl" aria-pressed="true"><b>NL</b> Nederlands</button></li>
+            <li><button type="button" data-language="en" lang="en" aria-pressed="false"><b>EN</b> English</button></li>
+            <li><button type="button" data-language="ru" lang="ru" aria-pressed="false"><b>RU</b> Русский</button></li>
+          </ul>
         </div>
         <button type="button" class="nav__menu" aria-expanded="false" aria-controls="nav-sheet" data-menu-btn>
           <svg viewBox="0 0 20 20" aria-hidden="true"><path class="nav__menu-a" d="M3 7h14"/><path class="nav__menu-b" d="M3 13h14"/></svg>
           <span data-menu-text><orbit-text data-i18n="b9c827b8c8">Menu</orbit-text></span>
         </button>
-        <a class="btn btn--accent nav__cta" href="index.html#contact"><orbit-text data-i18n="fc313f67b0">Contact us</orbit-text></a>
+        <a class="btn btn--accent nav__cta" href="en.html#contact"><orbit-text data-i18n="fc313f67b0">Contact us</orbit-text></a>
       </div>
     </div>
     <div class="nav__sheet" id="nav-sheet" hidden>
       <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">How it works</orbit-text></p>
       <ul class="nav__sheet-steps" role="list">
-        <li><a href="index.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
-        <li><a href="index.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></a></li>
-        <li><a href="index.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
-        <li><a href="index.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></a></li>
-        <li><a href="index.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
+        <li><a href="en.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
+        <li><a href="en.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></a></li>
+        <li><a href="en.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="en.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></a></li>
+        <li><a href="en.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
       </ul>
       <ul class="nav__sheet-pages" role="list">
         <li><a href="view-design.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text> <span aria-hidden="true">&rarr;</span></a></li>
@@ -125,7 +135,7 @@
             <div data-company-address hidden><dt>Address</dt><dd data-company-address-text></dd></div>
             <div><dt>KvK (Chamber of Commerce)</dt><dd>42080166</dd></div>
             <div><dt>VAT number</dt><dd>NL869615002B01</dd></div>
-            <div><dt>Email address</dt><dd><a data-mail data-mail-text href="index.html#contact">Jack@orbit3d.nl</a></dd></div>
+            <div><dt>Email address</dt><dd><a data-mail data-mail-text href="en.html#contact">Jack@orbit3d.nl</a></dd></div>
             <div><dt>Phone</dt><dd><a href="tel:+31616335318">+31 61 633 5318</a></dd></div>
             <div><dt>Founders</dt><dd>James Jitkul and Jack Lattery</dd></div>
           </dl>
@@ -180,7 +190,7 @@
             <div data-company-address hidden><dt>Adres</dt><dd data-company-address-text></dd></div>
             <div><dt>KvK-nummer</dt><dd>42080166</dd></div>
             <div><dt>Btw-nummer</dt><dd>NL869615002B01</dd></div>
-            <div><dt>E-mailadres</dt><dd><a data-mail data-mail-text href="index.html#contact">Jack@orbit3d.nl</a></dd></div>
+            <div><dt>E-mailadres</dt><dd><a data-mail data-mail-text href="en.html#contact">Jack@orbit3d.nl</a></dd></div>
             <div><dt>Telefoon</dt><dd><a href="tel:+31616335318">+31 61 633 5318</a></dd></div>
             <div><dt>Oprichters</dt><dd>James Jitkul en Jack Lattery</dd></div>
           </dl>
@@ -222,15 +232,15 @@
 
   <footer class="site-foot">
     <div class="wrap site-foot__row">
-      <a href="index.html#top" class="site-foot__logo" aria-label="Orbit 3D, home">
+      <a href="en.html#top" class="site-foot__logo" aria-label="Orbit 3D, home">
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
       </a>
       <nav class="site-foot__nav" aria-label="Footer">
-        <a href="index.html#inside"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
-        <a href="index.html#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a>
+        <a href="en.html#inside"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
+        <a href="en.html#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a>
         <a href="pricing.html"><orbit-text data-i18n="b767503acc">Pricing</orbit-text></a>
         <a href="about.html"><orbit-text data-i18n="2ca466a9b9">About us</orbit-text></a>
-        <a href="index.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Contact us</orbit-text></a>
+        <a href="en.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Contact us</orbit-text></a>
       </nav>
       <p class="meta site-foot__copy"><orbit-text data-i18n="c77e4f4800">© 2026 3DGS Orbit Studio</orbit-text></p>
 <!-- Legal strip (4 Nov 2026, James: "compliant with EU rules"). Shared part: tools/build.py puts it where a page has

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Privacy & cookies | Orbit 3D</title>
-  <meta name="description" content="How 3DGS Orbit Studio (Orbit 3D) handles personal data. No cookies, no tracking, no advertising.">
+  <meta name="description" content="How 3DGS Orbit Studio (Orbit 3D) handles personal data. Marketing cookies only if you say yes, no advertising.">
   <meta name="theme-color" content="#0b0c0e">
   <link rel="icon" type="image/png" href="assets/brand/favicon.png">
   <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
@@ -14,7 +14,7 @@
   <meta property="og:site_name" content="Orbit 3D">
   <meta property="og:url" content="https://orbit3d.nl/privacy.html">
   <meta property="og:title" content="Privacy & cookies | Orbit 3D">
-  <meta property="og:description" content="How 3DGS Orbit Studio (Orbit 3D) handles personal data. No cookies, no tracking, no advertising.">
+  <meta property="og:description" content="How 3DGS Orbit Studio (Orbit 3D) handles personal data. Marketing cookies only if you say yes, no advertising.">
   <meta property="og:image" content="https://orbit3d.nl/assets/story/share/orbit3d-share.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,13 +30,14 @@
   <link rel="stylesheet" href="css/site-extras.css">
   <script src="js/translations.js"></script>
   <script src="js/story-nl.js"></script>
+  <script src="js/story-ru.js"></script>
   <script src="js/language.js" defer></script>
   <script src="js/glider.js" defer></script>
   <script src="js/press.js" defer></script>
   <script src="js/reveal.js" defer></script>
   <link rel="alternate" hreflang="en" href="https://orbit3d.nl/privacy.html">
   <link rel="alternate" hreflang="nl" href="https://orbit3d.nl/privacyverklaring.html">
-  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/privacy.html">
+  <link rel="alternate" hreflang="x-default" href="https://orbit3d.nl/privacyverklaring.html">
   <meta property="og:locale" content="en_GB">
   <meta property="og:locale:alternate" content="nl_NL">
 </head>
@@ -44,12 +45,12 @@
      tools/build_story.py from the big site's src/pages/<name>.html with the story menu and footer. -->
 <body class="page page--privacy" data-page="privacy">
   <a class="sr-only" href="#main"><orbit-text data-i18n="444cdc672b">Skip to content</orbit-text></a>
-  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, EN | NL, orange "Contact us").
+  <!-- Story site (5 Nov 2026): the same top bar as the big site (logo, glass capsule, language drop-down NL / EN / RU, orange "Contact us").
        "How it works" holds the five parts of the story; the pill shows the part you are in (js/main.js with
        window.ORBIT_NAV_OF / ORBIT_NAV_STEPS from js/story.js). index.html = "" on the main page, "index.html" elsewhere. -->
   <header class="nav" data-nav>
     <div class="nav__island">
-      <a class="nav__logo" href="index.html#top" aria-label="Orbit 3D, home">
+      <a class="nav__logo" href="en.html#top" aria-label="Orbit 3D, home">
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22">
       </a>
       <nav class="nav__caps" aria-label="Main">
@@ -64,11 +65,11 @@
           </button>
           <div class="nav__drop" id="nav-story" hidden>
             <ul class="nav__links" role="list">
-              <li><a href="index.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="st26a03">The whole place, from the air</orbit-text></small></a></li>
-              <li><a href="index.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Step inside</orbit-text></b><small><orbit-text data-i18n="st26a04">Real scan or 3D model, you choose</orbit-text></small></a></li>
-              <li><a href="index.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
-              <li><a href="index.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Every floor</orbit-text></b><small><orbit-text data-i18n="st26a05">Up the stairs in one jump</orbit-text></small></a></li>
-              <li><a href="index.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
+              <li><a href="en.html#top"><i>01</i><b><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></b><small><orbit-text data-i18n="st26a03">The whole place, from the air</orbit-text></small></a></li>
+              <li><a href="en.html#inside"><i>02</i><b><orbit-text data-i18n="st26a01">Step inside</orbit-text></b><small><orbit-text data-i18n="st26a04">Real scan or 3D model, you choose</orbit-text></small></a></li>
+              <li><a href="en.html#design"><i>03</i><b><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></b><small><orbit-text data-i18n="93f75c4396">Change the furniture and colours</orbit-text></small></a></li>
+              <li><a href="en.html#upstairs"><i>04</i><b><orbit-text data-i18n="st26a02">Every floor</orbit-text></b><small><orbit-text data-i18n="st26a05">Up the stairs in one jump</orbit-text></small></a></li>
+              <li><a href="en.html#examples"><i>05</i><b><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></b><small><orbit-text data-i18n="d3a1c00108">Finished spaces, and your own design</orbit-text></small></a></li>
             </ul>
           </div>
         </div>
@@ -77,25 +78,34 @@
         <a class="nav__chip" href="about.html" data-page-link="about"><orbit-text data-i18n="091ccb2ec6">About us</orbit-text></a>
       </nav>
       <div class="nav__end">
-        <div class="language-switch" role="group" aria-label="Language / Taal">
-          <button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
-          <button type="button" data-language="nl" lang="nl" aria-label="Nederlands" aria-pressed="false">NL</button>
+        <!-- (14 Nov 2026, James) language drop-down: Dutch (default), English, Russian. Opens and closes in js/language.js;
+             the button shows the chosen language. The language names stay in their own language (never translated). -->
+        <div class="language-switch language-switch--menu" data-lang-menu>
+          <button type="button" class="language-switch__btn" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu" aria-label="Taal / Language / Язык" data-lang-btn>
+            <span data-language-current>NL</span>
+            <svg class="language-switch__caret" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <ul class="language-switch__list" id="lang-menu" role="list" hidden>
+            <li><button type="button" data-language="nl" lang="nl" aria-pressed="true"><b>NL</b> Nederlands</button></li>
+            <li><button type="button" data-language="en" lang="en" aria-pressed="false"><b>EN</b> English</button></li>
+            <li><button type="button" data-language="ru" lang="ru" aria-pressed="false"><b>RU</b> Русский</button></li>
+          </ul>
         </div>
         <button type="button" class="nav__menu" aria-expanded="false" aria-controls="nav-sheet" data-menu-btn>
           <svg viewBox="0 0 20 20" aria-hidden="true"><path class="nav__menu-a" d="M3 7h14"/><path class="nav__menu-b" d="M3 13h14"/></svg>
           <span data-menu-text><orbit-text data-i18n="b9c827b8c8">Menu</orbit-text></span>
         </button>
-        <a class="btn btn--accent nav__cta" href="index.html#contact"><orbit-text data-i18n="fc313f67b0">Contact us</orbit-text></a>
+        <a class="btn btn--accent nav__cta" href="en.html#contact"><orbit-text data-i18n="fc313f67b0">Contact us</orbit-text></a>
       </div>
     </div>
     <div class="nav__sheet" id="nav-sheet" hidden>
       <p class="nav__sheet-title"><orbit-text data-i18n="914d83456d">How it works</orbit-text></p>
       <ul class="nav__sheet-steps" role="list">
-        <li><a href="index.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
-        <li><a href="index.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></a></li>
-        <li><a href="index.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
-        <li><a href="index.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></a></li>
-        <li><a href="index.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
+        <li><a href="en.html#top" data-step-link="#top"><orbit-text data-i18n="d3a1c00101">Welcome</orbit-text></a></li>
+        <li><a href="en.html#inside" data-step-link="#inside"><orbit-text data-i18n="st26a01">Step inside</orbit-text></a></li>
+        <li><a href="en.html#design" data-step-link="#design"><orbit-text data-i18n="4cd2eea2cb">Design</orbit-text></a></li>
+        <li><a href="en.html#upstairs" data-step-link="#upstairs"><orbit-text data-i18n="st26a02">Every floor</orbit-text></a></li>
+        <li><a href="en.html#examples" data-step-link="#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a></li>
       </ul>
       <ul class="nav__sheet-pages" role="list">
         <li><a href="view-design.html" data-page-link="view-design"><orbit-text data-i18n="d3a1c00087">View your design</orbit-text> <span aria-hidden="true">&rarr;</span></a></li>
@@ -111,12 +121,13 @@
          css/pages.css shows the one that matches the EN / NL switch (html lang). Change BOTH when something changes,
          and update the date. The address comes from ORBIT_SITE.company.address (js/embeds.js), the email from
          ORBIT_SITE.email. If a stats tool is added, this page must say so (name, what it stores, where).
+         (12 Nov 2026) HubSpot marketing cookies, only after consent (js/site-extras.js block 5): sections 2, 3 and 4.
          (4 Nov 2026) The form now sends through Google Apps Script (backend/booking): sections 2 and 4 say so. -->
     <div class="lg-en">
       <header class="wrap pg-head lg-head">
         <h1 class="pg-title">Privacy &amp; cookies</h1>
-        <p class="pg-lede">The short version: we only use what you send us yourself. No cookies, no tracking, no advertising.</p>
-        <p class="meta lg-date">Last updated: 7 November 2026</p>
+        <p class="pg-lede">The short version: we use what you send us yourself, and marketing cookies from HubSpot only if you say yes. No advertising.</p>
+        <p class="meta lg-date">Last updated: 12 November 2026</p>
       </header>
 
       <div class="wrap lg">
@@ -127,7 +138,7 @@
             <div><dt>Company</dt><dd>3DGS Orbit Studio (Orbit 3D)</dd></div>
             <div data-company-address hidden><dt>Address</dt><dd data-company-address-text></dd></div>
             <div><dt>KvK</dt><dd>42080166</dd></div>
-            <div><dt>Email address</dt><dd><a data-mail data-mail-text href="index.html#contact">Jack@orbit3d.nl</a></dd></div>
+            <div><dt>Email address</dt><dd><a data-mail data-mail-text href="en.html#contact">Jack@orbit3d.nl</a></dd></div>
           </dl>
         </section>
 
@@ -144,20 +155,25 @@
           <h3>When you open a live 3D scan</h3>
           <p>"Step inside" and "View your design" open the Orbit viewer. It counts anonymous visits: which scan was opened and for how long. It stores no IP address, no cookie and no browser fingerprint, so these counts can not be traced back to you.</p>
           <p>This website counts its own visits in the same anonymous way: which page, how far you scrolled, how long you stayed, phone or computer, the language, and the website you came from. Nothing is saved on your device for this, and a new random number is made for every page view, so two visits can not be linked to each other or to you. <b>Why:</b> to see which parts of the site work (our legitimate interest, art. 6(1)(f)). <b>How long:</b> up to 2 years.</p>
+          <h3>When you say yes to marketing cookies</h3>
+          <p>Only if you press "Accept" in the cookie question, the site loads HubSpot. HubSpot then places cookies and records which pages you view, when, from which website you came, your device and browser, and your approximate location from your IP address. If you also send us the form, HubSpot can link your visits to your contact details. <b>Why:</b> to understand which parts of the site interest people and improve our marketing (your consent, GDPR art. 6(1)(a)). You can take your consent back at any time with the button in section 3. <b>How long:</b> HubSpot cookies last up to 13 months; the data in HubSpot is kept up to 2 years after your last visit.</p>
           <h3>When you upload a design file</h3>
           <p>"Upload your design" reads the file in your own browser to open the right house. The file is not sent to us.</p>
         </section>
 
         <section class="lg-sec">
           <h2>3. Cookies and browser storage</h2>
-          <p>We use no cookies. The site only uses your browser's own storage for things it needs to work. That is allowed without asking first (Dutch Telecommunicatiewet, art. 11.7a), so you will not see a cookie banner here.</p>
+          <p>Without your yes we use no cookies: the site only uses your browser's own storage for things it needs to work, which is allowed without asking first (Dutch Telecommunicatiewet, art. 11.7a). Marketing cookies from HubSpot are only placed after you press "Accept" in the cookie question at the bottom of the screen. "No thanks" is just as easy, and the site works the same either way.</p>
+          <p><button type="button" class="btn lg-consent" data-consent-open>Change my cookie choice</button></p>
           <dl class="lg-store">
+            <div><dt>orbit-consent</dt><dd>Remembers your answer to the cookie question, so we do not ask on every page. Kept for 12 months, then we ask again.</dd></div>
+            <div><dt>HubSpot cookies</dt><dd>Only after "Accept": __hstc, hubspotutk, __hssc and __hssrc (HubSpot, Inc.). They recognise your browser on a next visit and count your visits and pages. Kept up to 13 months (__hssc 30 minutes, __hssrc until you close the browser).</dd></div>
             <div><dt>orbit-language</dt><dd>Remembers English or Dutch. Kept in your browser until you clear it.</dd></div>
             <div><dt>orbit-palette</dt><dd>Remembers a colour theme, only if you change it. Kept until you clear it.</dd></div>
             <div><dt>orbit.site.design.v1</dt><dd>Keeps the design file you opened in this tab, so a reload opens it again. Gone after 30 minutes or when you close the tab.</dd></div>
             <div><dt>Offline copy</dt><dd>A small helper (service worker) keeps the big 3D files on your device, so your next visit loads faster. Kept until you clear the site data.</dd></div>
           </dl>
-          <p>No outside analytics, advertising or social media trackers: the anonymous visit counts above are our own and need no cookie. Our fonts come from our own server, not from Google.</p>
+          <p>No advertising or social media trackers. The anonymous visit counts above are our own and need no cookie; HubSpot is the only outside tool, and only with your yes. Our fonts come from our own server, not from Google.</p>
         </section>
 
         <section class="lg-sec">
@@ -167,9 +183,10 @@
             <li><b>Cloudflare, Inc.</b> hosts the Orbit viewer, the 3D files and the anonymous visit counts (kept in a European data centre).</li>
             <li><b>Our email provider</b> receives the emails you send us.</li>
             <li><b>Google</b> (Gmail, Google Calendar, Google Meet and Apps Script) receives what you send with the form, and holds the call in our calendar.</li>
+            <li><b>HubSpot, Inc.</b> only if you accept marketing cookies: it holds the visit data and, if you send the form, your contact details (our HubSpot account is kept in HubSpot's European data centre).</li>
             <li><b>WhatsApp (Meta)</b> only if you choose to message us there. Their own privacy rules apply.</li>
           </ul>
-          <p>We never sell your data and never share it for advertising. GitHub, Cloudflare and Google are American companies. They take part in the EU-US Data Privacy Framework and use the EU's standard contract clauses, so your data keeps the protection EU law asks for.</p>
+          <p>We never sell your data and never share it for advertising. GitHub, Cloudflare, Google and HubSpot are American companies. They take part in the EU-US Data Privacy Framework and use the EU's standard contract clauses, so your data keeps the protection EU law asks for.</p>
         </section>
 
         <section class="lg-sec">
@@ -197,8 +214,8 @@
     <div class="lg-nl" lang="nl">
       <header class="wrap pg-head lg-head">
         <h1 class="pg-title">Privacy &amp; cookies</h1>
-        <p class="pg-lede">Kort gezegd: we gebruiken alleen wat je zelf naar ons stuurt. Geen cookies, geen tracking, geen advertenties.</p>
-        <p class="meta lg-date">Laatst bijgewerkt: 7 november 2026</p>
+        <p class="pg-lede">Kort gezegd: we gebruiken wat je zelf naar ons stuurt, en marketingcookies van HubSpot alleen als je ja zegt. Geen advertenties.</p>
+        <p class="meta lg-date">Laatst bijgewerkt: 12 november 2026</p>
       </header>
 
       <div class="wrap lg">
@@ -209,7 +226,7 @@
             <div><dt>Bedrijf</dt><dd>3DGS Orbit Studio (Orbit 3D)</dd></div>
             <div data-company-address hidden><dt>Adres</dt><dd data-company-address-text></dd></div>
             <div><dt>KvK</dt><dd>42080166</dd></div>
-            <div><dt>E-mailadres</dt><dd><a data-mail data-mail-text href="index.html#contact">Jack@orbit3d.nl</a></dd></div>
+            <div><dt>E-mailadres</dt><dd><a data-mail data-mail-text href="en.html#contact">Jack@orbit3d.nl</a></dd></div>
           </dl>
         </section>
 
@@ -226,20 +243,25 @@
           <h3>Als je een live 3D-scan opent</h3>
           <p>"Stap binnen" en "Bekijk je ontwerp" openen de Orbit-viewer. Die telt anonieme bezoeken: welke scan geopend werd en hoe lang. Er wordt geen IP-adres, geen cookie en geen browservingerafdruk opgeslagen, dus deze tellingen zijn niet naar jou te herleiden.</p>
           <p>Deze website telt haar eigen bezoeken op dezelfde anonieme manier: welke pagina, hoe ver je scrolde, hoe lang je bleef, telefoon of computer, de taal, en de website waar je vandaan kwam. Hiervoor wordt niets op je apparaat opgeslagen, en elke paginaweergave krijgt een nieuw willekeurig nummer, dus twee bezoeken zijn niet aan elkaar of aan jou te koppelen. <b>Waarom:</b> om te zien welke delen van de site werken (ons gerechtvaardigd belang, art. 6 lid 1 sub f). <b>Hoe lang:</b> tot 2 jaar.</p>
+          <h3>Als je ja zegt tegen marketingcookies</h3>
+          <p>Alleen als je in de cookievraag op "Akkoord" drukt, laadt de site HubSpot. HubSpot plaatst dan cookies en legt vast welke pagina's je bekijkt, wanneer, van welke website je kwam, je apparaat en browser, en je globale locatie op basis van je IP-adres. Als je ons ook het formulier stuurt, kan HubSpot je bezoeken aan je contactgegevens koppelen. <b>Waarom:</b> om te begrijpen welke delen van de site mensen interesseren en onze marketing te verbeteren (jouw toestemming, AVG art. 6 lid 1 sub a). Je kunt je toestemming altijd intrekken met de knop in punt 3. <b>Hoe lang:</b> HubSpot-cookies blijven tot 13 maanden; de gegevens in HubSpot bewaren we tot 2 jaar na je laatste bezoek.</p>
           <h3>Als je een ontwerpbestand uploadt</h3>
           <p>"Upload je ontwerp" leest het bestand in je eigen browser om het juiste huis te openen. Het bestand wordt niet naar ons verstuurd.</p>
         </section>
 
         <section class="lg-sec">
           <h2>3. Cookies en browseropslag</h2>
-          <p>We gebruiken geen cookies. De site gebruikt alleen de eigen opslag van je browser voor wat nodig is om te werken. Daarvoor hoeven we volgens de Telecommunicatiewet (art. 11.7a) geen toestemming te vragen, dus je ziet hier geen cookiebanner.</p>
+          <p>Zonder jouw ja gebruiken we geen cookies: de site gebruikt alleen de eigen opslag van je browser voor wat nodig is om te werken, en daarvoor hoeven we volgens de Telecommunicatiewet (art. 11.7a) geen toestemming te vragen. Marketingcookies van HubSpot komen er pas als je onderin het scherm op "Akkoord" drukt. "Nee, bedankt" is net zo makkelijk, en de site werkt in beide gevallen hetzelfde.</p>
+          <p><button type="button" class="btn lg-consent" data-consent-open>Mijn cookiekeuze wijzigen</button></p>
           <dl class="lg-store">
+            <div><dt>orbit-consent</dt><dd>Onthoudt je antwoord op de cookievraag, zodat we het niet op elke pagina vragen. Blijft 12 maanden, daarna vragen we het opnieuw.</dd></div>
+            <div><dt>HubSpot-cookies</dt><dd>Alleen na "Akkoord": __hstc, hubspotutk, __hssc en __hssrc (HubSpot, Inc.). Ze herkennen je browser bij een volgend bezoek en tellen je bezoeken en pagina's. Blijven tot 13 maanden (__hssc 30 minuten, __hssrc tot je de browser sluit).</dd></div>
             <div><dt>orbit-language</dt><dd>Onthoudt Engels of Nederlands. Blijft in je browser tot je het wist.</dd></div>
             <div><dt>orbit-palette</dt><dd>Onthoudt een kleurthema, alleen als je het verandert. Blijft tot je het wist.</dd></div>
             <div><dt>orbit.site.design.v1</dt><dd>Bewaart het ontwerpbestand dat je in dit tabblad opende, zodat het na herladen weer opent. Weg na 30 minuten of als je het tabblad sluit.</dd></div>
             <div><dt>Offline kopie</dt><dd>Een kleine helper (service worker) bewaart de grote 3D-bestanden op je apparaat, zodat je volgende bezoek sneller laadt. Blijft tot je de sitegegevens wist.</dd></div>
           </dl>
-          <p>Geen analytics van buitenaf, geen advertenties en geen trackers van sociale media: de anonieme bezoektellingen hierboven zijn van ons zelf en hebben geen cookie nodig. Onze lettertypes komen van onze eigen server, niet van Google.</p>
+          <p>Geen advertenties en geen trackers van sociale media. De anonieme bezoektellingen hierboven zijn van ons zelf en hebben geen cookie nodig; HubSpot is de enige tool van buitenaf, en alleen met jouw ja. Onze lettertypes komen van onze eigen server, niet van Google.</p>
         </section>
 
         <section class="lg-sec">
@@ -249,9 +271,10 @@
             <li><b>Cloudflare, Inc.</b> host de Orbit-viewer, de 3D-bestanden en de anonieme bezoektellingen (bewaard in een Europees datacenter).</li>
             <li><b>Onze e-mailprovider</b> ontvangt de e-mails die je ons stuurt.</li>
             <li><b>Google</b> (Gmail, Google Agenda, Google Meet en Apps Script) ontvangt wat je met het formulier verstuurt, en bewaart het gesprek in onze agenda.</li>
+            <li><b>HubSpot, Inc.</b> alleen als je marketingcookies accepteert: bewaart de bezoekgegevens en, als je het formulier stuurt, je contactgegevens (ons HubSpot-account staat in het Europese datacenter van HubSpot).</li>
             <li><b>WhatsApp (Meta)</b> alleen als je ons daar zelf een bericht stuurt. Daar gelden hun eigen privacyregels.</li>
           </ul>
-          <p>We verkopen je gegevens nooit en delen ze nooit voor advertenties. GitHub, Cloudflare en Google zijn Amerikaanse bedrijven. Ze doen mee aan het EU-VS Data Privacy Framework en gebruiken de standaardcontractbepalingen van de EU, zodat je gegevens de bescherming houden die de EU-wet vraagt.</p>
+          <p>We verkopen je gegevens nooit en delen ze nooit voor advertenties. GitHub, Cloudflare, Google en HubSpot zijn Amerikaanse bedrijven. Ze doen mee aan het EU-VS Data Privacy Framework en gebruiken de standaardcontractbepalingen van de EU, zodat je gegevens de bescherming houden die de EU-wet vraagt.</p>
         </section>
 
         <section class="lg-sec">
@@ -279,15 +302,15 @@
 
   <footer class="site-foot">
     <div class="wrap site-foot__row">
-      <a href="index.html#top" class="site-foot__logo" aria-label="Orbit 3D, home">
+      <a href="en.html#top" class="site-foot__logo" aria-label="Orbit 3D, home">
         <img src="assets/brand/orbit-wordmark-nav.png" alt="Orbit 3D" width="105" height="22" loading="lazy">
       </a>
       <nav class="site-foot__nav" aria-label="Footer">
-        <a href="index.html#inside"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
-        <a href="index.html#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a>
+        <a href="en.html#inside"><orbit-text data-i18n="6e49d9ec8d">How it works</orbit-text></a>
+        <a href="en.html#examples"><orbit-text data-i18n="d3a1c00104">Explore</orbit-text></a>
         <a href="pricing.html"><orbit-text data-i18n="b767503acc">Pricing</orbit-text></a>
         <a href="about.html"><orbit-text data-i18n="2ca466a9b9">About us</orbit-text></a>
-        <a href="index.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Contact us</orbit-text></a>
+        <a href="en.html#contact"><orbit-text data-i18n="3d5bf4fcd2">Contact us</orbit-text></a>
       </nav>
       <p class="meta site-foot__copy"><orbit-text data-i18n="c77e4f4800">© 2026 3DGS Orbit Studio</orbit-text></p>
 <!-- Legal strip (4 Nov 2026, James: "compliant with EU rules"). Shared part: tools/build.py puts it where a page has

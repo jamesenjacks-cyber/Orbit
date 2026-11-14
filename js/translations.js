@@ -1923,8 +1923,8 @@ window.ORBIT_TRANSLATIONS = {
     "was": "Send"
   },
   "d3a1c00062": {
-    "en": "Book a call",
-    "nl": "Plan een gesprek",
+    "en": "Book a free call",
+    "nl": "Plan een gratis gesprek",
     "was": "Book a call"
   },
   "d3a1c00063": {

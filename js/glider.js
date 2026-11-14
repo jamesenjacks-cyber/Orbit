@@ -6,7 +6,7 @@
    the pressed button. Looks: css/motion.css. Reduced motion: it jumps (no slide). */
 (function () {
   'use strict';
-  var GROUPS = '.language-switch, .hero__modes, .compare__chaps, .design__modes';
+  var GROUPS = '.language-switch:not(.language-switch--menu), .hero__modes, .compare__chaps, .design__modes';
   var groups = [];
 
   function place(g, animate) {

@@ -307,3 +307,8 @@
   .chap > *, .chap.is-on > *, .chap.is-past > * { transition: opacity .2s linear; transition-delay: 0s; transform: none; filter: none; }
   .story__cue i, .story__load span { animation: none; }
 }
+
+/* (14 Nov 2026) Russian words are longer ("пространство."): on phones the big title shrinks so it stays on screen */
+@media (max-width: 767px) {
+  html[lang="ru"] .chap__hero { font-size: clamp(2.6rem, 12.5vw, 4.7rem); }
+}
